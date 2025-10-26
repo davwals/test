@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GTMCo — Go‑to‑Market & BD for Web3</title>
+  <meta name="description" content="GTMCo helps Web3 teams with go‑to‑market strategy, BD-as-a-service, ops & token support, and enterprise advisory." />
+  <link rel="icon" type="image/png" href="https://i.imgur.com/zADRR50.png">
+
+  <!-- Satoshi font -->
+  <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#000;              /* dark only */
+      --panel:#0f0f0f;        /* cards */
+      --text:#fff;            /* primary text */
+      --muted:#cfcfcf;        /* muted text */
+      --accent:#d1ff4c;       /* subtle Web3 accent */
+      --radius:14px;
+      --max-w:1100px;
+    }
+
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:'Satoshi',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      letter-spacing:-0.03em; /* -3% as requested */
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      font-weight:400;
+    }
+
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max-w);margin:0 auto;padding:0 20px}
+
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand-mark{width:12px;height:12px;border-radius:50%;background:var(--accent);display:inline-block}
+    .brand-word{font-size:1.05rem;font-weight:700}
+
+    .top-nav{display:flex;align-items:center;gap:18px}
+    .top-link{opacity:.95}
+    .top-link:hover{opacity:1;color:var(--accent)}
+
+    /* Hero */
+    .hero{padding:64px 0 18px;text-align:center}
+    .logo-word{font-size:3rem;line-height:1;letter-spacing:-0.02em;margin:0}
+    .logo-word .gtm{font-weight:800}
+    .logo-word .co{font-style:italic;font-weight:500}
+    .tagline{max-width:760px;margin:14px auto 0;color:var(--muted)}
+
+    /* Sections */
+    section{margin-top:52px}
+    section h2{text-align:center;margin:0 0 14px;font-size:1.25rem}
+
+    /* Services (high level) */
+    .services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .card{background:var(--panel);border:1px solid #1b1b1b;border-radius:var(--radius);padding:18px}
+    .card h3{margin:0 0 8px;font-size:1.02rem}
+    .card p{margin:0;color:#dcdcdc}
+
+    /* Logos row */
+    .logos{text-align:center}
+    .logos small{color:var(--muted)}
+    .logos-grid{margin-top:10px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;align-items:center;justify-items:center}
+    .logo-box{padding:6px;border-radius:12px;opacity:.9;transition:transform .18s ease,opacity .18s ease}
+    .logo-box:hover{opacity:1;transform:translateY(-2px) scale(1.02)}
+    .logo-box img{max-height:20px;max-width:100%;object-fit:contain;filter:grayscale(100%) contrast(.92) brightness(1.05);opacity:.7}
+
+    /* Selected experience chips */
+    .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+    .chip{border:1px solid #2a2a2a;border-radius:999px;padding:6px 10px;font-size:.9rem}
+
+    /* Case studies */
+    .cases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .case{background:var(--panel);border:1px solid #1b1b1b;border-radius:var(--radius);padding:18px}
+    .case h3{margin:0 0 8px;font-size:1.02rem}
+    .meta{color:var(--muted);font-size:.9rem;margin-bottom:8px}
+    .bullets{margin:10px 0 0;padding-left:18px}
+    .bullets li{margin:4px 0}
+
+    /* Contact */
+    .center{text-align:center}
+    .cta-btn{display:inline-block;margin-top:8px;border:1.5px solid #2a2a2a;border-radius:999px;padding:10px 14px}
+    .cta-btn:hover{color:var(--accent);border-color:var(--accent)}
+
+    /* Footer */
+    footer{text-align:center;color:var(--muted);padding:26px 0 40px;font-size:.92rem}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .logo-word{font-size:2.4rem}
+      .services{grid-template-columns:1fr}
+      .cases{grid-template-columns:1fr}
+      .logos-grid{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-word">GTMCo</span>
+      </div>
+      <nav class="top-nav" aria-label="Primary">
+        <a class="top-link" href="#services">services</a>
+        <a class="top-link" href="#experience">experience</a>
+        <a class="top-link" href="#cases">case studies</a>
+        <a class="top-link" href="#contact">contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero" id="home">
+        <h1 class="logo-word" aria-label="gtmco">
+          <span class="gtm">gtm</span><span class="co">co</span>
+        </h1>
+        <p class="tagline">Your go‑to Web3 GTM partner.</p>
+      </section>
+
+      <!-- High-level services -->
+      <section id="services" aria-labelledby="services-title">
+        <h2 id="services-title">What we do</h2>
+        <div class="services">
+          <article class="card"><h3>GTM Strategy</h3><p>Positioning, ICPs, and launch plans that convert.</p></article>
+          <article class="card"><h3>BD-as-a-Service</h3><p>Partner mapping, outreach, and deal support.</p></article>
+          <article class="card"><h3>Ops & Token</h3><p>Entity guidance, token schedules, and governance readiness.</p></article>
+        </div>
+      </section>
+
+      <!-- Experience / logos provided by you -->
+      <section id="experience" class="logos" aria-labelledby="exp-title">
+        <h2 id="exp-title">Selected experience</h2>
+        <div class="chips">
+          <span class="chip">Ethereum Foundation</span>
+          <span class="chip">Alluvial / Liquid Collective</span>
+          <span class="chip">StakingAwards.com</span>
+          <span class="chip">EY (Consulting)</span>
+        </div>
+        <small style="display:block;margin-top:14px">Trusted by employees at</small>
+        <div class="logos-grid" aria-label="Trusted logos">
+          <div class="logo-box"><img src="https://i.imgur.com/XfjgxGH.png" alt="Microsoft"></div>
+          <div class="logo-box"><img src="https://i.imgur.com/SGFRKRM.png" alt="Google"></div>
+          <div class="logo-box"><img src="https://i.imgur.com/rmQWASy.png" alt="McKinsey"></div>
+          <div class="logo-box"><img src="https://i.imgur.com/fde7Oxn.png" alt="Amazon"></div>
+          <div class="logo-box"><img src="https://i.imgur.com/RgLxwXt.png" alt="Deloitte"></div>
+          <div class="logo-box"><img src="https://i.imgur.com/EnimNpr.png" alt="IBM"></div>
+          <div class="logo-box"><img src="https://i.imgur.com/voiTYnm.png" alt="Ethereum Foundation"></div>
+          <div class="logo-box"><img src="https://i.imgur.com/8GtVY5U.png" alt="Santander"></div>
+        </div>
+      </section>
+
+      <!-- Case studies (anonymized) -->
+      <section id="cases" aria-labelledby="cases-title">
+        <h2 id="cases-title">Case studies</h2>
+        <div class="cases">
+          <article class="case">
+            <h3>L2 ecosystem: GTM sprint</h3>
+            <div class="meta">3 weeks • strategy & launch</div>
+            <ul class="bullets">
+              <li>Clarified ICPs and narrative for builders & enterprise units.</li>
+              <li>Delivered channel plan and enablement toolkit.</li>
+              <li>Kickstarted 12 partner conversations via targeted outreach.</li>
+            </ul>
+          </article>
+          <article class="case">
+            <h3>Staking product: BD pipeline</h3>
+            <div class="meta">Quarterly retainer • partnerships</div>
+            <ul class="bullets">
+              <li>Built repeatable partner mapping for custodians & exchanges.</li>
+              <li>Set weekly cadence and deal review; 20+ qualified intros.</li>
+              <li>Co‑marketing playbook to support integrations.</li>
+            </ul>
+          </article>
+          <article class="case">
+            <h3>Enterprise workshop: Ethereum adoption</h3>
+            <div class="meta">2 days • exec enablement</div>
+            <ul class="bullets">
+              <li>Defined ROI cases and risk framework for pilot approval.</li>
+              <li>Stakeholder map across IT, risk, and business lines.</li>
+              <li>Path to pilot with concrete success metrics.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">Work with us</h2>
+        <div class="center">
+          <p>Interested in a sprint or retainer? Send a note and we’ll set up time.</p>
+          <a class="cta-btn" href="mailto:hello@gtmco.xyz">hello@gtmco.xyz</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>© 2025 GTMCo. All rights reserved.</div>
+    </footer>
+  </div>
+</body>
+</html>
