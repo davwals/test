@@ -164,7 +164,7 @@
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="fixed inset-0 z-40 hidden">
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" id="mobileMenuOverlay"></div>
-        <div class="fixed right-0 top-0 h-full w-64 bg-white dark:bg-zinc-900 border-l border-zinc-200 dark:border-zinc-800 shadow-xl transform translate-x-full transition-transform duration-300" id="mobileMenuPanel">
+        <div class="fixed left-0 top-0 h-full w-64 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 shadow-xl transform -translate-x-full transition-transform duration-300" id="mobileMenuPanel">
             <div class="flex flex-col h-full">
                 <div class="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
                     <span class="text-sm font-semibold">Menu</span>
@@ -654,12 +654,12 @@
         function openMobileMenu() {
             mobileMenu.classList.remove('hidden');
             setTimeout(() => {
-                mobileMenuPanel.classList.remove('translate-x-full');
+                mobileMenuPanel.classList.remove('-translate-x-full');
             }, 10);
         }
 
         function closeMobileMenuFunc() {
-            mobileMenuPanel.classList.add('translate-x-full');
+            mobileMenuPanel.classList.add('-translate-x-full');
             setTimeout(() => {
                 mobileMenu.classList.add('hidden');
             }, 300);
