@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Enterprise Onchain</title>
+    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/LJ0gSjb.jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'manrope': ['Manrope', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 antialiased min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md px-6">
+        <!-- Logo and Title -->
+        <div class="text-center mb-8">
+            <a href="index.html" class="inline-flex items-center gap-2 mb-4">
+                <img src="https://i.imgur.com/LJ0gSjb.jpeg" alt="Enterprise Onchain" class="w-10 h-10 rounded-full">
+                <span class="text-xl font-bold tracking-tight">Enterprise Onchain</span>
+            </a>
+            <h1 class="text-2xl font-bold text-white mb-2">Welcome Back</h1>
+            <p class="text-sm text-zinc-400">Sign in to access premium content</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-4">
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden mb-4 p-3 bg-emerald-900/20 border border-emerald-800 rounded-lg text-emerald-400 text-sm">
+                Check your email for the magic link!
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="hidden mb-4 p-3 bg-red-900/20 border border-red-800 rounded-lg text-red-400 text-sm"></div>
+
+            <!-- Google Sign In -->
+            <button id="googleSignIn" class="w-full h-11 px-4 rounded-lg bg-white text-zinc-900 text-sm font-medium hover:bg-zinc-100 transition-colors flex items-center justify-center gap-2 mb-4">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                    <path d="M9.003 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.96v2.332C2.44 15.983 5.485 18 9.003 18z" fill="#34A853"/>
+                    <path d="M3.964 10.712c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V4.96H.957C.347 6.175 0 7.55 0 9.002c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+                    <path d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.428 0 9.003 0 5.485 0 2.44 2.017.96 4.958L3.967 7.29c.708-2.127 2.692-3.71 5.036-3.71z" fill="#EA4335"/>
+                </svg>
+                Continue with Google
+            </button>
+
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-zinc-800"></div>
+                </div>
+                <div class="relative flex justify-center text-xs">
+                    <span class="px-2 bg-zinc-900 text-zinc-500">Or continue with email</span>
+                </div>
+            </div>
+
+            <!-- Email Magic Link Form -->
+            <form id="magicLinkForm" class="space-y-4">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-zinc-300 mb-2">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        placeholder="name@organization.com"
+                        class="w-full h-11 px-4 rounded-lg border border-zinc-800 bg-zinc-950 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all"
+                    >
+                </div>
+                <button
+                    type="submit"
+                    id="submitBtn"
+                    class="w-full h-11 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors"
+                >
+                    Send Magic Link
+                </button>
+            </form>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="text-center">
+            <a href="index.html" class="text-sm text-zinc-500 hover:text-white transition-colors">
+                ← Back to home
+            </a>
+        </div>
+    </div>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        const magicLinkForm = document.getElementById('magicLinkForm');
+        const googleSignInBtn = document.getElementById('googleSignIn');
+        const emailInput = document.getElementById('email');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Check if user is already logged in
+        supabaseClient.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                window.location.href = 'articles.html';
+            }
+        });
+
+        // Handle magic link form submission
+        magicLinkForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            // Hide previous messages
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+
+            try {
+                const { error } = await supabaseClient.auth.signInWithOtp({
+                    email: email,
+                    options: {
+                        emailRedirectTo: window.location.origin + '/articles.html'
+                    }
+                });
+
+                if (error) throw error;
+
+                // Show success message
+                successMessage.classList.remove('hidden');
+                emailInput.value = '';
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.textContent = error.message || 'An error occurred. Please try again.';
+                errorMessage.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Magic Link';
+            }
+        });
+
+        // Handle Google Sign In
+        googleSignInBtn.addEventListener('click', async () => {
+            try {
+                const { error } = await supabaseClient.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin + '/articles.html'
+                    }
+                });
+
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.textContent = error.message || 'An error occurred. Please try again.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+
+        // Handle auth state changes
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN') {
+                window.location.href = 'articles.html';
+            }
+        });
+    </script>
+</body>
+</html>
