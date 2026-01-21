@@ -1,220 +1,660 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GTMCo — Your go-to Web3 GTM partner</title>
-  <meta name="description" content="Go-to-market strategy and business development for Web3 protocols, infra, and L2s." />
-  <link rel="icon" type="image/png" href="https://i.imgur.com/zADRR50.png" />
-  <link href="https://fonts.cdnfonts.com/css/satoshi" rel="stylesheet" />
-  <meta name="theme-color" content="#000000" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Onchain | Track Institutional Crypto Adoption</title>
 
-  <style>
-    :root {
-      --bg:#000;
-      --text:#fff;
-      --muted:#b9b9b9;
-      --accent:#d1ff4c;
-      --max-w:980px;
-    }
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/LJ0gSjb.jpeg">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/LJ0gSjb.jpeg">
 
-    *, *::before, *::after { box-sizing:border-box; }
-    html, body { height:100%; margin:0; }
-    body {
-      background:var(--bg);
-      color:var(--text);
-      font-family:'Satoshi',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      letter-spacing:-0.03em;
-      line-height:1.5;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
+    <!-- Open Graph / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://enterpriseonchain.com/">
+    <meta property="og:title" content="Enterprise Onchain | Track Institutional Crypto Adoption">
+    <meta property="og:description" content="Intelligence built for decision makers. Track tokenization, adoption, and regulatory shifts from one place.">
+    <meta property="og:image" content="https://enterpriseonchain.com/og-image.jpg">
 
-    a { color:inherit; text-decoration:none; }
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://enterpriseonchain.com/">
+    <meta name="twitter:title" content="Enterprise Onchain | Track Institutional Crypto Adoption">
+    <meta name="twitter:description" content="Intelligence built for decision makers. Track tokenization, adoption, and regulatory shifts from one place.">
+    <meta name="twitter:image" content="https://enterpriseonchain.com/og-image.jpg">
 
-    .wrap {
-      max-width:var(--max-w);
-      margin:0 auto;
-      padding:0 24px;
-    }
+    <!-- Additional SEO -->
+    <meta name="description" content="Intelligence built for decision makers. Track tokenization, adoption, and regulatory shifts from one place.">
+    <meta name="keywords" content="institutional crypto, tokenization, RWA, blockchain adoption, enterprise ethereum">
 
-    header {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:32px 0;
-    }
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    .logo {
-      font-weight:900;
-      letter-spacing:-0.02em;
-    }
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'manrope': ['Manrope', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; }
 
-    nav a {
-      opacity:.9;
-      margin-left:18px;
-    }
-    nav a:hover {
-      opacity:1;
-      color:var(--accent);
-    }
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #e4e4e7;
+            border-radius: 9999px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #3f3f46;
+        }
 
-    /* Hero */
-    .hero {
-      margin-top: 0 !important;
-      padding: 160px 0 80px;
-      text-align: left;
-      min-height: 40vh;
-    }
+        /* Grid Pattern */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
+        }
+        .dark .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+        }
 
-    .wordmark {
-      display:block;
-      font-size:4rem;
-      margin:0;
-      letter-spacing:-0.02em;
-      font-weight:900;
-    }
+        /* Building elements for cityscape */
+        .building {
+            position: absolute;
+            bottom: 0;
+            background-color: currentColor;
+            opacity: 0.1;
+        }
+        .dark .building {
+            opacity: 0.2;
+        }
 
-    .wordmark .gtm { font-weight:900; }
-    .wordmark .co { font-style:italic; font-weight:600; }
+        /* Scroll animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-    .tagline {
-      margin:18px 0 22px;
-      color:#b9b9b9;
-      max-width:50ch;
-      font-size:1.2rem;
-    }
+        /* Staggered animation delays */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+        .delay-500 { transition-delay: 500ms; }
+        .delay-600 { transition-delay: 600ms; }
+        .delay-700 { transition-delay: 700ms; }
 
-    .cta {
-      display:inline-block;
-      border:1px solid #222;
-      border-radius:999px;
-      padding:12px 18px;
-      transition:border-color .2s ease, color .2s ease;
-    }
-    .cta:hover {
-      border-color:var(--accent);
-      color:var(--accent);
-    }
-
-    section { margin-top:84px; }
-
-    h2 {
-      font-size:1.1rem;
-      margin:0 0 10px;
-      text-transform:lowercase;
-      letter-spacing:-0.02em;
-    }
-
-    .list { display:grid; gap:6px; }
-    .list p { margin:0; color:#e9e9e9; }
-    .muted { color:var(--muted); }
-
-    footer {
-      padding:80px 0 60px;
-      color:var(--muted);
-      font-size:.92rem;
-    }
-
-    @media (max-width:900px) {
-      .hero { padding:120px 0 60px; }
-      .wordmark { font-size:3rem; }
-    }
-  </style>
+        /* Exit popup animation */
+        .popup-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .popup-content {
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        .popup-overlay.active .popup-content {
+            transform: scale(1) translateY(0);
+        }
+    </style>
 </head>
+<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <img src="https://i.imgur.com/LJ0gSjb.jpeg" alt="Enterprise Onchain" class="w-6 h-6 rounded-full">
+                <span class="text-sm font-semibold tracking-tight">Enterprise Onchain</span>
+            </div>
 
-<body>
-  <div class="wrap">
-    <header>
-      <div class="logo" aria-label="gtmco">
-        <span class="gtm">gtm</span><span class="co" style="font-style:italic;font-weight:600">co</span>
-      </div>
-      <nav aria-label="primary">
-        <a href="#services">services</a>
-        <a href="#experience">experience</a>
-        <a href="#contact">contact</a>
-      </nav>
-    </header>
+            <div class="flex items-center gap-3">
+                <button id="themeToggle" class="p-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                    <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                    </svg>
+                    <svg id="moonIcon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
 
-    <main>
-      <!-- Hero -->
-      <section class="hero">
-        <h1 class="wordmark"><span class="gtm">gtm</span><span class="co">co</span></h1>
-        <p class="tagline">Your go-to Web3 GTM partner.</p>
-        <a class="cta" href="#contact">request intro call →</a>
-      </section>
-
-      <!-- About -->
-      <section id="about" aria-labelledby="about-title">
-        <h2 id="about-title">about</h2>
-        <p class="muted">
-          GTMCo was founded by operators behind some of Web3’s fastest-growing ecosystems.
-          We’ve led GTM and BD at Ethereum Foundation, Alluvial, Liquid Collective, and
-          Staking Rewards — now we help others do the same.
-        </p>
-      </section>
-
-      <!-- What we do -->
-      <section id="services" aria-labelledby="s-title">
-        <h2 id="s-title">what we do</h2>
-        <div class="list" aria-label="services">
-          <p><strong>Ecosystem growth</strong> — attract builders, partners, and liquidity.</p>
-          <p><strong>Token design</strong> — schedules, governance, and incentives.</p>
-          <p><strong>Business development</strong> — warm intros and partnerships.</p>
-          <p><strong>Advisory</strong> — ongoing counsel and ecosystem alignment.</p>
-          <p><strong>Strategy</strong> — positioning, ICPs, and execution plans.</p>
-          <p><strong>Operations</strong> — legal structures and program setup.</p>
-          <p><strong>Marketing</strong> — campaigns, content, and co-branding.</p>
-          <p><strong>Go-to-market support</strong> — from narrative to launch.</p>
+                <a href="#" id="navJoinBtn" class="hidden sm:inline-flex h-8 items-center justify-center rounded-md bg-zinc-900 dark:bg-white px-4 text-xs font-medium text-white dark:text-zinc-900 shadow transition-all hover:bg-zinc-700 dark:hover:bg-zinc-200">
+                    Join Community
+                </a>
+            </div>
         </div>
-        <p class="muted" style="margin-top:12px">
-          We believe great go-to-market isn’t about noise — it’s about clarity, execution, and lasting partnerships.
-        </p>
-      </section>
+    </nav>
 
-      <!-- Experience -->
-      <section id="experience" aria-labelledby="e-title">
-        <h2 id="e-title">experience</h2>
-        <p class="muted" style="margin-bottom:10px">
-          Current focus: supporting founders to scale their products and ecosystems.
-        </p>
-        <div class="list">
-          <p><strong>Ethereum Foundation</strong></p>
-          <p><strong>Alluvial</strong></p>
-          <p><strong>Liquid Collective</strong></p>
-          <p><strong>Staking Rewards</strong></p>
-          <p><strong>EY</strong></p>
-          <p class="muted">Partners include Coinbase, Binance, Galaxy, and Bloomberg.</p>
+    <!-- Hero Section -->
+    <main class="pt-32 sm:pt-40 pb-16 sm:pb-24 overflow-hidden border-b border-zinc-100 dark:border-zinc-800 relative">
+        <div class="absolute inset-0 -z-10 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white,transparent)] dark:[mask-image:linear-gradient(to_bottom,rgba(0,0,0,1),transparent)]"></div>
+
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Left: Content -->
+            <div class="max-w-xl">
+                <!-- Badges row -->
+                <div class="flex flex-wrap items-center gap-3 mb-6">
+                    <!-- Launch badge -->
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span class="text-xs font-medium text-zinc-600 dark:text-zinc-400">Live Now</span>
+                    </div>
+                </div>
+
+                <h1 class="text-4xl sm:text-5xl font-manrope text-zinc-900 dark:text-white mb-6 leading-[1.1]">
+                    Track Institutional Adoption of Crypto<br>
+                    <span class="text-zinc-400 dark:text-zinc-500">in One Place.</span>
+                </h1>
+
+                <p class="text-base text-zinc-500 dark:text-zinc-400 max-w-md mb-8 leading-relaxed">
+                    Intelligence built for decision makers. Track tokenization, adoption, and regulatory shifts from one place.
+                </p>
+
+                <!-- Substack Newsletter Form - Hero -->
+                <form action="https://enterpriseonchain.substack.com/api/v1/free?nojs=true" method="post" target="hidden_iframe" onsubmit="showThankYou(this)" class="flex gap-2 max-w-sm mb-4">
+                    <input type="email" name="email" placeholder="name@organization.com" required class="flex-1 h-10 px-3 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200 dark:focus:ring-zinc-700 placeholder:text-zinc-400 transition-all shadow-sm">
+                    <button type="submit" class="h-10 px-4 rounded-md bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap">
+                        Join Free
+                    </button>
+                </form>
+                <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+                <!-- Subscriber count badge -->
+                <div class="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+                    <div class="flex -space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-zinc-300 dark:bg-zinc-700 border-2 border-white dark:border-zinc-950"></div>
+                        <div class="w-6 h-6 rounded-full bg-zinc-400 dark:bg-zinc-600 border-2 border-white dark:border-zinc-950"></div>
+                        <div class="w-6 h-6 rounded-full bg-zinc-500 dark:bg-zinc-500 border-2 border-white dark:border-zinc-950"></div>
+                    </div>
+                    <span>Join <strong class="text-zinc-900 dark:text-white">8,443</strong> subscribers from leading institutions</span>
+                </div>
+            </div>
+
+            <!-- Right: Chart Graphic -->
+            <div class="relative h-64 lg:h-96 w-full bg-zinc-50 dark:bg-zinc-900/50 rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden flex items-end justify-center animate-on-scroll">
+                <!-- Abstract Cityscape -->
+                <div class="absolute inset-0 text-zinc-300 dark:text-zinc-700 pointer-events-none">
+                    <div class="building" style="left: 1rem; width: 2rem; height: 6rem;"></div>
+                    <div class="building" style="left: 3.5rem; width: 3rem; height: 10rem;"></div>
+                    <div class="building" style="left: 7rem; width: 4rem; height: 8rem;"></div>
+                    <div class="building" style="left: 12rem; width: 2.5rem; height: 14rem;"></div>
+                    <div class="building" style="left: 16rem; width: 3.5rem; height: 7rem;"></div>
+                    <div class="building" style="left: 20rem; width: 5rem; height: 12rem;"></div>
+                    <div class="building" style="right: 2.5rem; width: 3rem; height: 9rem;"></div>
+                    <div class="building" style="right: 6rem; width: 4rem; height: 5rem;"></div>
+                    <div class="building" style="right: 11rem; width: 2rem; height: 11rem;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-white/10 to-white dark:from-zinc-950/10 dark:to-zinc-950 opacity-50"></div>
+                </div>
+
+                <!-- Line Chart SVG -->
+                <div class="absolute inset-0 p-8 flex items-end">
+                    <svg viewBox="0 0 400 200" class="w-full h-full drop-shadow-lg">
+                        <defs>
+                            <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+                                <stop offset="0%" stop-color="#10b981" stop-opacity="0.2"></stop>
+                                <stop offset="100%" stop-color="#10b981" stop-opacity="0"></stop>
+                            </linearGradient>
+                        </defs>
+                        <!-- Grid lines -->
+                        <line x1="0" y1="150" x2="400" y2="150" stroke="currentColor" class="text-zinc-200 dark:text-zinc-800" stroke-width="1" stroke-dasharray="4"></line>
+                        <line x1="0" y1="100" x2="400" y2="100" stroke="currentColor" class="text-zinc-200 dark:text-zinc-800" stroke-width="1" stroke-dasharray="4"></line>
+                        <line x1="0" y1="50" x2="400" y2="50" stroke="currentColor" class="text-zinc-200 dark:text-zinc-800" stroke-width="1" stroke-dasharray="4"></line>
+
+                        <!-- The Line -->
+                        <path d="M0,160 Q40,150 80,110 T160,120 T240,80 T320,40 T400,20" fill="url(#chartGradient)" stroke="#10b981" stroke-width="2" stroke-linecap="round"></path>
+
+                        <!-- Data Point -->
+                        <circle cx="320" cy="40" r="3" class="fill-white dark:fill-zinc-900 stroke-emerald-500" stroke-width="2"></circle>
+                        <rect x="280" y="10" width="80" height="24" rx="4" class="fill-white dark:fill-zinc-800 stroke-zinc-200 dark:stroke-zinc-700" stroke-width="1"></rect>
+                        <text x="320" y="26" text-anchor="middle" font-family="JetBrains Mono" font-size="10" class="fill-zinc-900 dark:fill-white font-medium">$2.4T TVL</text>
+                    </svg>
+                </div>
+            </div>
         </div>
-      </section>
-
-      <!-- Founder -->
-      <section id="founder" aria-labelledby="f-title">
-        <h2 id="f-title">founder</h2>
-        <div class="list">
-          <p><strong>David Walsh</strong></p>
-          <p>
-            <a href="https://www.linkedin.com/in/davwals" target="_blank" rel="noopener noreferrer">LinkedIn →</a>
-            &nbsp;
-            <a href="https://x.com/davwals" target="_blank" rel="noopener noreferrer">X →</a>
-          </p>
-        </div>
-      </section>
-
-      <!-- Contact -->
-      <section id="contact" aria-labelledby="ct-title">
-        <h2 id="ct-title">contact</h2>
-        <p class="muted">We reply the same day.</p>
-        <p style="margin-top:8px">
-          <a class="cta" href="mailto:hello@gtmco.xyz">hello@gtmco.xyz</a>
-        </p>
-      </section>
     </main>
 
-    <footer>
-      <div>© 2025 GTMCo. All rights reserved.</div>
+    <!-- Trust Bar -->
+    <section class="bg-zinc-50/50 dark:bg-zinc-900/30 border-b border-zinc-100 dark:border-zinc-800/50 py-8">
+        <div class="max-w-7xl mx-auto px-6">
+            <p class="text-center text-xs font-medium text-zinc-400 mb-6 uppercase tracking-wider">Trusted by teams at</p>
+            <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 opacity-60 grayscale">
+                <span class="text-lg tracking-tight text-zinc-800 dark:text-zinc-300" style="font-family: serif;">J.P.Morgan</span>
+                <span class="text-lg font-semibold tracking-tight text-zinc-800 dark:text-zinc-300">Morgan Stanley</span>
+                <span class="text-lg font-semibold tracking-tight text-zinc-800 dark:text-zinc-300">Microsoft</span>
+                <span class="text-lg font-medium tracking-tight text-zinc-800 dark:text-zinc-300">Google</span>
+                <span class="text-lg font-semibold tracking-tighter text-zinc-800 dark:text-zinc-300">BARCLAYS</span>
+                <span class="text-lg font-bold tracking-tight text-zinc-800 dark:text-zinc-300">PwC</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Coverage Grid -->
+    <section class="bg-white dark:bg-zinc-950 py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12 animate-on-scroll">
+                <h2 class="text-2xl font-manrope mb-3 tracking-tight">Market Coverage</h2>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 max-w-xl">Covering areas such as:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Card 1 - Institutional Adoption -->
+                <div class="group p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-300 hover:shadow-sm animate-on-scroll delay-100 cursor-pointer market-card">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 flex items-center justify-center mb-4 text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12h4m-4-4h4m0 13v-3a2 2 0 0 0-4 0v3"/><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/></svg>
+                    </div>
+                    <h3 class="font-medium text-sm text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">Institutional Adoption</h3>
+                </div>
+
+                <!-- Card 2 - Tokenization & RWAs -->
+                <div class="group p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-300 hover:shadow-sm animate-on-scroll delay-200 cursor-pointer market-card">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 flex items-center justify-center mb-4 text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="2" width="8" height="8" rx="1"/><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"/></svg>
+                    </div>
+                    <h3 class="font-medium text-sm text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">Tokenization &amp; RWAs</h3>
+                </div>
+
+                <!-- Card 3 - Stablecoins -->
+                <div class="group p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-300 hover:shadow-sm animate-on-scroll delay-300 cursor-pointer market-card">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 flex items-center justify-center mb-4 text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8m4 2V6"/></svg>
+                    </div>
+                    <h3 class="font-medium text-sm text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">Stablecoins</h3>
+                </div>
+
+                <!-- Card 4 - DeFi -->
+                <div class="group p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-300 hover:shadow-sm animate-on-scroll delay-400 cursor-pointer market-card">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 flex items-center justify-center mb-4 text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18v-7m1.12-8.802a2 2 0 0 1 1.76.006l7.866 3.847c.476.233.31.949-.22.949H3.474c-.53 0-.695-.716-.22-.949zM14 18v-7m4 7v-7M3 22h18M6 18v-7"/></svg>
+                    </div>
+                    <h3 class="font-medium text-sm text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">DeFi</h3>
+                </div>
+
+                <!-- Card 5 - ETF / ETP Flows -->
+                <div class="group p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-300 hover:shadow-sm animate-on-scroll delay-100 cursor-pointer market-card">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 flex items-center justify-center mb-4 text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    </div>
+                    <h3 class="font-medium text-sm text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">ETF / ETP Flows</h3>
+                </div>
+
+                <!-- Card 6 - Staking Info -->
+                <div class="group p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-300 hover:shadow-sm animate-on-scroll delay-200 cursor-pointer market-card">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 flex items-center justify-center mb-4 text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>
+                    </div>
+                    <h3 class="font-medium text-sm text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">Staking Info</h3>
+                </div>
+
+                <!-- Card 7 - L2 Ecosystem -->
+                <div class="group p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-300 hover:shadow-sm animate-on-scroll delay-300 cursor-pointer market-card">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 flex items-center justify-center mb-4 text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>
+                    </div>
+                    <h3 class="font-medium text-sm text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">L2 Ecosystem</h3>
+                </div>
+
+                <!-- Card 8 - Regulatory Updates -->
+                <div class="group p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all duration-300 hover:shadow-sm animate-on-scroll delay-400 cursor-pointer market-card">
+                    <div class="w-8 h-8 rounded-lg bg-zinc-50 dark:bg-zinc-800 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 flex items-center justify-center mb-4 text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18m7-13 3 8a5 5 0 0 1-6 0z"/><path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1M5 8l3 8a5 5 0 0 1-6 0z"/><path d="M3 21h18"/></svg>
+                    </div>
+                    <h3 class="font-medium text-sm text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">Regulatory Updates</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enterprise Onchain Section -->
+    <section id="enterprise" class="py-24 bg-zinc-950 text-white overflow-hidden relative border-y border-zinc-800">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-zinc-800/40 via-zinc-950 to-zinc-950"></div>
+        <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22white%22 stroke-width=%221%22%3E%3Cpath d=%22M3 3v18h18%22/%3E%3C/svg%3E'); background-repeat: repeat;"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+            <!-- Left: Text -->
+            <div class="animate-on-scroll">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm mb-8">
+                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span class="text-xs font-semibold tracking-wide text-zinc-300 uppercase">Enterprise Onchain Podcast</span>
+                </div>
+
+                <h2 class="text-3xl md:text-4xl font-manrope mb-4 text-white">Enterprise Onchain</h2>
+
+                <p class="text-zinc-400 text-sm md:text-base leading-relaxed mb-8 max-w-md">
+                    Podcast with leaders from the space. Hear directly from executives driving institutional crypto adoption.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="h-11 inline-flex items-center justify-center px-6 rounded-lg bg-white text-zinc-950 text-sm font-semibold hover:bg-zinc-200 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+                        Watch
+                    </a>
+                    <a href="https://open.spotify.com/show/6piY0ttC8ZSgYQX1YRuP36?si=5680061a22954b6b" target="_blank" class="h-11 inline-flex items-center justify-center px-6 rounded-lg border border-zinc-800 bg-zinc-900/50 text-white text-sm font-medium hover:bg-zinc-800 hover:border-zinc-700 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 19v3m7-12v2a7 7 0 0 1-14 0v-2"/><rect width="6" height="13" x="9" y="2" rx="3"/></svg>
+                        Listen
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Podcast Card Only -->
+            <div class="relative animate-on-scroll delay-200">
+                <div class="absolute -inset-4 bg-emerald-500/10 blur-3xl rounded-full"></div>
+
+                <div class="relative">
+                    <!-- Podcast Card -->
+                    <div class="p-5 rounded-xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md shadow-2xl hover:-translate-y-1 transition-transform duration-500">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-10 h-10 rounded bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+                            </div>
+                            <span class="text-[10px] font-mono text-zinc-500 border border-zinc-800 px-2 py-1 rounded">EP. 07</span>
+                        </div>
+                        <h3 class="text-sm font-semibold text-white mb-1">Why Traditional Finance is Moving Onchain</h3>
+                        <p class="text-xs text-zinc-500 mb-4">Featuring Head of Digital Assets @ Large Bank</p>
+                        <div class="flex items-center gap-3">
+                            <button class="w-8 h-8 rounded-full bg-white text-zinc-950 flex items-center justify-center hover:scale-105 transition-transform">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg>
+                            </button>
+                            <div class="h-1 flex-1 bg-zinc-800 rounded-full overflow-hidden">
+                                <div class="h-full w-1/3 bg-zinc-500 rounded-full"></div>
+                            </div>
+                            <span class="text-[10px] text-zinc-500 font-mono">14:20</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live News Monitor Section -->
+    <section class="bg-zinc-50 dark:bg-zinc-900 border-y border-zinc-100 dark:border-zinc-800 py-20">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 animate-on-scroll">
+                <div>
+                    <h2 class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-white">Live News Monitor</h2>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Latest institutional crypto news and announcements.</p>
+                </div>
+            </div>
+
+            <div class="rounded-xl border border-zinc-200 dark:border-zinc-700/50 bg-white dark:bg-zinc-950 overflow-hidden shadow-sm animate-on-scroll delay-100">
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <!-- News Item 1 -->
+                    <div class="p-5 hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors cursor-pointer news-item">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-zinc-900 text-white flex items-center justify-center text-xs font-bold shrink-0">JPM</div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-1">J.P. Morgan Launches MONY Tokenized Money Market Fund</h3>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-2">The banking giant announces its first tokenized fund product on Ethereum, targeting institutional investors.</p>
+                                <div class="flex items-center gap-3 text-xs text-zinc-400">
+                                    <span>2 hours ago</span>
+                                    <span class="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">Tokenization</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- News Item 2 -->
+                    <div class="p-5 hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors cursor-pointer news-item">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-900 text-white flex items-center justify-center text-xs font-bold shrink-0">SC</div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-1">Standard Chartered Raises ETH Price Target to $40,000</h3>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-2">Analysts cite growing institutional adoption and ETF inflows as key drivers for the bullish outlook.</p>
+                                <div class="flex items-center gap-3 text-xs text-zinc-400">
+                                    <span>5 hours ago</span>
+                                    <span class="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">Research</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- News Item 3 -->
+                    <div class="p-5 hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors cursor-pointer news-item">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0">MS</div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-1">Morgan Stanley Goes All-In on Crypto</h3>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-2">The $1.8T bank launches crypto ETFs and announces tokenization wallet.</p>
+                                <div class="flex items-center gap-3 text-xs text-zinc-400">
+                                    <span>Yesterday</span>
+                                    <span class="px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">Adoption</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / CTA -->
+    <footer id="waitlist" class="bg-zinc-50 dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 pt-20 pb-12">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-manrope text-zinc-900 dark:text-white mb-4 tracking-tight">Don't Miss the Institutional Crypto Revolution</h2>
+            <p class="text-zinc-500 mb-8">Stay ahead with the latest news, insights, and analysis on institutional adoption.</p>
+
+            <!-- Substack Newsletter Form - Footer -->
+            <form action="https://enterpriseonchain.substack.com/api/v1/free?nojs=true" method="post" target="hidden_iframe2" onsubmit="showThankYou(this)" class="flex flex-col sm:flex-row gap-2 max-w-sm mx-auto mb-6">
+                <input type="email" name="email" placeholder="name@organization.com" required class="flex-1 h-11 px-4 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-400 dark:focus:ring-zinc-600 transition-all">
+                <button type="submit" class="h-11 px-6 rounded-md bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-sm font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors whitespace-nowrap">
+                    Join Free
+                </button>
+            </form>
+            <iframe name="hidden_iframe2" style="display:none;"></iframe>
+
+            <!-- Subscriber count -->
+            <p class="text-sm text-zinc-500 mb-16">
+                <strong class="text-zinc-700 dark:text-zinc-300">8,443</strong> executives already subscribed
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+                <div class="mb-4 md:mb-0">
+                    © 2025 Enterprise Onchain. All rights reserved.
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="hover:text-zinc-900 dark:hover:text-white transition-colors">About</a>
+                    <a href="#" class="hover:text-zinc-900 dark:hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a>
+                    <div class="flex items-center gap-4 ml-2">
+                        <!-- YouTube -->
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+                        </a>
+                        <!-- X/Twitter -->
+                        <a href="https://x.com/enteronchain?s=20" target="_blank" class="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/company/enterpriseonchain/" target="_blank" class="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                        </a>
+                        <!-- Mail/Substack -->
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </footer>
-  </div>
+
+    <!-- Exit Intent Popup -->
+    <div id="exitPopup" class="popup-overlay fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="popup-content bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl max-w-md w-full p-8 relative border border-zinc-200 dark:border-zinc-800">
+            <!-- Close button -->
+            <button id="closePopup" class="absolute top-4 right-4 text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+
+            <!-- Content -->
+            <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-600 dark:text-emerald-400"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                </div>
+
+                <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-2">Don't miss out!</h3>
+                <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
+                    Join 8,443 executives staying ahead of institutional crypto adoption.
+                </p>
+
+                <!-- Substack Newsletter Form - Popup -->
+                <form action="https://enterpriseonchain.substack.com/api/v1/free?nojs=true" method="post" target="hidden_iframe3" onsubmit="showThankYou(this)" class="flex flex-col gap-3 w-full">
+                    <input type="email" name="email" placeholder="name@organization.com" required class="h-11 px-4 rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all w-full">
+                    <button type="submit" class="h-11 px-6 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors w-full">
+                        Join Free
+                    </button>
+                </form>
+                <iframe name="hidden_iframe3" style="display:none;"></iframe>
+
+                <p class="text-xs text-zinc-400 mt-4">No spam. Unsubscribe anytime.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Thank you message after form submit
+        function showThankYou(form) {
+            const button = form.querySelector('button[type="submit"]');
+            const originalText = button.textContent;
+            button.textContent = '✓ Subscribed!';
+            button.disabled = true;
+            button.classList.add('bg-emerald-600', 'dark:bg-emerald-600', 'text-white', 'dark:text-white');
+            form.querySelector('input[type="email"]').value = '';
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+                button.classList.remove('bg-emerald-600', 'dark:bg-emerald-600');
+            }, 3000);
+        }
+
+        // Theme toggle logic - default to dark mode
+        const toggleBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+
+        // Default to dark mode
+        html.classList.add('dark');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+
+        toggleBtn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        });
+
+        // Scroll animation observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Exit intent popup
+        const exitPopup = document.getElementById('exitPopup');
+        const closePopup = document.getElementById('closePopup');
+        const navJoinBtn = document.getElementById('navJoinBtn');
+        let popupShown = false;
+
+        // Open popup from nav button
+        navJoinBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            exitPopup.classList.add('active');
+        });
+
+        // Open popup from market coverage cards
+        document.querySelectorAll('.market-card').forEach(card => {
+            card.addEventListener('click', () => {
+                exitPopup.classList.add('active');
+            });
+        });
+
+        // Open popup from news items
+        document.querySelectorAll('.news-item').forEach(item => {
+            item.addEventListener('click', () => {
+                exitPopup.classList.add('active');
+            });
+        });
+
+        // Show popup when mouse leaves viewport (desktop)
+        document.addEventListener('mouseout', (e) => {
+            if (!popupShown && e.clientY < 10 && e.relatedTarget === null) {
+                exitPopup.classList.add('active');
+                popupShown = true;
+                localStorage.setItem('exitPopupShown', 'true');
+            }
+        });
+
+        // Check if popup was already shown this session
+        if (localStorage.getItem('exitPopupShown')) {
+            popupShown = true;
+        }
+
+        // Close popup
+        closePopup.addEventListener('click', () => {
+            exitPopup.classList.remove('active');
+        });
+
+        // Close popup on overlay click
+        exitPopup.addEventListener('click', (e) => {
+            if (e.target === exitPopup) {
+                exitPopup.classList.remove('active');
+            }
+        });
+
+        // Close popup on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                exitPopup.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
-

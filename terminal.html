@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal | Enterprise Onchain</title>
+    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/LJ0gSjb.jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'manrope': ['Manrope', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #3f3f46;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 antialiased min-h-screen">
+    <nav class="fixed top-0 w-full z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-md">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="flex items-center gap-2">
+                    <img src="https://i.imgur.com/LJ0gSjb.jpeg" alt="Enterprise Onchain" class="w-6 h-6 rounded-full">
+                    <span class="text-sm font-semibold tracking-tight">Enterprise Onchain</span>
+                    <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded ml-2">TERMINAL</span>
+                </a>
+                <div class="hidden md:flex items-center gap-1 text-sm">
+                    <a href="#" class="px-3 py-1.5 rounded-md bg-zinc-800 text-white font-medium">Dashboard</a>
+                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">News</a>
+                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Newsletter</a>
+                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Podcast</a>
+                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Data</a>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-xs text-zinc-500 hover:text-white transition-colors hidden sm:block">← Back to site</a>
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold">DW</div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-14">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-6">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-white mb-1">gm, James</h1>
+                <p class="text-sm text-zinc-400">Here's what's happening in institutional crypto today. <span class="text-zinc-500">Jan 14, 2025</span></p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">BTC ETF Flows (24h)</div>
+                    <div class="text-lg font-mono font-bold text-emerald-500">+$487M</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 12.3%</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH ETF Flows (24h)</div>
+                    <div class="text-lg font-mono font-bold text-emerald-500">+$124M</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 8.7%</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Crypto Market Cap</div>
+                    <div class="text-lg font-mono font-bold text-white">$3.42T</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 2.1%</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">RWA TVL</div>
+                    <div class="text-lg font-mono font-bold text-white">$2.41T</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 0.8%</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Stablecoin Supply</div>
+                    <div class="text-lg font-mono font-bold text-white">$178B</div>
+                    <div class="text-[10px] text-zinc-500">ATH</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">DeFi TVL</div>
+                    <div class="text-lg font-mono font-bold text-white">$89.2B</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 3.4%</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Staked</div>
+                    <div class="text-lg font-mono font-bold text-white">28.4%</div>
+                    <div class="text-[10px] text-zinc-500">34.2M ETH</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">L2 TVL</div>
+                    <div class="text-lg font-mono font-bold text-white">$42.1B</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 5.2%</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <div><div class="text-sm font-medium text-white">Crypto Market Cap</div><div class="text-xs text-zinc-500">Last 30 days</div></div>
+                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$3.42T</div><div class="text-xs text-emerald-500">+18.4% MTD</div></div>
+                    </div>
+                    <div class="h-48"><canvas id="marketCapChart"></canvas></div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-4">
+                        <div><div class="text-sm font-medium text-white">Tokenized RWA TVL</div><div class="text-xs text-zinc-500">Last 30 days</div></div>
+                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$2.41T</div><div class="text-xs text-emerald-500">+24.2% MTD</div></div>
+                    </div>
+                    <div class="h-48"><canvas id="rwaChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2">
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                        <div class="px-4 py-3 border-b border-zinc-800 flex items-center justify-between sticky top-0 bg-zinc-900 z-10">
+                            <div class="flex items-center gap-2">
+                                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>
+                                <span class="text-sm font-medium">Live News Feed</span>
+                                <span class="text-xs text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded">50 stories</span>
+                            </div>
+                            <span class="text-xs text-zinc-500">Updated 2 min ago</span>
+                        </div>
+                        <div class="divide-y divide-zinc-800 max-h-[800px] overflow-y-auto custom-scrollbar" id="newsFeed"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                        <div class="px-4 py-3 border-b border-zinc-800"><span class="text-sm font-medium">Latest Newsletter</span></div>
+                        <div class="p-4">
+                            <div class="text-xs text-zinc-500 mb-2">Issue #47 • Jan 13, 2025</div>
+                            <h3 class="text-sm font-medium text-white mb-3">Morgan Stanley Goes All-In + BlackRock's BUIDL Hits $500M</h3>
+                            <a href="#" class="block w-full text-center text-sm font-medium text-emerald-500 hover:text-emerald-400 py-2 border border-zinc-800 rounded-lg hover:bg-zinc-800/50 transition-colors">Read Full Issue →</a>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                        <div class="px-4 py-3 border-b border-zinc-800"><span class="text-sm font-medium">Latest Podcast</span></div>
+                        <div class="p-4">
+                            <div class="flex items-center gap-2 mb-3"><span class="text-xs font-mono text-zinc-500">EP. 07</span><span class="text-xs text-zinc-600">•</span><span class="text-xs text-zinc-500">32 min</span></div>
+                            <h3 class="text-sm font-medium text-white mb-2">Why Traditional Finance is Moving Onchain</h3>
+                            <div class="flex gap-2">
+                                <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="flex-1 text-center text-xs font-medium text-zinc-400 hover:text-white py-2 border border-zinc-800 rounded-lg hover:bg-zinc-800/50">YouTube</a>
+                                <a href="https://open.spotify.com/show/6piY0ttC8ZSgYQX1YRuP36" target="_blank" class="flex-1 text-center text-xs font-medium text-zinc-400 hover:text-white py-2 border border-zinc-800 rounded-lg hover:bg-zinc-800/50">Spotify</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                        <div class="px-4 py-3 border-b border-zinc-800"><span class="text-sm font-medium">Tokenized Treasuries</span></div>
+                        <div class="p-4 space-y-3">
+                            <div class="flex items-center justify-between"><span class="text-sm">BUIDL</span><span class="text-sm font-mono text-emerald-500">$514M</span></div>
+                            <div class="flex items-center justify-between"><span class="text-sm">BENJI</span><span class="text-sm font-mono">$412M</span></div>
+                            <div class="flex items-center justify-between"><span class="text-sm">USDY</span><span class="text-sm font-mono">$318M</span></div>
+                            <div class="flex items-center justify-between"><span class="text-sm">USTB</span><span class="text-sm font-mono">$124M</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+                        <div class="px-4 py-3 border-b border-zinc-800"><span class="text-sm font-medium">BTC ETF AUM</span></div>
+                        <div class="p-4 space-y-3">
+                            <div class="flex items-center justify-between"><span class="text-sm">IBIT <span class="text-xs text-zinc-600">BlackRock</span></span><span class="text-sm font-mono text-emerald-500">$21.4B</span></div>
+                            <div class="flex items-center justify-between"><span class="text-sm">FBTC <span class="text-xs text-zinc-600">Fidelity</span></span><span class="text-sm font-mono">$12.1B</span></div>
+                            <div class="flex items-center justify-between"><span class="text-sm">ARKB <span class="text-xs text-zinc-600">ARK</span></span><span class="text-sm font-mono">$3.2B</span></div>
+                            <div class="flex items-center justify-between"><span class="text-sm">BITB <span class="text-xs text-zinc-600">Bitwise</span></span><span class="text-sm font-mono">$2.4B</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const newsItems = [
+            { ticker: "JPM", tag: "BREAKING", tagColor: "emerald", time: "2 hours ago", title: "J.P. Morgan Launches MONY Tokenized Money Market Fund", desc: "The banking giant announces its first tokenized fund product on Ethereum." },
+            { ticker: "SC", tag: "RESEARCH", tagColor: "blue", time: "5 hours ago", title: "Standard Chartered Raises ETH Price Target to $40,000", desc: "Analysts cite growing institutional adoption and ETF inflows." },
+            { ticker: "MS", tag: "ADOPTION", tagColor: "purple", time: "8 hours ago", title: "Morgan Stanley Goes All-In on Crypto", desc: "The $1.8T bank launches crypto ETFs and announces tokenization wallet." },
+            { ticker: "BLK", tag: "MILESTONE", tagColor: "orange", time: "12 hours ago", title: "BlackRock's BUIDL Fund Surpasses $500M AUM", desc: "The tokenized treasury fund becomes the largest of its kind." },
+            { ticker: "SEC", tag: "REGULATORY", tagColor: "red", time: "Yesterday", title: "SEC Signals Openness to ETH Staking ETFs", desc: "New commissioner comments suggest pathway for staking yields." },
+            { ticker: "GS", tag: "ADOPTION", tagColor: "purple", time: "Yesterday", title: "Goldman Sachs Expands Digital Assets Trading Desk", desc: "The investment bank doubles headcount in crypto division." },
+            { ticker: "FID", tag: "ETF", tagColor: "emerald", time: "Yesterday", title: "Fidelity's FBTC Sees Record $312M Single-Day Inflow", desc: "Bitcoin ETF competition heats up." },
+            { ticker: "FT", tag: "TOKENIZATION", tagColor: "blue", time: "2 days ago", title: "Franklin Templeton's BENJI Fund Crosses $400M", desc: "Tokenized money market fund adds 15 new institutional investors." },
+            { ticker: "EU", tag: "REGULATORY", tagColor: "red", time: "2 days ago", title: "MiCA Stablecoin Rules Take Effect Across EU", desc: "Circle's USDC becomes first fully compliant stablecoin." },
+            { ticker: "CME", tag: "DERIVATIVES", tagColor: "orange", time: "2 days ago", title: "CME Bitcoin Futures Hit Record Open Interest", desc: "Institutional demand pushes open interest past $8B." },
+            { ticker: "VIS", tag: "PAYMENTS", tagColor: "purple", time: "2 days ago", title: "Visa Expands Stablecoin Settlement to 10 New Markets", desc: "Payment giant accelerates USDC settlement rollout." },
+            { ticker: "SWF", tag: "INVESTMENT", tagColor: "emerald", time: "3 days ago", title: "Norway Sovereign Wealth Fund Discloses Indirect BTC Exposure", desc: "World's largest sovereign fund holds $500M+ in Bitcoin." },
+            { ticker: "UBS", tag: "TOKENIZATION", tagColor: "blue", time: "3 days ago", title: "UBS Launches Tokenized Bond on Ethereum", desc: "Swiss bank issues $100M digital bond." },
+            { ticker: "CB", tag: "CUSTODY", tagColor: "purple", time: "3 days ago", title: "Coinbase Prime Crosses $200B in Custodied Assets", desc: "Institutional custody platform sees record growth." },
+            { ticker: "PYP", tag: "STABLECOIN", tagColor: "orange", time: "3 days ago", title: "PayPal's PYUSD Supply Hits $1B Milestone", desc: "Dollar-backed stablecoin sees rapid adoption." },
+            { ticker: "HK", tag: "REGULATORY", tagColor: "red", time: "4 days ago", title: "Hong Kong Approves Retail Crypto ETFs", desc: "SFC greenlights spot Bitcoin and Ethereum ETFs." },
+            { ticker: "BNY", tag: "CUSTODY", tagColor: "purple", time: "4 days ago", title: "BNY Mellon Expands Crypto Custody to Ethereum", desc: "World's largest custodian adds ETH support." },
+            { ticker: "SBI", tag: "PARTNERSHIP", tagColor: "blue", time: "4 days ago", title: "SBI Holdings Partners with Circle for USDC in Japan", desc: "Japanese financial giant to offer stablecoin services." },
+            { ticker: "WF", tag: "ETF", tagColor: "emerald", time: "5 days ago", title: "WisdomTree Files for Multi-Crypto ETF", desc: "Asset manager seeks approval for diversified crypto index." },
+            { ticker: "CIT", tag: "CUSTODY", tagColor: "purple", time: "5 days ago", title: "Citi Launches Digital Asset Custody Platform", desc: "Major bank enters crypto custody space." },
+            { ticker: "ARK", tag: "RESEARCH", tagColor: "blue", time: "5 days ago", title: "ARK Invest Predicts $1M Bitcoin by 2030", desc: "Cathie Wood's firm releases updated Big Ideas report." },
+            { ticker: "SG", tag: "REGULATORY", tagColor: "red", time: "5 days ago", title: "Singapore MAS Finalizes Stablecoin Framework", desc: "Monetary Authority establishes comprehensive regime." },
+            { ticker: "DTG", tag: "INFRASTRUCTURE", tagColor: "blue", time: "6 days ago", title: "DTCC Completes Blockchain Settlement Pilot", desc: "Depository Trust clears $1T+ in simulated trades." },
+            { ticker: "SWF", tag: "INFRASTRUCTURE", tagColor: "purple", time: "6 days ago", title: "SWIFT Expands Tokenization Interoperability Network", desc: "Banking network adds 20+ institutions." },
+            { ticker: "AXA", tag: "INSURANCE", tagColor: "orange", time: "6 days ago", title: "AXA Launches Crypto Insurance Products", desc: "French insurer offers comprehensive coverage." },
+            { ticker: "DB", tag: "CUSTODY", tagColor: "purple", time: "1 week ago", title: "Deutsche Bank Receives Crypto Custody License", desc: "German banking giant cleared for EU markets." },
+            { ticker: "INV", tag: "ETF", tagColor: "emerald", time: "1 week ago", title: "Invesco Enters Tokenized ETF Race", desc: "Asset manager files for tokenized fund structure." },
+            { ticker: "BIS", tag: "RESEARCH", tagColor: "blue", time: "1 week ago", title: "BIS Report: Tokenization Could Transform Finance", desc: "Central bank group highlights $16T opportunity." },
+            { ticker: "MC", tag: "PAYMENTS", tagColor: "purple", time: "1 week ago", title: "Mastercard Tests Crypto Credential System", desc: "Payment network pilots blockchain identity." },
+            { ticker: "SOC", tag: "TOKENIZATION", tagColor: "blue", time: "1 week ago", title: "Société Générale Issues Digital Green Bond", desc: "French bank tokenizes €100M sustainability bond." },
+            { ticker: "FCA", tag: "REGULATORY", tagColor: "red", time: "1 week ago", title: "UK FCA Proposes New Crypto Regime", desc: "Regulator outlines comprehensive framework." },
+            { ticker: "NOM", tag: "INFRASTRUCTURE", tagColor: "blue", time: "2 weeks ago", title: "Nomura's Laser Digital Launches Staking", desc: "Japanese bank offers Ethereum staking." },
+            { ticker: "STT", tag: "CUSTODY", tagColor: "purple", time: "2 weeks ago", title: "State Street Explores Tokenized Fund Services", desc: "Custodian develops digital infrastructure." },
+            { ticker: "OND", tag: "TOKENIZATION", tagColor: "blue", time: "2 weeks ago", title: "Ondo Finance Crosses $300M in Tokenized Treasuries", desc: "DeFi protocol sees institutional demand surge." },
+            { ticker: "BR", tag: "CBDC", tagColor: "red", time: "2 weeks ago", title: "Brazil Central Bank Launches DREX Phase 2", desc: "CBDC project expands to tokenized assets." },
+            { ticker: "VAN", tag: "ETF", tagColor: "emerald", time: "2 weeks ago", title: "VanEck Reduces Bitcoin ETF Fees to 0.20%", desc: "Fee war intensifies among asset managers." },
+            { ticker: "HSBC", tag: "TOKENIZATION", tagColor: "purple", time: "2 weeks ago", title: "HSBC Tokenizes Gold for Hong Kong Investors", desc: "Bank offers blockchain-based gold ownership." },
+            { ticker: "G7", tag: "REGULATORY", tagColor: "red", time: "2 weeks ago", title: "G7 Nations Agree on Stablecoin Framework", desc: "Finance ministers coordinate global approach." },
+            { ticker: "KKR", tag: "TOKENIZATION", tagColor: "blue", time: "3 weeks ago", title: "KKR Tokenizes Private Equity Fund Stake", desc: "PE giant pilots blockchain secondary trading." },
+            { ticker: "RBC", tag: "RESEARCH", tagColor: "purple", time: "3 weeks ago", title: "RBC: Institutional Adoption at Inflection Point", desc: "Canadian bank forecasts accelerating adoption." },
+            { ticker: "UAE", tag: "REGULATORY", tagColor: "red", time: "3 weeks ago", title: "UAE Approves Dirham-Backed Stablecoin", desc: "First regulated stablecoin in Gulf region." },
+            { ticker: "ABN", tag: "TOKENIZATION", tagColor: "blue", time: "3 weeks ago", title: "ABN AMRO Tests Digital Mortgage Bonds", desc: "Dutch bank pilots tokenized MBS." },
+            { ticker: "21S", tag: "ETF", tagColor: "emerald", time: "3 weeks ago", title: "21Shares ETP Assets Surpass $5B", desc: "Swiss crypto ETP provider sees record growth." },
+            { ticker: "JPX", tag: "INFRASTRUCTURE", tagColor: "purple", time: "3 weeks ago", title: "Japan Exchange Tests Security Token Trading", desc: "TSE operator pilots digital securities." },
+            { ticker: "SCB", tag: "LENDING", tagColor: "orange", time: "1 month ago", title: "Standard Chartered Launches Crypto Lending", desc: "Bank offers BTC and ETH collateralized loans." },
+            { ticker: "PWC", tag: "RESEARCH", tagColor: "blue", time: "1 month ago", title: "PwC: 60% of Hedge Funds Now Hold Crypto", desc: "Survey shows sharp increase in allocations." },
+            { ticker: "CAL", tag: "PENSION", tagColor: "purple", time: "1 month ago", title: "CalPERS Explores 1% Bitcoin Allocation", desc: "Largest US pension considers crypto exposure." },
+            { ticker: "ECB", tag: "CBDC", tagColor: "red", time: "1 month ago", title: "ECB Digital Euro Enters Preparation Phase", desc: "European central bank advances CBDC timeline." },
+            { ticker: "CHG", tag: "DERIVATIVES", tagColor: "orange", time: "1 month ago", title: "Cboe Launches ETH Options Trading", desc: "Exchange expands crypto derivatives suite." },
+            { ticker: "TET", tag: "STABLECOIN", tagColor: "emerald", time: "1 month ago", title: "Tether Treasury Holdings Exceed $100B", desc: "Largest stablecoin becomes major Treasury holder." }
+        ];
+
+        const tagColors = {
+            emerald: "text-emerald-500",
+            blue: "text-blue-500",
+            purple: "text-purple-500",
+            orange: "text-orange-500",
+            red: "text-red-500"
+        };
+
+        const newsFeed = document.getElementById('newsFeed');
+        newsItems.forEach(item => {
+            newsFeed.innerHTML += `<a href="#" class="block p-4 hover:bg-zinc-800/50 transition-colors"><div class="flex items-start gap-3"><div class="w-8 h-8 rounded bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-400 shrink-0">${item.ticker}</div><div class="flex-1 min-w-0"><div class="flex items-center gap-2 mb-1"><span class="text-xs font-mono ${tagColors[item.tagColor]}">${item.tag}</span><span class="text-xs text-zinc-500">${item.time}</span></div><h3 class="text-sm font-medium text-white mb-1">${item.title}</h3><p class="text-xs text-zinc-500 line-clamp-2">${item.desc}</p></div></div></a>`;
+        });
+
+        Chart.defaults.color = '#71717a';
+        Chart.defaults.borderColor = '#27272a';
+
+        new Chart(document.getElementById('marketCapChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Dec 15', 'Dec 18', 'Dec 21', 'Dec 24', 'Dec 27', 'Dec 30', 'Jan 2', 'Jan 5', 'Jan 8', 'Jan 11', 'Jan 14'],
+                datasets: [{
+                    data: [2.89, 2.95, 3.02, 3.15, 3.08, 3.18, 3.25, 3.31, 3.28, 3.38, 3.42],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 10 } }
+                    },
+                    y: {
+                        grid: { color: '#27272a' },
+                        ticks: {
+                            font: { size: 10 },
+                            callback: v => '$' + v + 'T'
+                        }
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('rwaChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Dec 15', 'Dec 18', 'Dec 21', 'Dec 24', 'Dec 27', 'Dec 30', 'Jan 2', 'Jan 5', 'Jan 8', 'Jan 11', 'Jan 14'],
+                datasets: [{
+                    data: [1.94, 1.98, 2.05, 2.12, 2.15, 2.19, 2.24, 2.28, 2.32, 2.37, 2.41],
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 10 } }
+                    },
+                    y: {
+                        grid: { color: '#27272a' },
+                        ticks: {
+                            font: { size: 10 },
+                            callback: v => '$' + v + 'T'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
