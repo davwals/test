@@ -6,7 +6,7 @@
     <title id="pageTitle">Fund Profile | Enterprise Onchain Terminal</title>
     <link rel="icon" type="image/jpeg" href="https://i.imgur.com/LJ0gSjb.jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
@@ -14,6 +14,7 @@
             theme: {
                 extend: {
                     fontFamily: {
+                        'manrope': ['Manrope', 'sans-serif'],
                         'mono': ['JetBrains Mono', 'monospace']
                     }
                 }
@@ -21,890 +22,167 @@
         }
     </script>
     <style>
-        body { font-family: 'JetBrains Mono', monospace; }
-        .terminal-border {
-            border: 1px solid #22c55e;
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
-        }
-        .terminal-glow {
-            text-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
-        }
-        .data-table {
-            width: 100%;
-            font-size: 0.75rem;
-        }
-        .data-table td {
-            padding: 0.5rem;
-            border-bottom: 1px solid #27272a;
-        }
-        .data-table td:first-child {
-            color: #71717a;
-            width: 40%;
-        }
-        .data-table td:last-child {
-            color: #22c55e;
-            font-weight: 600;
-        }
+        body { font-family: 'Manrope', sans-serif; }
+        .data-table { width: 100%; font-size: 0.75rem; }
+        .data-table td { padding: 0.5rem; border-bottom: 1px solid #27272a; }
+        .data-table td:first-child { color: #71717a; width: 40%; }
+        .data-table td:last-child { color: #fff; font-weight: 500; }
     </style>
 </head>
-<body class="bg-black text-green-400 antialiased min-h-screen">
+<body class="bg-zinc-950 text-zinc-100 antialiased min-h-screen">
     <!-- Navigation -->
-    <nav class="border-b border-zinc-800 bg-black/90 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <a href="funds.html" class="text-green-400 hover:text-green-300 text-sm">← Back to Funds</a>
-                <span class="text-zinc-600">|</span>
-                <span class="text-sm font-semibold terminal-glow" id="fundTicker"></span>
+    <nav class="fixed top-0 w-full z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-md">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <button id="burgerBtn" class="p-2 text-zinc-500 hover:text-white transition-colors -ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="funds.html" class="flex items-center gap-2">
+                    <img src="https://i.imgur.com/LJ0gSjb.jpeg" alt="Enterprise Onchain" class="w-6 h-6 rounded-full">
+                    <span class="text-sm font-semibold tracking-tight">Enterprise Onchain</span>
+                    <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded ml-2">TERMINAL</span>
+                </a>
+                <div class="hidden lg:flex items-center gap-1 text-xs">
+                    <a href="funds.html?category=treasuries" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Treasuries</a>
+                    <a href="funds.html?category=securities" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Securities</a>
+                    <a href="funds.html?category=commodities" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Commodities</a>
+                    <a href="funds.html?category=defi" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">DeFi</a>
+                    <a href="funds.html?category=stablecoins" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Stablecoins</a>
+                    <a href="funds.html?category=real-estate" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Real Estate</a>
+                    <a href="funds.html?category=credit" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Credit</a>
+                </div>
             </div>
-            <div class="text-xs text-zinc-500">
-                <span id="currentTime"></span>
+            <div class="flex items-center gap-3">
+                <a href="funds.html" class="text-xs text-zinc-500 hover:text-white transition-colors hidden sm:block">← Back to Funds</a>
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold">DW</div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Fund Header -->
-        <div class="mb-8">
-            <div class="flex items-start justify-between mb-4">
-                <div>
-                    <h1 class="text-2xl font-bold mb-2 terminal-glow" id="fundName"></h1>
-                    <p class="text-sm text-zinc-500" id="fundIssuer"></p>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 hidden">
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" id="mobileMenuOverlay"></div>
+        <div class="fixed left-0 top-0 h-full w-64 bg-zinc-950 border-r border-zinc-800 shadow-xl transform -translate-x-full transition-transform duration-300" id="mobileMenuPanel">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between p-4 border-b border-zinc-800">
+                    <span class="text-sm font-semibold">Menu</span>
+                    <button id="closeMobileMenu" class="p-2 text-zinc-500 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
                 </div>
-                <div class="text-right">
-                    <div class="text-xs text-zinc-500 mb-1">Current AUM</div>
-                    <div class="text-3xl font-bold" id="fundAUM"></div>
+                <div class="flex-1 overflow-y-auto p-4">
+                    <nav class="space-y-1">
+                        <a href="terminal.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Terminal</a>
+                        <a href="funds.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white hover:bg-zinc-800 transition-colors">Funds</a>
+                        <a href="articles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Articles</a>
+                        <div class="pt-4 pb-2 border-t border-zinc-800 mt-4">
+                            <div class="text-xs text-zinc-500 px-3 mb-2">Resources</div>
+                        </div>
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Newsletter</a>
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Podcast</a>
+                    </nav>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Key Metrics -->
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            <div class="terminal-border bg-zinc-950 p-4">
-                <div class="text-xs text-zinc-500 mb-1">Yield</div>
-                <div class="text-xl font-bold" id="fundYield"></div>
+    <main class="pt-14">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-8">
+            <!-- Fund Header -->
+            <div class="mb-8">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <div class="text-xs text-zinc-500 mb-2 font-mono" id="fundTicker"></div>
+                        <h1 class="text-2xl font-bold mb-2" id="fundName"></h1>
+                        <p class="text-sm text-zinc-400" id="fundIssuer"></p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-zinc-500 mb-1">Current AUM</div>
+                        <div class="text-3xl font-mono font-bold" id="fundAUM"></div>
+                    </div>
+                </div>
             </div>
-            <div class="terminal-border bg-zinc-950 p-4">
-                <div class="text-xs text-zinc-500 mb-1">Min Investment</div>
-                <div class="text-xl font-bold" id="fundMin"></div>
-            </div>
-            <div class="terminal-border bg-zinc-950 p-4">
-                <div class="text-xs text-zinc-500 mb-1">Chains</div>
-                <div class="text-xl font-bold" id="fundChains"></div>
-            </div>
-            <div class="terminal-border bg-zinc-950 p-4">
-                <div class="text-xs text-zinc-500 mb-1">Holders</div>
-                <div class="text-xl font-bold" id="fundHolders"></div>
-            </div>
-            <div class="terminal-border bg-zinc-950 p-4">
-                <div class="text-xs text-zinc-500 mb-1">Market Share</div>
-                <div class="text-xl font-bold" id="fundMarketShare"></div>
-            </div>
-        </div>
 
-        <!-- TVL & Active Users Chart -->
-        <div class="terminal-border bg-zinc-950 p-6 mb-8">
-            <h2 class="text-sm font-bold mb-4 terminal-glow">TVL & ACTIVE USERS (7M TREND)</h2>
-            <div style="height: 300px;">
-                <canvas id="metricsChart"></canvas>
+            <!-- Key Metrics -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Yield</div>
+                    <div class="text-xl font-mono font-bold" id="fundYield"></div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Min Investment</div>
+                    <div class="text-xl font-mono font-bold" id="fundMin"></div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Chains</div>
+                    <div class="text-xl font-mono font-bold" id="fundChains"></div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Holders</div>
+                    <div class="text-xl font-mono font-bold" id="fundHolders"></div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Market Share</div>
+                    <div class="text-xl font-mono font-bold" id="fundMarketShare"></div>
+                </div>
             </div>
-        </div>
 
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="fundDetails">
-            <!-- Details will be loaded here -->
+            <!-- TVL & Active Users Chart -->
+            <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-8">
+                <h2 class="text-sm font-bold mb-4">TVL & ACTIVE USERS (7M TREND)</h2>
+                <div style="height: 300px;">
+                    <canvas id="metricsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="fundDetails"></div>
         </div>
     </main>
 
-    <script>
-        // Get fund ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const fundId = urlParams.get('id');
-
-        // Load funds data
-        const fundsData = JSON.parse(localStorage.getItem('fundsData') || '[]');
-        const fund = fundsData.find(f => f.id === fundId);
-
-        if (!fund) {
-            window.location.href = 'funds.html';
-        }
-
-        // Update time
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('currentTime').textContent = now.toUTCString();
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-
-        // Format currency
-        function formatCurrency(value) {
-            if (value >= 1000000000) return '$' + (value / 1000000000).toFixed(1) + 'B';
-            if (value >= 1000000) return '$' + (value / 1000000).toFixed(0) + 'M';
-            if (value >= 1000) return '$' + (value / 1000).toFixed(0) + 'K';
-            return '$' + value;
-        }
-
-        // Calculate market share
-        const totalMarket = 6800000000; // $6.8B total
-        const marketShare = ((fund.aum / totalMarket) * 100).toFixed(1);
-
-        // Update header
-        document.getElementById('pageTitle').textContent = `${fund.ticker} - ${fund.name}`;
-        document.getElementById('fundTicker').textContent = fund.ticker;
-        document.getElementById('fundName').textContent = fund.name;
-        document.getElementById('fundIssuer').textContent = `Issued by ${fund.issuer}`;
-        document.getElementById('fundAUM').textContent = formatCurrency(fund.aum);
-        document.getElementById('fundYield').textContent = fund.yield + '%';
-        document.getElementById('fundMin').textContent = formatCurrency(fund.minInvestment);
-        document.getElementById('fundChains').textContent = fund.chains;
-        document.getElementById('fundHolders').textContent = fund.holders.toLocaleString();
-        document.getElementById('fundMarketShare').textContent = marketShare + '%';
-
-        // Create chart
-        const ctx = document.getElementById('metricsChart').getContext('2d');
-        const labels = ['6M ago', '5M ago', '4M ago', '3M ago', '2M ago', '1M ago', 'Now'];
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'TVL ($M)',
-                    data: fund.tvlHistory,
-                    borderColor: '#22c55e',
-                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                    yAxisID: 'y',
-                    tension: 0.4
-                }, {
-                    label: 'Active Users',
-                    data: fund.activeUsers,
-                    borderColor: '#3b82f6',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    yAxisID: 'y1',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#22c55e',
-                            font: {
-                                family: 'JetBrains Mono'
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: '#09090b',
-                        borderColor: '#22c55e',
-                        borderWidth: 1,
-                        titleColor: '#22c55e',
-                        bodyColor: '#71717a',
-                        titleFont: {
-                            family: 'JetBrains Mono'
-                        },
-                        bodyFont: {
-                            family: 'JetBrains Mono'
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        ticks: {
-                            color: '#22c55e',
-                            font: {
-                                family: 'JetBrains Mono',
-                                size: 10
-                            }
-                        },
-                        grid: {
-                            color: '#27272a'
-                        },
-                        title: {
-                            display: true,
-                            text: 'TVL ($M)',
-                            color: '#22c55e',
-                            font: {
-                                family: 'JetBrains Mono',
-                                size: 11
-                            }
-                        }
-                    },
-                    y1: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        ticks: {
-                            color: '#3b82f6',
-                            font: {
-                                family: 'JetBrains Mono',
-                                size: 10
-                            }
-                        },
-                        grid: {
-                            drawOnChartArea: false,
-                        },
-                        title: {
-                            display: true,
-                            text: 'Active Users',
-                            color: '#3b82f6',
-                            font: {
-                                family: 'JetBrains Mono',
-                                size: 11
-                            }
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: '#71717a',
-                            font: {
-                                family: 'JetBrains Mono',
-                                size: 10
-                            }
-                        },
-                        grid: {
-                            color: '#27272a'
-                        }
-                    }
-                }
-            }
-        });
-
-        // Fund-specific data templates
-        const fundProfiles = {
-            buidl: {
-                identity: {
-                    'Product Name': 'BlackRock USD Institutional Digital Liquidity Fund',
-                    'Token Ticker': 'BUIDL',
-                    'Issuer': 'BlackRock Financial Management, Inc.',
-                    'Jurisdiction': 'British Virgin Islands (BVI)',
-                    'Regulatory Status': 'SEC Reg D Rule 506(c)',
-                    'Launch Date': 'March 20, 2024',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'Aptos, Arbitrum, Avalanche, BNB, Optimism, Polygon, Solana'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$2.9B (Mid-2025)',
-                    'Market Share': marketShare + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Daily accrual, monthly payout',
-                    'Distribution Method': 'New tokens minted to wallet',
-                    'Cumulative Dividends': '$100M+ (Dec 2025)'
-                },
-                access: {
-                    'Minimum Investment': formatCurrency(fund.minInvestment),
-                    'Minimum Redemption': '$250,000',
-                    'Investor Eligibility': 'Qualified Purchasers ($5M+ assets)',
-                    'KYC/AML Provider': 'Securitize',
-                    'Subscription Currency': 'USD (wire), USDC',
-                    'Redemption Settlement': 'T+0 (USDC), T+1 (wire)',
-                    'Instant Redemption': 'Yes (via Circle USDC)'
-                },
-                fees: {
-                    'Management Fee (ETH)': '50 bps (0.50%)',
-                    'Management Fee (L2s)': '20 bps (0.20%)',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None',
-                    'Total Expense Ratio': '~0.50%',
-                    'Annual Fee Revenue': '~$60M'
-                },
-                providers: {
-                    'Investment Manager': 'BlackRock Financial Management',
-                    'Fund Administrator': 'Bank of New York Mellon',
-                    'Custodian': 'BNY Mellon',
-                    'Digital Custodians': 'Anchorage, BitGo, Coinbase, Fireblocks',
-                    'Transfer Agent': 'Securitize, LLC',
-                    'Auditor': 'PricewaterhouseCoopers LLP',
-                    'Bridge Provider': 'Wormhole'
-                },
-                defi: {
-                    'Circle': '✅ USDC instant redemption',
-                    'Ondo Finance': '✅ Reserve asset for OUSG',
-                    'Ethena': '✅ Reserve Fund allocation',
-                    'Frax Finance': '✅ Collateral for frxUSD',
-                    'Binance': '✅ Off-exchange collateral',
-                    'Ripple/RLUSD': '✅ Token swap integration',
-                    'Jupiter': '✅ Backing via USDtb/Ethena'
-                }
-            },
-            benji: {
-                identity: {
-                    'Product Name': 'Franklin OnChain U.S. Government Money Fund',
-                    'Token Ticker': 'BENJI',
-                    'Issuer': 'Franklin Templeton',
-                    'Jurisdiction': 'United States',
-                    'Regulatory Status': 'SEC Registered (1940 Act)',
-                    'Launch Date': 'April 2021',
-                    'Primary Blockchain': 'Stellar',
-                    'Secondary Chains': 'Polygon, Avalanche'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$720M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Monthly',
-                    'Distribution Method': 'New shares issued',
-                    'SEC Yield (30-day)': '5.05%'
-                },
-                access: {
-                    'Minimum Investment': '$20',
-                    'Minimum Redemption': '$20',
-                    'Investor Eligibility': 'Retail and institutional',
-                    'KYC/AML Provider': 'Franklin Templeton',
-                    'Subscription Currency': 'USD (ACH), wire',
-                    'Redemption Settlement': 'T+1',
-                    'Mobile App': 'Yes (Franklin Templeton app)'
-                },
-                fees: {
-                    'Management Fee': '0.00% (waived)',
-                    'Gross Expense Ratio': '0.80%',
-                    'Net Expense Ratio': '0.00% (waived)',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None',
-                    '12b-1 Fee': 'None'
-                },
-                providers: {
-                    'Investment Manager': 'Franklin Advisers, Inc.',
-                    'Fund Administrator': 'Franklin Templeton Services',
-                    'Custodian': 'State Street Bank',
-                    'Transfer Agent': 'Franklin Templeton',
-                    'Auditor': 'PricewaterhouseCoopers LLP',
-                    'Blockchain': 'Stellar Development Foundation'
-                },
-                defi: {
-                    'Stellar DEX': '✅ Native trading',
-                    'AnchorUSD': '✅ On/off ramp partner',
-                    'MoneyGram': '✅ Remittance integration',
-                    'Circle': '🔄 USDC interoperability',
-                    'DeFi Protocols': '❌ Limited integration',
-                    'Cross-chain': '✅ Via bridge protocols'
-                }
-            },
-            usdy: {
-                identity: {
-                    'Product Name': 'Ondo U.S. Dollar Yield',
-                    'Token Ticker': 'USDY',
-                    'Issuer': 'Ondo Finance',
-                    'Jurisdiction': 'United States',
-                    'Regulatory Status': 'SEC Reg D (accredited only)',
-                    'Launch Date': 'January 2023',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'Solana, Mantle, Aptos, Sui'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$420M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Daily rebase',
-                    'Distribution Method': 'Elastic supply (rebase)',
-                    'Backed By': '100% U.S. Treasuries + cash'
-                },
-                access: {
-                    'Minimum Investment': '$500 (via Ondo)',
-                    'Minimum Redemption': '$100',
-                    'Investor Eligibility': 'Accredited investors (US)',
-                    'KYC/AML Provider': 'Ondo Finance',
-                    'Subscription Currency': 'USDC',
-                    'Redemption Settlement': 'T+1 to T+3',
-                    'Secondary Market': 'Limited OTC'
-                },
-                fees: {
-                    'Management Fee': '0.30%',
-                    'Custody Fee': '0.05%',
-                    'Total Fees': '0.35% annually',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None',
-                    'Performance Fee': 'None'
-                },
-                providers: {
-                    'Investment Manager': 'Ondo Finance DAO',
-                    'Fund Administrator': 'NAV Consulting',
-                    'Custodian': 'Coinbase Custody',
-                    'Asset Custodian': 'Bank of New York Mellon',
-                    'Transfer Agent': 'Ondo Finance',
-                    'Auditor': 'Armanino LLP'
-                },
-                defi: {
-                    'Curve Finance': '✅ USDY pools',
-                    'Balancer': '✅ Liquidity pools',
-                    'Flux Finance': '✅ Collateral',
-                    'Morpho': '✅ Money market',
-                    'Pendle': '✅ Yield trading',
-                    'Uniswap': '✅ Limited pools'
-                }
-            },
-            usyc: {
-                identity: {
-                    'Product Name': 'Hashnote U.S. Yield Coin',
-                    'Token Ticker': 'USYC',
-                    'Issuer': 'Hashnote',
-                    'Jurisdiction': 'Cayman Islands',
-                    'Regulatory Status': 'Exempt offshore fund',
-                    'Launch Date': 'October 2023',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'Solana'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$950M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Daily accrual',
-                    'Distribution Method': 'Token rebase',
-                    'Strategy': 'Short-duration Treasuries + cash'
-                },
-                access: {
-                    'Minimum Investment': '$100,000',
-                    'Minimum Redemption': '$10,000',
-                    'Investor Eligibility': 'Qualified investors (non-US)',
-                    'KYC/AML Provider': 'Hashnote compliance team',
-                    'Subscription Currency': 'USDC, USDT, wire USD',
-                    'Redemption Settlement': 'T+0 (USDC)',
-                    'Instant Redemption': 'Yes (via smart contract)'
-                },
-                fees: {
-                    'Management Fee': '0.25%',
-                    'Performance Fee': 'None',
-                    'Admin Fee': '0.05%',
-                    'Total Expense Ratio': '0.30%',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None'
-                },
-                providers: {
-                    'Investment Manager': 'Hashnote Asset Management',
-                    'Fund Administrator': 'Apex Fund Services',
-                    'Custodian': 'Copper.co',
-                    'Banking Partner': 'Signature Bank (historical)',
-                    'Transfer Agent': 'Hashnote',
-                    'Auditor': 'Grant Thornton'
-                },
-                defi: {
-                    'Aave (proposed)': '🔄 Collateral listing',
-                    'Morpho': '✅ Lending markets',
-                    'Ethena': '✅ Reserve asset',
-                    'Compound': '🔄 Governance discussion',
-                    'DeFi integration': '✅ Growing adoption',
-                    'CeFi platforms': '✅ Binance, Crypto.com'
-                }
-            },
-            ustb: {
-                identity: {
-                    'Product Name': 'Superstate Short Duration Government Securities',
-                    'Token Ticker': 'USTB',
-                    'Issuer': 'Superstate',
-                    'Jurisdiction': 'United States',
-                    'Regulatory Status': 'SEC Reg D',
-                    'Launch Date': 'October 2023',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'None (Ethereum only)'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$105M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Monthly',
-                    'Distribution Method': 'New tokens issued',
-                    'NAV': '$1.00 (stable)'
-                },
-                access: {
-                    'Minimum Investment': '$100,000',
-                    'Minimum Redemption': '$10,000',
-                    'Investor Eligibility': 'Accredited investors (US)',
-                    'KYC/AML Provider': 'Superstate',
-                    'Subscription Currency': 'USDC, wire USD',
-                    'Redemption Settlement': 'T+1',
-                    'Direct USDC': 'Yes'
-                },
-                fees: {
-                    'Management Fee': '0.10%',
-                    'Distribution Fee': '0.05%',
-                    'Total Expense Ratio': '0.15%',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None',
-                    'Lowest Fee': 'Among major T-bill tokens'
-                },
-                providers: {
-                    'Investment Manager': 'Superstate Management LLC',
-                    'Fund Administrator': 'U.S. Bancorp Fund Services',
-                    'Custodian': 'Anchorage Digital Bank',
-                    'Banking Partner': 'Customers Bancorp',
-                    'Transfer Agent': 'Superstate',
-                    'Auditor': 'Cohen & Company'
-                },
-                defi: {
-                    'Centrifuge': '✅ RWA integration',
-                    'Goldfinch': '🔄 Proposed integration',
-                    'Maple Finance': '🔄 Discussion stage',
-                    'DeFi Adoption': '❌ Limited (early stage)',
-                    'Focus': 'Institutional treasury management',
-                    'Yield Optimization': '✅ Automated strategies'
-                }
-            },
-            usdm: {
-                identity: {
-                    'Product Name': 'Mountain Protocol USD',
-                    'Token Ticker': 'USDM',
-                    'Issuer': 'Mountain Protocol',
-                    'Jurisdiction': 'Bermuda',
-                    'Regulatory Status': 'Bermuda Digital Asset License',
-                    'Launch Date': 'February 2023',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'Optimism, Base'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$162M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Daily',
-                    'Distribution Method': 'Rebase mechanism',
-                    'Peg': '$1.00 (yield-bearing stablecoin)'
-                },
-                access: {
-                    'Minimum Investment': '$100',
-                    'Minimum Redemption': '$100',
-                    'Investor Eligibility': 'Retail and institutional',
-                    'KYC/AML Provider': 'Mountain Protocol',
-                    'Subscription Currency': 'USDC, wire USD',
-                    'Redemption Settlement': 'T+1',
-                    'Permissionless Transfers': 'No (whitelist required)'
-                },
-                fees: {
-                    'Management Fee': '0.00%',
-                    'Expense Ratio': '0.00% (currently waived)',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None',
-                    'Future Fees': 'TBD (currently promotional)',
-                    'Revenue Model': 'Spread on Treasury yields'
-                },
-                providers: {
-                    'Investment Manager': 'Mountain Protocol Foundation',
-                    'Fund Administrator': 'Apex Fund Services',
-                    'Custodian': 'Zodia Custody',
-                    'Banking Partner': 'Multiple tier-1 banks',
-                    'Transfer Agent': 'Mountain Protocol',
-                    'Auditor': 'BDO'
-                },
-                defi: {
-                    'Curve Finance': '✅ USDM pools',
-                    'Aerodrome': '✅ Base DEX integration',
-                    'Velodrome': '✅ Optimism integration',
-                    'Balancer': '✅ Liquidity pools',
-                    'DeFi Adoption': '✅ Growing rapidly',
-                    'Yield Aggregators': '✅ Yearn, Beefy'
-                }
-            },
-            tbill: {
-                identity: {
-                    'Product Name': 'OpenEden T-Bill Token',
-                    'Token Ticker': 'TBILL',
-                    'Issuer': 'OpenEden',
-                    'Jurisdiction': 'Singapore',
-                    'Regulatory Status': 'MAS regulated',
-                    'Launch Date': 'June 2023',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'Arbitrum'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$92M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Monthly',
-                    'Distribution Method': 'New tokens minted',
-                    'Asset Backing': '100% U.S. T-Bills'
-                },
-                access: {
-                    'Minimum Investment': '$100,000',
-                    'Minimum Redemption': '$10,000',
-                    'Investor Eligibility': 'Institutional and accredited',
-                    'KYC/AML Provider': 'OpenEden',
-                    'Subscription Currency': 'USDC',
-                    'Redemption Settlement': 'T+2',
-                    'Geographic Focus': 'Asia-Pacific'
-                },
-                fees: {
-                    'Management Fee': '0.15%',
-                    'Admin Fee': '0.05%',
-                    'Total Fees': '0.20%',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None',
-                    'Performance Fee': 'None'
-                },
-                providers: {
-                    'Investment Manager': 'OpenEden Pte Ltd',
-                    'Fund Administrator': 'Intertrust Singapore',
-                    'Custodian': 'Hex Trust',
-                    'Banking Partner': 'DBS Bank',
-                    'Transfer Agent': 'OpenEden',
-                    'Auditor': 'KPMG'
-                },
-                defi: {
-                    'Pendle Finance': '✅ Yield tokenization',
-                    'Spark Protocol': '🔄 Integration planned',
-                    'Asia DeFi': '✅ Focus on Asian protocols',
-                    'GMX': '🔄 Collateral discussion',
-                    'Institutional DeFi': '✅ Primary use case',
-                    'Retail Access': '❌ Limited'
-                }
-            },
-            stbt: {
-                identity: {
-                    'Product Name': 'MatrixDock Short-term Treasury Bill Token',
-                    'Token Ticker': 'STBT',
-                    'Issuer': 'MatrixDock',
-                    'Jurisdiction': 'Singapore',
-                    'Regulatory Status': 'MAS regulated',
-                    'Launch Date': 'July 2023',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'Polygon'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$340M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Daily accrual',
-                    'Distribution Method': 'Rebase token',
-                    'Transparency': 'Daily NAV reporting'
-                },
-                access: {
-                    'Minimum Investment': '$100,000',
-                    'Minimum Redemption': '$10,000',
-                    'Investor Eligibility': 'Accredited investors',
-                    'KYC/AML Provider': 'MatrixDock',
-                    'Subscription Currency': 'USDC, USDT',
-                    'Redemption Settlement': 'T+1',
-                    'Institutional Focus': 'Yes'
-                },
-                fees: {
-                    'Management Fee': '0.30%',
-                    'Custody Fee': 'Included',
-                    'Total Fees': '0.30%',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None',
-                    'Admin Fee': 'None'
-                },
-                providers: {
-                    'Investment Manager': 'MatrixDock Pte Ltd',
-                    'Fund Administrator': 'Apex Fund Services',
-                    'Custodian': 'Copper.co',
-                    'Banking Partner': 'Standard Chartered',
-                    'Transfer Agent': 'MatrixDock',
-                    'Auditor': 'PwC Singapore'
-                },
-                defi: {
-                    'Asia Protocols': '✅ Regional focus',
-                    'Lending Markets': '🔄 Integration underway',
-                    'Institutional DeFi': '✅ Primary market',
-                    'DEX Liquidity': '❌ Limited',
-                    'CeFi Partners': '✅ Multiple exchanges',
-                    'Yield Products': '✅ Structured products'
-                }
-            },
-            bib01: {
-                identity: {
-                    'Product Name': 'Backed IB01 Government Bond',
-                    'Token Ticker': 'bIB01',
-                    'Issuer': 'Backed Finance',
-                    'Jurisdiction': 'Switzerland',
-                    'Regulatory Status': 'FINMA regulated',
-                    'Launch Date': 'March 2023',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'Polygon'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$295M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Quarterly',
-                    'Distribution Method': 'Coupon payments',
-                    'Underlying': 'iShares $ Treasury Bond 0-1yr ETF'
-                },
-                access: {
-                    'Minimum Investment': '$1,000',
-                    'Minimum Redemption': '$1,000',
-                    'Investor Eligibility': 'Retail and institutional (global)',
-                    'KYC/AML Provider': 'Backed Assets',
-                    'Subscription Currency': 'USDC',
-                    'Redemption Settlement': 'T+2',
-                    'European Focus': 'Yes'
-                },
-                fees: {
-                    'Management Fee': '0.00%',
-                    'Underlying ETF Fee': '0.07% (iShares)',
-                    'Total Fees': '0.07%',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None',
-                    'Lowest Cost': 'Among tokenized bonds'
-                },
-                providers: {
-                    'Token Issuer': 'Backed Assets GmbH',
-                    'Custodian': 'Sygnum Bank',
-                    'Underlying Manager': 'BlackRock (iShares)',
-                    'Banking Partner': 'Sygnum Bank',
-                    'Transfer Agent': 'Backed Finance',
-                    'Auditor': 'PwC Switzerland'
-                },
-                defi: {
-                    'Curve Finance': '✅ bIB01 pools',
-                    'Balancer': '✅ Liquidity provision',
-                    'Uniswap': '✅ Trading pairs',
-                    'Aave (proposed)': '🔄 Collateral listing',
-                    'European DeFi': '✅ Strong presence',
-                    'Cross-border': '✅ Global accessibility'
-                }
-            },
-            ousg: {
-                identity: {
-                    'Product Name': 'Ondo Short-Term US Government Treasuries',
-                    'Token Ticker': 'OUSG',
-                    'Issuer': 'Ondo Finance',
-                    'Jurisdiction': 'United States',
-                    'Regulatory Status': 'SEC Reg D',
-                    'Launch Date': 'January 2023',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'Solana, Polygon, Mantle'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$620M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Monthly',
-                    'Distribution Method': 'Token price appreciation',
-                    'Backed By': '90% BlackRock BUIDL + 10% USDC'
-                },
-                access: {
-                    'Minimum Investment': '$5,000',
-                    'Minimum Redemption': '$1,000',
-                    'Investor Eligibility': 'Accredited investors (US)',
-                    'KYC/AML Provider': 'Ondo Finance',
-                    'Subscription Currency': 'USDC',
-                    'Redemption Settlement': 'T+2 to T+5',
-                    'Retail Gateway': 'For BUIDL access'
-                },
-                fees: {
-                    'Management Fee': '0.15%',
-                    'Underlying BUIDL Fee': '0.50% (pass-through)',
-                    'Total Fees': '0.65%',
-                    'Subscription Fee': 'None',
-                    'Redemption Fee': 'None',
-                    'Convenience Premium': 'Lower minimum vs BUIDL'
-                },
-                providers: {
-                    'Investment Manager': 'Ondo Finance DAO',
-                    'Fund Administrator': 'NAV Consulting',
-                    'Custodian': 'Coinbase Custody',
-                    'Underlying Fund': 'BlackRock BUIDL',
-                    'Transfer Agent': 'Ondo Finance',
-                    'Auditor': 'Armanino LLP'
-                },
-                defi: {
-                    'Flux Finance': '✅ Ondo lending protocol',
-                    'Morpho': '✅ Money markets',
-                    'Pendle': '✅ Yield trading',
-                    'Balancer': '✅ Liquidity pools',
-                    'Curve': '✅ Stable pools',
-                    'Retail DeFi': '✅ Democratized BUIDL access'
-                }
-            },
-            syrup: {
-                identity: {
-                    'Product Name': 'Maple Syrup',
-                    'Token Ticker': 'SYRUP',
-                    'Issuer': 'Maple Finance',
-                    'Jurisdiction': 'Cayman Islands',
-                    'Regulatory Status': 'Exempt fund',
-                    'Launch Date': 'November 2023',
-                    'Primary Blockchain': 'Ethereum',
-                    'Secondary Chains': 'None'
-                },
-                performance: {
-                    'Current AUM': formatCurrency(fund.aum),
-                    'Peak AUM': '$102M',
-                    'Market Share': ((fund.aum / totalMarket) * 100).toFixed(1) + '%',
-                    'Current Yield': fund.yield + '% APY',
-                    'Distribution Frequency': 'Continuous accrual',
-                    'Distribution Method': 'Principal + interest at maturity',
-                    'Strategy': 'T-Bills + cash management'
-                },
-                access: {
-                    'Minimum Investment': '$100,000',
-                    'Minimum Redemption': '$10,000',
-                    'Investor Eligibility': 'Qualified investors',
-                    'KYC/AML Provider': 'Maple Finance',
-                    'Subscription Currency': 'USDC',
-                    'Redemption Settlement': 'At maturity or T+7',
-                    'Lock-up Period': '30-90 days (varies by pool)'
-                },
-                fees: {
-                    'Management Fee': '0.00%',
-                    'Performance Fee': '10% over benchmark',
-                    'Platform Fee': '0.66% (split with pool delegates)',
-                    'Subscription Fee': 'None',
-                    'Early Redemption Fee': '1% (if before maturity)',
-                    'Total Fees': '~0.66% base + performance'
-                },
-                providers: {
-                    'Investment Manager': 'Maple Finance DAO',
-                    'Pool Delegate': 'Various (institutional)',
-                    'Custodian': 'Fireblocks',
-                    'Banking Partner': 'Multiple',
-                    'Transfer Agent': 'Maple Finance',
-                    'Auditor': 'Three Sigma (smart contracts)'
-                },
-                defi: {
-                    'Maple Protocol': '✅ Native lending',
-                    'Institutional Lending': '✅ Core product',
-                    'Aave Arc': '🔄 Integration discussed',
-                    'Under-collateralized': '✅ Credit-based',
-                    'Retail Access': '❌ Institutional only',
-                    'Fixed Income DeFi': '✅ Pioneer'
-                }
-            }
-        };
-
-        // Render fund details
-        const profile = fundProfiles[fundId];
-        if (profile) {
-            const sections = [
-                { title: 'IDENTITY', data: profile.identity },
-                { title: 'PERFORMANCE', data: profile.performance },
-                { title: 'ACCESS & ELIGIBILITY', data: profile.access },
-                { title: 'FEES', data: profile.fees },
-                { title: 'SERVICE PROVIDERS', data: profile.providers },
-                { title: 'DEFI INTEGRATIONS', data: profile.defi }
-            ];
-
-            document.getElementById('fundDetails').innerHTML = sections.map(section => `
-                <div class="terminal-border bg-zinc-950 p-6">
-                    <h2 class="text-sm font-bold mb-4 terminal-glow">${section.title}</h2>
-                    <table class="data-table">
-                        ${Object.entries(section.data).map(([key, value]) => `
-                            <tr>
-                                <td>${key}</td>
-                                <td>${value}</td>
-                            </tr>
-                        `).join('')}
-                    </table>
+    <!-- Footer -->
+    <footer class="bg-zinc-950 border-t border-zinc-800 pt-20 pb-12 mt-12">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-manrope text-white mb-4 tracking-tight">Don't Miss the Institutional Crypto Revolution</h2>
+            <p class="text-zinc-500 mb-8">Stay ahead with the latest news, insights, and analysis on institutional adoption.</p>
+            <form action="https://enterpriseonchain.substack.com/api/v1/free?nojs=true" method="post" target="hidden_iframe2" onsubmit="showThankYou(this)" class="flex flex-col sm:flex-row gap-2 max-w-sm mx-auto mb-6">
+                <input type="email" name="email" placeholder="name@organization.com" required class="flex-1 h-11 px-4 rounded-md border border-zinc-700 bg-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 transition-all">
+                <button type="submit" class="h-11 px-6 rounded-md bg-white text-zinc-900 text-sm font-medium hover:bg-zinc-200 transition-colors whitespace-nowrap">Join Free</button>
+            </form>
+            <iframe name="hidden_iframe2" style="display:none;"></iframe>
+            <p class="text-sm text-zinc-500 mb-16"><strong class="text-zinc-300">8,443</strong> executives already subscribed</p>
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-8 border-t border-zinc-800">
+                <div class="mb-4 md:mb-0">© 2025 Enterprise Onchain. All rights reserved.</div>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="hover:text-white transition-colors">About</a>
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Contact</a>
+                    <div class="flex items-center gap-4 ml-2">
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+                        </a>
+                        <a href="https://x.com/enteronchain?s=20" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/enterpriseonchain/" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                        </a>
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </a>
+                    </div>
                 </div>
-            `).join('');
-        }
-    </script>
+            </div>
+        </div>
+    </footer>
+
+    <script src="fund-detail-data.js"></script>
 </body>
 </html>
