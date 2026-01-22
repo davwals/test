@@ -6,13 +6,14 @@
     <title>Fund Profiles | Enterprise Onchain Terminal</title>
     <link rel="icon" type="image/jpeg" href="https://i.imgur.com/LJ0gSjb.jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
+                        'manrope': ['Manrope', 'sans-serif'],
                         'mono': ['JetBrains Mono', 'monospace']
                     }
                 }
@@ -20,297 +21,272 @@
         }
     </script>
     <style>
-        body { font-family: 'JetBrains Mono', monospace; }
-        .terminal-border {
-            border: 1px solid #22c55e;
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
-        }
-        .terminal-glow {
-            text-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
-        }
+        body { font-family: 'Manrope', sans-serif; }
     </style>
 </head>
-<body class="bg-black text-green-400 antialiased min-h-screen">
+<body class="bg-zinc-950 text-zinc-100 antialiased min-h-screen">
     <!-- Navigation -->
-    <nav class="border-b border-zinc-800 bg-black/90 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <a href="terminal.html" class="text-green-400 hover:text-green-300 text-sm">← Back to Terminal</a>
-                <span class="text-zinc-600">|</span>
-                <span class="text-sm font-semibold terminal-glow">FUND PROFILES</span>
+    <nav class="fixed top-0 w-full z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-md">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <!-- Burger Menu Button -->
+                <button id="burgerBtn" class="p-2 text-zinc-500 hover:text-white transition-colors -ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="terminal.html" class="flex items-center gap-2">
+                    <img src="https://i.imgur.com/LJ0gSjb.jpeg" alt="Enterprise Onchain" class="w-6 h-6 rounded-full">
+                    <span class="text-sm font-semibold tracking-tight">Enterprise Onchain</span>
+                    <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded ml-2">TERMINAL</span>
+                </a>
+                <div class="hidden lg:flex items-center gap-1 text-xs">
+                    <a href="?category=treasuries" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Treasuries</a>
+                    <a href="?category=securities" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Securities</a>
+                    <a href="?category=commodities" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Commodities</a>
+                    <a href="?category=defi" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">DeFi</a>
+                    <a href="?category=stablecoins" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Stablecoins</a>
+                    <a href="?category=real-estate" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Real Estate</a>
+                    <a href="?category=credit" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Credit</a>
+                </div>
             </div>
-            <div class="text-xs text-zinc-500">
-                <span id="currentTime"></span>
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-xs text-zinc-500 hover:text-white transition-colors hidden sm:block">← Back to site</a>
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold">DW</div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold mb-2 terminal-glow">Tokenized Fund Database</h1>
-            <p class="text-sm text-zinc-500">Comprehensive profiles of on-chain treasury and RWA funds</p>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 hidden">
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" id="mobileMenuOverlay"></div>
+        <div class="fixed left-0 top-0 h-full w-64 bg-zinc-950 border-r border-zinc-800 shadow-xl transform -translate-x-full transition-transform duration-300" id="mobileMenuPanel">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between p-4 border-b border-zinc-800">
+                    <span class="text-sm font-semibold">Menu</span>
+                    <button id="closeMobileMenu" class="p-2 text-zinc-500 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4">
+                    <nav class="space-y-1">
+                        <a href="terminal.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Terminal</a>
+                        <a href="articles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Articles</a>
+                        <div class="pt-4 pb-2">
+                            <div class="text-xs text-zinc-500 px-3 mb-2">Asset Categories</div>
+                        </div>
+                        <a href="?category=treasuries" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white hover:bg-zinc-800 transition-colors">Treasuries</a>
+                        <a href="?category=securities" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Securities</a>
+                        <a href="?category=commodities" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Commodities</a>
+                        <a href="?category=defi" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">DeFi</a>
+                        <a href="?category=stablecoins" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Stablecoins</a>
+                        <a href="?category=real-estate" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Real Estate</a>
+                        <a href="?category=credit" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Credit</a>
+                        <div class="pt-4 pb-2 border-t border-zinc-800 mt-4">
+                            <div class="text-xs text-zinc-500 px-3 mb-2">Resources</div>
+                        </div>
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Newsletter</a>
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Podcast</a>
+                    </nav>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <!-- Stats Overview -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="terminal-border bg-zinc-950 p-4">
-                <div class="text-xs text-zinc-500 mb-1">Total Funds</div>
-                <div class="text-2xl font-bold">11</div>
+    <main class="pt-14">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-8">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-white mb-2">Tokenized Fund Database</h1>
+                <p class="text-sm text-zinc-400">Comprehensive profiles of on-chain treasury and RWA funds</p>
             </div>
-            <div class="terminal-border bg-zinc-950 p-4">
-                <div class="text-xs text-zinc-500 mb-1">Total AUM</div>
-                <div class="text-2xl font-bold">$6.8B</div>
-            </div>
-            <div class="terminal-border bg-zinc-950 p-4">
-                <div class="text-xs text-zinc-500 mb-1">Avg Yield</div>
-                <div class="text-2xl font-bold">5.2%</div>
-            </div>
-            <div class="terminal-border bg-zinc-950 p-4">
-                <div class="text-xs text-zinc-500 mb-1">Active Chains</div>
-                <div class="text-2xl font-bold">12</div>
-            </div>
-        </div>
 
-        <!-- Filters -->
-        <div class="mb-6 flex flex-wrap gap-2">
-            <button class="filter-btn active px-4 py-2 text-xs border border-green-500 bg-green-500/10 text-green-400 rounded" data-filter="all">All Funds</button>
-            <button class="filter-btn px-4 py-2 text-xs border border-zinc-700 text-zinc-400 hover:border-green-500 hover:text-green-400 rounded" data-filter="treasury">Treasury</button>
-            <button class="filter-btn px-4 py-2 text-xs border border-zinc-700 text-zinc-400 hover:border-green-500 hover:text-green-400 rounded" data-filter="rwa">RWA</button>
-            <button class="filter-btn px-4 py-2 text-xs border border-zinc-700 text-zinc-400 hover:border-green-500 hover:text-green-400 rounded" data-filter="stablecoin">Stablecoin</button>
-        </div>
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Total Funds</div>
+                    <div class="text-2xl font-mono font-bold text-white">11</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Total AUM</div>
+                    <div class="text-2xl font-mono font-bold text-white">$6.80B</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Avg Yield</div>
+                    <div class="text-2xl font-mono font-bold text-white">5.20%</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Active Chains</div>
+                    <div class="text-2xl font-mono font-bold text-white">12</div>
+                </div>
+            </div>
 
-        <!-- Funds Grid -->
-        <div class="grid grid-cols-1 gap-4" id="fundsGrid">
-            <!-- Funds will be inserted here -->
+            <!-- Filters -->
+            <div class="mb-6 flex flex-wrap gap-2">
+                <button class="filter-btn active px-4 py-2 text-xs bg-zinc-800 text-white font-medium rounded-md" data-filter="all">All Funds</button>
+                <button class="filter-btn px-4 py-2 text-xs text-zinc-400 hover:text-white hover:bg-zinc-800/50 rounded-md transition-colors" data-filter="treasuries">Treasuries</button>
+                <button class="filter-btn px-4 py-2 text-xs text-zinc-400 hover:text-white hover:bg-zinc-800/50 rounded-md transition-colors" data-filter="stablecoins">Stablecoins</button>
+                <button class="filter-btn px-4 py-2 text-xs text-zinc-400 hover:text-white hover:bg-zinc-800/50 rounded-md transition-colors" data-filter="credit">Credit</button>
+            </div>
+
+            <!-- Funds Grid -->
+            <div class="grid grid-cols-1 gap-4" id="fundsGrid"></div>
         </div>
     </main>
 
-    <script>
-        // Update time
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('currentTime').textContent = now.toUTCString();
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
+    <!-- Footer -->
+    <footer class="bg-zinc-950 border-t border-zinc-800 pt-20 pb-12 mt-12">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-manrope text-white mb-4 tracking-tight">Don't Miss the Institutional Crypto Revolution</h2>
+            <p class="text-zinc-500 mb-8">Stay ahead with the latest news, insights, and analysis on institutional adoption.</p>
+            <form action="https://enterpriseonchain.substack.com/api/v1/free?nojs=true" method="post" target="hidden_iframe2" onsubmit="showThankYou(this)" class="flex flex-col sm:flex-row gap-2 max-w-sm mx-auto mb-6">
+                <input type="email" name="email" placeholder="name@organization.com" required class="flex-1 h-11 px-4 rounded-md border border-zinc-700 bg-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 transition-all">
+                <button type="submit" class="h-11 px-6 rounded-md bg-white text-zinc-900 text-sm font-medium hover:bg-zinc-200 transition-colors whitespace-nowrap">Join Free</button>
+            </form>
+            <iframe name="hidden_iframe2" style="display:none;"></iframe>
+            <p class="text-sm text-zinc-500 mb-16"><strong class="text-zinc-300">8,443</strong> executives already subscribed</p>
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-8 border-t border-zinc-800">
+                <div class="mb-4 md:mb-0">© 2025 Enterprise Onchain. All rights reserved.</div>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="hover:text-white transition-colors">About</a>
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Contact</a>
+                    <div class="flex items-center gap-4 ml-2">
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+                        </a>
+                        <a href="https://x.com/enteronchain?s=20" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/enterpriseonchain/" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                        </a>
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
+    <script>
         // Fund data
         const funds = [
-            {
-                id: 'buidl',
-                name: 'BlackRock USD Institutional Digital Liquidity Fund',
-                ticker: 'BUIDL',
-                issuer: 'BlackRock',
-                type: 'treasury',
-                aum: 1700000000,
-                yield: 5.0,
-                minInvestment: 5000000,
-                chains: 8,
-                holders: 56,
-                tvlHistory: [500, 800, 1200, 1500, 2900, 2400, 1700],
-                activeUsers: [12, 18, 28, 35, 52, 48, 56]
-            },
-            {
-                id: 'benji',
-                name: 'Franklin OnChain U.S. Government Money Fund',
-                ticker: 'BENJI',
-                issuer: 'Franklin Templeton',
-                type: 'treasury',
-                aum: 700000000,
-                yield: 5.1,
-                minInvestment: 20,
-                chains: 3,
-                holders: 142,
-                tvlHistory: [100, 250, 380, 520, 650, 680, 700],
-                activeUsers: [45, 68, 92, 115, 128, 138, 142]
-            },
-            {
-                id: 'usdy',
-                name: 'Ondo U.S. Dollar Yield',
-                ticker: 'USDY',
-                issuer: 'Ondo Finance',
-                type: 'treasury',
-                aum: 400000000,
-                yield: 5.3,
-                minInvestment: 500,
-                chains: 5,
-                holders: 3240,
-                tvlHistory: [50, 120, 200, 280, 350, 380, 400],
-                activeUsers: [890, 1450, 2100, 2650, 2980, 3150, 3240]
-            },
-            {
-                id: 'usyc',
-                name: 'Hashnote U.S. Yield Coin',
-                ticker: 'USYC',
-                issuer: 'Hashnote',
-                type: 'treasury',
-                aum: 900000000,
-                yield: 5.2,
-                minInvestment: 100000,
-                chains: 2,
-                holders: 89,
-                tvlHistory: [200, 350, 500, 650, 800, 850, 900],
-                activeUsers: [25, 38, 52, 68, 78, 84, 89]
-            },
-            {
-                id: 'ustb',
-                name: 'Superstate Short Duration Government Securities',
-                ticker: 'USTB',
-                issuer: 'Superstate',
-                type: 'treasury',
-                aum: 100000000,
-                yield: 5.0,
-                minInvestment: 100000,
-                chains: 1,
-                holders: 34,
-                tvlHistory: [10, 25, 45, 65, 80, 92, 100],
-                activeUsers: [8, 14, 20, 26, 30, 32, 34]
-            },
-            {
-                id: 'usdm',
-                name: 'Mountain Protocol USD',
-                ticker: 'USDM',
-                issuer: 'Mountain Protocol',
-                type: 'stablecoin',
-                aum: 150000000,
-                yield: 5.1,
-                minInvestment: 100,
-                chains: 3,
-                holders: 2180,
-                tvlHistory: [20, 45, 75, 100, 125, 140, 150],
-                activeUsers: [450, 820, 1250, 1580, 1850, 2050, 2180]
-            },
-            {
-                id: 'tbill',
-                name: 'OpenEden T-Bill Token',
-                ticker: 'TBILL',
-                issuer: 'OpenEden',
-                type: 'treasury',
-                aum: 85000000,
-                yield: 4.9,
-                minInvestment: 100000,
-                chains: 2,
-                holders: 28,
-                tvlHistory: [15, 30, 48, 62, 74, 80, 85],
-                activeUsers: [6, 12, 18, 22, 25, 27, 28]
-            },
-            {
-                id: 'stbt',
-                name: 'MatrixDock Short-term Treasury Bill Token',
-                ticker: 'STBT',
-                issuer: 'MatrixDock',
-                type: 'treasury',
-                aum: 320000000,
-                yield: 5.0,
-                minInvestment: 100000,
-                chains: 2,
-                holders: 67,
-                tvlHistory: [50, 110, 175, 230, 280, 305, 320],
-                activeUsers: [18, 28, 38, 48, 58, 64, 67]
-            },
-            {
-                id: 'bib01',
-                name: 'Backed IB01 Government Bond',
-                ticker: 'bIB01',
-                issuer: 'Backed Finance',
-                type: 'rwa',
-                aum: 280000000,
-                yield: 4.8,
-                minInvestment: 1000,
-                chains: 2,
-                holders: 456,
-                tvlHistory: [40, 85, 135, 185, 230, 260, 280],
-                activeUsers: [125, 210, 295, 360, 410, 438, 456]
-            },
-            {
-                id: 'ousg',
-                name: 'Ondo Short-Term US Government Treasuries',
-                ticker: 'OUSG',
-                issuer: 'Ondo Finance',
-                type: 'treasury',
-                aum: 580000000,
-                yield: 5.2,
-                minInvestment: 5000,
-                chains: 4,
-                holders: 1850,
-                tvlHistory: [80, 180, 290, 390, 480, 540, 580],
-                activeUsers: [520, 890, 1230, 1520, 1680, 1780, 1850]
-            },
-            {
-                id: 'syrup',
-                name: 'Maple Syrup',
-                ticker: 'SYRUP',
-                issuer: 'Maple Finance',
-                type: 'rwa',
-                aum: 95000000,
-                yield: 5.5,
-                minInvestment: 100000,
-                chains: 1,
-                holders: 42,
-                tvlHistory: [15, 32, 50, 68, 82, 90, 95],
-                activeUsers: [12, 18, 26, 32, 37, 40, 42]
-            }
+            { id: 'buidl', name: 'BlackRock USD Institutional Digital Liquidity Fund', ticker: 'BUIDL', issuer: 'BlackRock', type: 'treasuries', aum: 1700000000, yield: 5.00, minInvestment: 5000000, chains: 8, holders: 56 },
+            { id: 'benji', name: 'Franklin OnChain U.S. Government Money Fund', ticker: 'BENJI', issuer: 'Franklin Templeton', type: 'treasuries', aum: 700000000, yield: 5.10, minInvestment: 20, chains: 3, holders: 142 },
+            { id: 'usdy', name: 'Ondo U.S. Dollar Yield', ticker: 'USDY', issuer: 'Ondo Finance', type: 'treasuries', aum: 400000000, yield: 5.30, minInvestment: 500, chains: 5, holders: 3240 },
+            { id: 'usyc', name: 'Hashnote U.S. Yield Coin', ticker: 'USYC', issuer: 'Hashnote', type: 'treasuries', aum: 900000000, yield: 5.20, minInvestment: 100000, chains: 2, holders: 89 },
+            { id: 'ustb', name: 'Superstate Short Duration Government Securities', ticker: 'USTB', issuer: 'Superstate', type: 'treasuries', aum: 100000000, yield: 5.00, minInvestment: 100000, chains: 1, holders: 34 },
+            { id: 'usdm', name: 'Mountain Protocol USD', ticker: 'USDM', issuer: 'Mountain Protocol', type: 'stablecoins', aum: 150000000, yield: 5.10, minInvestment: 100, chains: 3, holders: 2180 },
+            { id: 'tbill', name: 'OpenEden T-Bill Token', ticker: 'TBILL', issuer: 'OpenEden', type: 'treasuries', aum: 85000000, yield: 4.90, minInvestment: 100000, chains: 2, holders: 28 },
+            { id: 'stbt', name: 'MatrixDock Short-term Treasury Bill Token', ticker: 'STBT', issuer: 'MatrixDock', type: 'treasuries', aum: 320000000, yield: 5.00, minInvestment: 100000, chains: 2, holders: 67 },
+            { id: 'bib01', name: 'Backed IB01 Government Bond', ticker: 'bIB01', issuer: 'Backed Finance', type: 'treasuries', aum: 280000000, yield: 4.80, minInvestment: 1000, chains: 2, holders: 456 },
+            { id: 'ousg', name: 'Ondo Short-Term US Government Treasuries', ticker: 'OUSG', issuer: 'Ondo Finance', type: 'treasuries', aum: 580000000, yield: 5.20, minInvestment: 5000, chains: 4, holders: 1850 },
+            { id: 'syrup', name: 'Maple Syrup', ticker: 'SYRUP', issuer: 'Maple Finance', type: 'credit', aum: 95000000, yield: 5.50, minInvestment: 100000, chains: 1, holders: 42 }
         ];
 
-        // Render funds
+        function formatCurrency(value) {
+            if (value >= 1000000000) return '$' + (value / 1000000000).toFixed(2) + 'B';
+            if (value >= 1000000) return '$' + (value / 1000000).toFixed(0) + 'M';
+            if (value >= 1000) return '$' + (value / 1000).toFixed(0) + 'K';
+            return '$' + value.toFixed(2);
+        }
+
         function renderFunds(filter = 'all') {
             const grid = document.getElementById('fundsGrid');
             const filtered = filter === 'all' ? funds : funds.filter(f => f.type === filter);
 
             grid.innerHTML = filtered.map(fund => `
-                <a href="fund-detail.html?id=${fund.id}" class="terminal-border bg-zinc-950 p-4 hover:border-green-400 transition-all block">
+                <a href="fund-detail.html?id=${fund.id}" class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-all block">
                     <div class="flex items-start justify-between mb-3">
                         <div>
-                            <div class="text-xs text-zinc-500 mb-1">${fund.ticker}</div>
+                            <div class="text-xs text-zinc-500 mb-1 font-mono">${fund.ticker}</div>
                             <div class="font-semibold text-sm mb-1">${fund.name}</div>
                             <div class="text-xs text-zinc-400">${fund.issuer}</div>
                         </div>
                         <div class="text-right">
                             <div class="text-xs text-zinc-500 mb-1">AUM</div>
-                            <div class="font-bold text-green-400">$${(fund.aum / 1000000).toFixed(0)}M</div>
+                            <div class="font-mono font-bold text-white">${formatCurrency(fund.aum)}</div>
                         </div>
                     </div>
                     <div class="grid grid-cols-4 gap-3 pt-3 border-t border-zinc-800 text-xs">
                         <div>
                             <div class="text-zinc-500 mb-1">Yield</div>
-                            <div class="font-semibold">${fund.yield}%</div>
+                            <div class="font-semibold font-mono">${fund.yield.toFixed(2)}%</div>
                         </div>
                         <div>
                             <div class="text-zinc-500 mb-1">Min</div>
-                            <div class="font-semibold">$${fund.minInvestment >= 1000000 ? (fund.minInvestment / 1000000).toFixed(0) + 'M' : fund.minInvestment >= 1000 ? (fund.minInvestment / 1000).toFixed(0) + 'K' : fund.minInvestment}</div>
+                            <div class="font-semibold font-mono">${formatCurrency(fund.minInvestment)}</div>
                         </div>
                         <div>
                             <div class="text-zinc-500 mb-1">Chains</div>
-                            <div class="font-semibold">${fund.chains}</div>
+                            <div class="font-semibold font-mono">${fund.chains}</div>
                         </div>
                         <div>
                             <div class="text-zinc-500 mb-1">Holders</div>
-                            <div class="font-semibold">${fund.holders.toLocaleString()}</div>
+                            <div class="font-semibold font-mono">${fund.holders.toLocaleString()}</div>
                         </div>
                     </div>
                 </a>
             `).join('');
         }
 
-        // Filter functionality
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.filter-btn').forEach(b => {
-                    b.classList.remove('active', 'bg-green-500/10', 'text-green-400', 'border-green-500');
-                    b.classList.add('border-zinc-700', 'text-zinc-400');
+                    b.classList.remove('bg-zinc-800', 'text-white', 'font-medium');
+                    b.classList.add('text-zinc-400', 'hover:bg-zinc-800/50');
                 });
-                btn.classList.add('active', 'bg-green-500/10', 'text-green-400', 'border-green-500');
-                btn.classList.remove('border-zinc-700', 'text-zinc-400');
+                btn.classList.add('bg-zinc-800', 'text-white', 'font-medium');
+                btn.classList.remove('text-zinc-400', 'hover:bg-zinc-800/50');
                 renderFunds(btn.dataset.filter);
             });
         });
 
+        // Burger menu
+        const burgerBtn = document.getElementById('burgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuPanel = document.getElementById('mobileMenuPanel');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+        function openMenu() {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => mobileMenuPanel.classList.remove('-translate-x-full'), 10);
+        }
+
+        function closeMenu() {
+            mobileMenuPanel.classList.add('-translate-x-full');
+            setTimeout(() => mobileMenu.classList.add('hidden'), 300);
+        }
+
+        burgerBtn?.addEventListener('click', openMenu);
+        closeMobileMenu?.addEventListener('click', closeMenu);
+        mobileMenuOverlay?.addEventListener('click', closeMenu);
+
+        function showThankYou(form) {
+            setTimeout(() => {
+                form.innerHTML = '<p class="text-emerald-500 font-medium">✓ Thanks for subscribing! Check your email.</p>';
+            }, 500);
+        }
+
         // Initialize
         renderFunds();
-
-        // Store funds data for detail page
         localStorage.setItem('fundsData', JSON.stringify(funds));
+
+        // Check for category filter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category');
+        if (category) {
+            const btn = document.querySelector(`[data-filter="${category}"]`);
+            if (btn) btn.click();
+        }
     </script>
 </body>
 </html>
