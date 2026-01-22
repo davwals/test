@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fund Profiles | Enterprise Onchain Terminal</title>
+    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/LJ0gSjb.jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'JetBrains Mono', monospace; }
+        .terminal-border {
+            border: 1px solid #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
+        }
+        .terminal-glow {
+            text-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-black text-green-400 antialiased min-h-screen">
+    <!-- Navigation -->
+    <nav class="border-b border-zinc-800 bg-black/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="terminal.html" class="text-green-400 hover:text-green-300 text-sm">← Back to Terminal</a>
+                <span class="text-zinc-600">|</span>
+                <span class="text-sm font-semibold terminal-glow">FUND PROFILES</span>
+            </div>
+            <div class="text-xs text-zinc-500">
+                <span id="currentTime"></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold mb-2 terminal-glow">Tokenized Fund Database</h1>
+            <p class="text-sm text-zinc-500">Comprehensive profiles of on-chain treasury and RWA funds</p>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="terminal-border bg-zinc-950 p-4">
+                <div class="text-xs text-zinc-500 mb-1">Total Funds</div>
+                <div class="text-2xl font-bold">11</div>
+            </div>
+            <div class="terminal-border bg-zinc-950 p-4">
+                <div class="text-xs text-zinc-500 mb-1">Total AUM</div>
+                <div class="text-2xl font-bold">$6.8B</div>
+            </div>
+            <div class="terminal-border bg-zinc-950 p-4">
+                <div class="text-xs text-zinc-500 mb-1">Avg Yield</div>
+                <div class="text-2xl font-bold">5.2%</div>
+            </div>
+            <div class="terminal-border bg-zinc-950 p-4">
+                <div class="text-xs text-zinc-500 mb-1">Active Chains</div>
+                <div class="text-2xl font-bold">12</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="mb-6 flex flex-wrap gap-2">
+            <button class="filter-btn active px-4 py-2 text-xs border border-green-500 bg-green-500/10 text-green-400 rounded" data-filter="all">All Funds</button>
+            <button class="filter-btn px-4 py-2 text-xs border border-zinc-700 text-zinc-400 hover:border-green-500 hover:text-green-400 rounded" data-filter="treasury">Treasury</button>
+            <button class="filter-btn px-4 py-2 text-xs border border-zinc-700 text-zinc-400 hover:border-green-500 hover:text-green-400 rounded" data-filter="rwa">RWA</button>
+            <button class="filter-btn px-4 py-2 text-xs border border-zinc-700 text-zinc-400 hover:border-green-500 hover:text-green-400 rounded" data-filter="stablecoin">Stablecoin</button>
+        </div>
+
+        <!-- Funds Grid -->
+        <div class="grid grid-cols-1 gap-4" id="fundsGrid">
+            <!-- Funds will be inserted here -->
+        </div>
+    </main>
+
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toUTCString();
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Fund data
+        const funds = [
+            {
+                id: 'buidl',
+                name: 'BlackRock USD Institutional Digital Liquidity Fund',
+                ticker: 'BUIDL',
+                issuer: 'BlackRock',
+                type: 'treasury',
+                aum: 1700000000,
+                yield: 5.0,
+                minInvestment: 5000000,
+                chains: 8,
+                holders: 56,
+                tvlHistory: [500, 800, 1200, 1500, 2900, 2400, 1700],
+                activeUsers: [12, 18, 28, 35, 52, 48, 56]
+            },
+            {
+                id: 'benji',
+                name: 'Franklin OnChain U.S. Government Money Fund',
+                ticker: 'BENJI',
+                issuer: 'Franklin Templeton',
+                type: 'treasury',
+                aum: 700000000,
+                yield: 5.1,
+                minInvestment: 20,
+                chains: 3,
+                holders: 142,
+                tvlHistory: [100, 250, 380, 520, 650, 680, 700],
+                activeUsers: [45, 68, 92, 115, 128, 138, 142]
+            },
+            {
+                id: 'usdy',
+                name: 'Ondo U.S. Dollar Yield',
+                ticker: 'USDY',
+                issuer: 'Ondo Finance',
+                type: 'treasury',
+                aum: 400000000,
+                yield: 5.3,
+                minInvestment: 500,
+                chains: 5,
+                holders: 3240,
+                tvlHistory: [50, 120, 200, 280, 350, 380, 400],
+                activeUsers: [890, 1450, 2100, 2650, 2980, 3150, 3240]
+            },
+            {
+                id: 'usyc',
+                name: 'Hashnote U.S. Yield Coin',
+                ticker: 'USYC',
+                issuer: 'Hashnote',
+                type: 'treasury',
+                aum: 900000000,
+                yield: 5.2,
+                minInvestment: 100000,
+                chains: 2,
+                holders: 89,
+                tvlHistory: [200, 350, 500, 650, 800, 850, 900],
+                activeUsers: [25, 38, 52, 68, 78, 84, 89]
+            },
+            {
+                id: 'ustb',
+                name: 'Superstate Short Duration Government Securities',
+                ticker: 'USTB',
+                issuer: 'Superstate',
+                type: 'treasury',
+                aum: 100000000,
+                yield: 5.0,
+                minInvestment: 100000,
+                chains: 1,
+                holders: 34,
+                tvlHistory: [10, 25, 45, 65, 80, 92, 100],
+                activeUsers: [8, 14, 20, 26, 30, 32, 34]
+            },
+            {
+                id: 'usdm',
+                name: 'Mountain Protocol USD',
+                ticker: 'USDM',
+                issuer: 'Mountain Protocol',
+                type: 'stablecoin',
+                aum: 150000000,
+                yield: 5.1,
+                minInvestment: 100,
+                chains: 3,
+                holders: 2180,
+                tvlHistory: [20, 45, 75, 100, 125, 140, 150],
+                activeUsers: [450, 820, 1250, 1580, 1850, 2050, 2180]
+            },
+            {
+                id: 'tbill',
+                name: 'OpenEden T-Bill Token',
+                ticker: 'TBILL',
+                issuer: 'OpenEden',
+                type: 'treasury',
+                aum: 85000000,
+                yield: 4.9,
+                minInvestment: 100000,
+                chains: 2,
+                holders: 28,
+                tvlHistory: [15, 30, 48, 62, 74, 80, 85],
+                activeUsers: [6, 12, 18, 22, 25, 27, 28]
+            },
+            {
+                id: 'stbt',
+                name: 'MatrixDock Short-term Treasury Bill Token',
+                ticker: 'STBT',
+                issuer: 'MatrixDock',
+                type: 'treasury',
+                aum: 320000000,
+                yield: 5.0,
+                minInvestment: 100000,
+                chains: 2,
+                holders: 67,
+                tvlHistory: [50, 110, 175, 230, 280, 305, 320],
+                activeUsers: [18, 28, 38, 48, 58, 64, 67]
+            },
+            {
+                id: 'bib01',
+                name: 'Backed IB01 Government Bond',
+                ticker: 'bIB01',
+                issuer: 'Backed Finance',
+                type: 'rwa',
+                aum: 280000000,
+                yield: 4.8,
+                minInvestment: 1000,
+                chains: 2,
+                holders: 456,
+                tvlHistory: [40, 85, 135, 185, 230, 260, 280],
+                activeUsers: [125, 210, 295, 360, 410, 438, 456]
+            },
+            {
+                id: 'ousg',
+                name: 'Ondo Short-Term US Government Treasuries',
+                ticker: 'OUSG',
+                issuer: 'Ondo Finance',
+                type: 'treasury',
+                aum: 580000000,
+                yield: 5.2,
+                minInvestment: 5000,
+                chains: 4,
+                holders: 1850,
+                tvlHistory: [80, 180, 290, 390, 480, 540, 580],
+                activeUsers: [520, 890, 1230, 1520, 1680, 1780, 1850]
+            },
+            {
+                id: 'syrup',
+                name: 'Maple Syrup',
+                ticker: 'SYRUP',
+                issuer: 'Maple Finance',
+                type: 'rwa',
+                aum: 95000000,
+                yield: 5.5,
+                minInvestment: 100000,
+                chains: 1,
+                holders: 42,
+                tvlHistory: [15, 32, 50, 68, 82, 90, 95],
+                activeUsers: [12, 18, 26, 32, 37, 40, 42]
+            }
+        ];
+
+        // Render funds
+        function renderFunds(filter = 'all') {
+            const grid = document.getElementById('fundsGrid');
+            const filtered = filter === 'all' ? funds : funds.filter(f => f.type === filter);
+
+            grid.innerHTML = filtered.map(fund => `
+                <a href="fund-detail.html?id=${fund.id}" class="terminal-border bg-zinc-950 p-4 hover:border-green-400 transition-all block">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <div class="text-xs text-zinc-500 mb-1">${fund.ticker}</div>
+                            <div class="font-semibold text-sm mb-1">${fund.name}</div>
+                            <div class="text-xs text-zinc-400">${fund.issuer}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-zinc-500 mb-1">AUM</div>
+                            <div class="font-bold text-green-400">$${(fund.aum / 1000000).toFixed(0)}M</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-3 pt-3 border-t border-zinc-800 text-xs">
+                        <div>
+                            <div class="text-zinc-500 mb-1">Yield</div>
+                            <div class="font-semibold">${fund.yield}%</div>
+                        </div>
+                        <div>
+                            <div class="text-zinc-500 mb-1">Min</div>
+                            <div class="font-semibold">$${fund.minInvestment >= 1000000 ? (fund.minInvestment / 1000000).toFixed(0) + 'M' : fund.minInvestment >= 1000 ? (fund.minInvestment / 1000).toFixed(0) + 'K' : fund.minInvestment}</div>
+                        </div>
+                        <div>
+                            <div class="text-zinc-500 mb-1">Chains</div>
+                            <div class="font-semibold">${fund.chains}</div>
+                        </div>
+                        <div>
+                            <div class="text-zinc-500 mb-1">Holders</div>
+                            <div class="font-semibold">${fund.holders.toLocaleString()}</div>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-green-500/10', 'text-green-400', 'border-green-500');
+                    b.classList.add('border-zinc-700', 'text-zinc-400');
+                });
+                btn.classList.add('active', 'bg-green-500/10', 'text-green-400', 'border-green-500');
+                btn.classList.remove('border-zinc-700', 'text-zinc-400');
+                renderFunds(btn.dataset.filter);
+            });
+        });
+
+        // Initialize
+        renderFunds();
+
+        // Store funds data for detail page
+        localStorage.setItem('fundsData', JSON.stringify(funds));
+    </script>
+</body>
+</html>
