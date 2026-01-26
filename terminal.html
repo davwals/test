@@ -132,7 +132,7 @@
                     </span>
                     <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded">LIVE</span>
                 </div>
-                <p class="text-sm text-zinc-400">Real-time data tracking institutional crypto adoption. <span class="text-zinc-500" id="currentDate"></span></p>
+                <p class="text-sm text-zinc-400">Real-time data tracking institutional crypto adoption. <span class="text-zinc-500" id="currentDate"></span> • <span class="text-zinc-500" id="lastUpdate">Last updated: Loading...</span></p>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
@@ -176,6 +176,11 @@
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Supply Staked (%)</div>
                     <div class="text-lg font-mono font-bold text-white metric-value">28.40%</div>
                     <div class="text-[10px] text-zinc-500 metric-change">of total supply</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-ecosystem-tps">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Ecosystem TPS</div>
+                    <div class="text-lg font-mono font-bold text-emerald-500 metric-value">Loading...</div>
+                    <div class="text-[10px] text-zinc-500 metric-change">Avg. Transactions/sec</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Stablecoin Supply</div>
@@ -362,6 +367,16 @@
         // Set current date
         const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         document.getElementById('currentDate').textContent = currentDate;
+
+        // Function to update last API pull time
+        window.updateLastAPITime = function() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            document.getElementById('lastUpdate').textContent = `Last updated: ${timeString}`;
+        };
+
+        // Set initial update time
+        window.updateLastAPITime();
 
         Chart.defaults.color = '#71717a';
         Chart.defaults.borderColor = '#27272a';

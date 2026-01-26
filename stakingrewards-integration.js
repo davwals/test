@@ -5,6 +5,9 @@ const STAKING_REWARDS_API_URL = 'https://api.stakingrewards.com/public/query';
 // CoinGecko API for total crypto market cap
 const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3';
 
+// GrowthePie API for Ethereum ecosystem TPS
+const GROWTHEPIE_API_URL = 'https://api.growthepie.com/v1/fundamentals.json';
+
 /**
  * GraphQL query to get Ethereum staking metrics
  */
@@ -265,6 +268,11 @@ async function updateTerminalWithStakingData() {
     }
   }
 
+  // Update last API pull timestamp
+  if (typeof window.updateLastAPITime === 'function') {
+    window.updateLastAPITime();
+  }
+
   return formattedData;
 }
 
@@ -321,6 +329,78 @@ async function fetchTotalCryptoMarketCapHistory() {
   } catch (error) {
     console.error('Error fetching crypto market cap history:', error);
     return null;
+  }
+}
+
+/**
+ * Fetch Ethereum ecosystem TPS from GrowthePie API
+ */
+async function fetchEthereumEcosystemTPS() {
+  try {
+    const response = await fetch(GROWTHEPIE_API_URL);
+
+    if (!response.ok) {
+      throw new Error(`GrowthePie API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Filter for throughput metric
+    const throughputData = data.filter(item => item.metric_key === 'throughput');
+
+    if (throughputData.length === 0) {
+      console.warn('No throughput data found in GrowthePie API');
+      return null;
+    }
+
+    // Get the most recent date
+    const dates = [...new Set(throughputData.map(item => item.date))];
+    dates.sort((a, b) => new Date(b) - new Date(a));
+    const mostRecentDate = dates[0];
+
+    // Get all throughput values for the most recent date
+    const recentThroughput = throughputData
+      .filter(item => item.date === mostRecentDate)
+      .filter(item => item.origin_key !== 'ethereum' && item.origin_key !== 'all_l2s'); // Exclude aggregates
+
+    // Sum up TPS across all chains
+    const totalTPS = recentThroughput.reduce((sum, item) => sum + (item.value || 0), 0);
+
+    return {
+      tps: totalTPS,
+      date: mostRecentDate,
+      chainCount: recentThroughput.length
+    };
+  } catch (error) {
+    console.error('Error fetching Ethereum ecosystem TPS:', error);
+    return null;
+  }
+}
+
+/**
+ * Update Ethereum ecosystem TPS tile
+ */
+async function updateEthereumEcosystemTPS() {
+  const tpsData = await fetchEthereumEcosystemTPS();
+
+  if (!tpsData) {
+    return;
+  }
+
+  const tpsTile = document.querySelector('[data-metric="eth-ecosystem-tps"]');
+  if (tpsTile) {
+    const valueEl = tpsTile.querySelector('.metric-value');
+    const changeEl = tpsTile.querySelector('.metric-change');
+
+    if (valueEl) {
+      // Format TPS with comma separators
+      const formattedTPS = Math.round(tpsData.tps).toLocaleString('en-US');
+      valueEl.textContent = `${formattedTPS}`;
+    }
+
+    if (changeEl) {
+      changeEl.textContent = `${tpsData.chainCount} chains`;
+    }
   }
 }
 
@@ -400,11 +480,13 @@ function initializeStakingData() {
   updateTerminalWithStakingData();
   updateMarketCapChart();
   updateTotalCryptoMarketCap();
+  updateEthereumEcosystemTPS();
 
   // Update every 5 minutes (300000ms)
   setInterval(updateTerminalWithStakingData, 300000);
   setInterval(updateMarketCapChart, 300000);
   setInterval(updateTotalCryptoMarketCap, 300000);
+  setInterval(updateEthereumEcosystemTPS, 300000);
 }
 
 // Auto-initialize when DOM is ready
@@ -422,10 +504,12 @@ if (typeof module !== 'undefined' && module.exports) {
     fetchEthereumStakingData,
     fetchEthereumMarketCapHistory,
     fetchTotalCryptoMarketCap,
+    fetchEthereumEcosystemTPS,
     formatStakingDataForTerminal,
     updateTerminalWithStakingData,
     updateMarketCapChart,
     updateTotalCryptoMarketCap,
+    updateEthereumEcosystemTPS,
     initializeStakingData
   };
 }
