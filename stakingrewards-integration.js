@@ -2,6 +2,9 @@
 const STAKING_REWARDS_API_KEY = 'ee8b4f23-152e-4734-a262-df7a5eb8b41d';
 const STAKING_REWARDS_API_URL = 'https://api.stakingrewards.com/public/query';
 
+// CoinGecko API for total crypto market cap
+const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3';
+
 /**
  * GraphQL query to get Ethereum staking metrics
  */
@@ -115,6 +118,25 @@ async function fetchEthereumMarketCapHistory() {
 }
 
 /**
+ * Fetch total crypto market data from CoinGecko API
+ */
+async function fetchTotalCryptoMarketCap() {
+  try {
+    const response = await fetch(`${COINGECKO_API_URL}/global`);
+
+    if (!response.ok) {
+      throw new Error(`CoinGecko API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error('Error fetching total crypto market cap:', error);
+    return null;
+  }
+}
+
+/**
  * Format staking data for terminal display
  */
 function formatStakingDataForTerminal(stakingData) {
@@ -184,11 +206,26 @@ async function updateTerminalWithStakingData() {
   const marketCapTile = document.querySelector('[data-metric="eth-market-cap"]');
   if (marketCapTile) {
     const valueEl = marketCapTile.querySelector('.metric-value');
+    const changeEl = marketCapTile.querySelector('.metric-change');
 
     if (formattedData.marketCap && valueEl) {
       const marketCapInB = (formattedData.marketCap / 1000000000).toFixed(2);
       valueEl.textContent = `$${marketCapInB}B`;
     }
+
+    // Fetch ETH price data for 24h change (from CoinGecko)
+    fetch(`${COINGECKO_API_URL}/simple/price?ids=ethereum&vs_currencies=usd&include_market_cap=true&include_24hr_change=true`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.ethereum && changeEl) {
+          const change24h = data.ethereum.usd_24h_change || 0;
+          const isPositive = change24h > 0;
+          const arrow = isPositive ? '↑' : '↓';
+          changeEl.textContent = `${arrow} ${Math.abs(change24h).toFixed(2)}% (24h)`;
+          changeEl.className = isPositive ? 'text-[10px] text-emerald-500/70 metric-change' : 'text-[10px] text-red-500/70 metric-change';
+        }
+      })
+      .catch(err => console.error('Error fetching ETH price change:', err));
   }
 
   // Update Staked ETH USD tile
@@ -229,6 +266,42 @@ async function updateTerminalWithStakingData() {
   }
 
   return formattedData;
+}
+
+/**
+ * Update total crypto market cap tile
+ */
+async function updateTotalCryptoMarketCap() {
+  const globalData = await fetchTotalCryptoMarketCap();
+
+  if (!globalData) {
+    return;
+  }
+
+  const marketCapTile = document.querySelector('[data-metric="total-crypto-market-cap"]');
+  if (marketCapTile) {
+    const valueEl = marketCapTile.querySelector('.metric-value');
+    const changeEl = marketCapTile.querySelector('.metric-change');
+
+    // Total market cap in trillions
+    const totalMarketCap = globalData.total_market_cap.usd / 1000000000000;
+
+    // 24h market cap percentage change
+    const marketCapChange24h = globalData.market_cap_change_percentage_24h_usd;
+
+    if (valueEl) {
+      valueEl.textContent = `$${totalMarketCap.toFixed(2)}T`;
+    }
+
+    if (changeEl && marketCapChange24h !== undefined) {
+      const isPositive = marketCapChange24h > 0;
+      const arrow = isPositive ? '↑' : '↓';
+      changeEl.textContent = `${arrow} ${Math.abs(marketCapChange24h).toFixed(2)}%`;
+      changeEl.className = isPositive
+        ? 'text-[10px] text-emerald-500/70 metric-change'
+        : 'text-[10px] text-red-500/70 metric-change';
+    }
+  }
 }
 
 /**
@@ -280,10 +353,12 @@ function initializeStakingData() {
   // Update immediately on page load
   updateTerminalWithStakingData();
   updateMarketCapChart();
+  updateTotalCryptoMarketCap();
 
   // Update every 5 minutes (300000ms)
   setInterval(updateTerminalWithStakingData, 300000);
   setInterval(updateMarketCapChart, 300000);
+  setInterval(updateTotalCryptoMarketCap, 300000);
 }
 
 // Auto-initialize when DOM is ready
@@ -300,9 +375,11 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     fetchEthereumStakingData,
     fetchEthereumMarketCapHistory,
+    fetchTotalCryptoMarketCap,
     formatStakingDataForTerminal,
     updateTerminalWithStakingData,
     updateMarketCapChart,
+    updateTotalCryptoMarketCap,
     initializeStakingData
   };
 }
