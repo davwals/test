@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Testing APIs</h1>
+    <div id="results"></div>
+
+    <script>
+        const results = document.getElementById('results');
+
+        async function testAPIs() {
+            const tests = [
+                {
+                    name: 'CoinGecko Global',
+                    url: 'https://api.coingecko.com/api/v3/global'
+                },
+                {
+                    name: 'CoinGecko Ethereum',
+                    url: 'https://api.coingecko.com/api/v3/coins/ethereum'
+                },
+                {
+                    name: 'CoinGecko Stablecoins',
+                    url: 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=stablecoins&order=market_cap_desc&per_page=10&page=1'
+                },
+                {
+                    name: 'CoinGecko Bitcoin Chart',
+                    url: 'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7'
+                },
+                {
+                    name: 'DeFi Llama Charts',
+                    url: 'https://api.llama.fi/charts'
+                },
+                {
+                    name: 'GrowthePie Fundamentals',
+                    url: 'https://api.growthepie.com/v1/fundamentals.json'
+                },
+                {
+                    name: 'StakingRewards',
+                    url: 'https://api.stakingrewards.com/public/query',
+                    method: 'POST',
+                    body: {
+                        query: `{
+                            assets(where: { slugs: ["ethereum"] }) {
+                                name
+                                slug
+                                metrics {
+                                    marketCap
+                                    stakedTokens
+                                    totalStakedUSD
+                                }
+                            }
+                        }`
+                    },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': 'ee8b4f23-152e-4734-a262-df7a5eb8b41d'
+                    }
+                }
+            ];
+
+            for (const test of tests) {
+                const div = document.createElement('div');
+                div.style.margin = '20px 0';
+                div.style.padding = '10px';
+                div.style.border = '1px solid #ccc';
+
+                div.innerHTML = `<h3>${test.name}</h3><p>Testing...</p>`;
+                results.appendChild(div);
+
+                try {
+                    const options = {
+                        method: test.method || 'GET'
+                    };
+
+                    if (test.headers) {
+                        options.headers = test.headers;
+                    }
+
+                    if (test.body) {
+                        options.body = JSON.stringify(test.body);
+                    }
+
+                    console.log(`Testing ${test.name}...`);
+                    const response = await fetch(test.url, options);
+
+                    if (!response.ok) {
+                        div.innerHTML = `<h3>${test.name}</h3><p style="color: red;">❌ Failed: ${response.status} ${response.statusText}</p>`;
+                        console.error(`${test.name} failed:`, response.status, response.statusText);
+                        continue;
+                    }
+
+                    const data = await response.json();
+                    div.innerHTML = `<h3>${test.name}</h3><p style="color: green;">✅ Success!</p><pre style="background: #f5f5f5; padding: 10px; overflow: auto; max-height: 200px;">${JSON.stringify(data, null, 2).substring(0, 500)}...</pre>`;
+                    console.log(`${test.name} success:`, data);
+                } catch (error) {
+                    div.innerHTML = `<h3>${test.name}</h3><p style="color: red;">❌ Error: ${error.message}</p>`;
+                    console.error(`${test.name} error:`, error);
+                }
+            }
+        }
+
+        testAPIs();
+    </script>
+</body>
+</html>
