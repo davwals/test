@@ -166,10 +166,10 @@
                     <div class="text-lg font-mono font-bold text-white">$89.20B</div>
                     <div class="text-[10px] text-emerald-500/70">↑ 3.40%</div>
                 </div>
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staked">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Staked</div>
-                    <div class="text-lg font-mono font-bold text-white">28.40%</div>
-                    <div class="text-[10px] text-zinc-500">34.20M ETH</div>
+                    <div class="text-lg font-mono font-bold text-white metric-value">28.40%</div>
+                    <div class="text-[10px] text-zinc-500 metric-change">34.20M ETH</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">L2 TVL</div>
@@ -482,5 +482,8 @@
             }, 500);
         }
     </script>
+
+    <!-- StakingRewards Integration -->
+    <script src="stakingrewards-integration.js"></script>
 </body>
 </html>
