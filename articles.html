@@ -23,11 +23,6 @@
     </script>
     <style>
         body { font-family: 'Manrope', sans-serif; }
-        .dropdown { position: relative; }
-        .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; margin-top: 0.5rem; background: #18181b; border: 1px solid #27272a; border-radius: 0.5rem; padding: 0.5rem; min-width: 160px; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3); }
-        .dropdown:hover .dropdown-menu { display: block; }
-        .dropdown-menu a { display: block; padding: 0.5rem 0.75rem; font-size: 0.75rem; color: #a1a1aa; border-radius: 0.375rem; transition: all 0.2s; }
-        .dropdown-menu a:hover { background: #27272a; color: #fff; }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 antialiased min-h-screen">
@@ -42,36 +37,14 @@
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <a href="terminal.html" class="flex items-center gap-2">
+                <a href="index.html" class="flex items-center gap-2">
                     <img src="https://i.imgur.com/LJ0gSjb.jpeg" alt="Enterprise Onchain" class="w-6 h-6 rounded-full">
                     <span class="text-sm font-semibold tracking-tight">Enterprise Onchain</span>
                     <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded ml-2">TERMINAL</span>
                 </a>
-                <div class="hidden lg:flex items-center gap-1 text-xs">
-                    <div class="dropdown">
-                        <button class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors flex items-center gap-1">
-                            RWA
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <div class="dropdown-menu">
-                            <a href="funds.html?category=treasuries">Treasuries</a>
-                            <a href="funds.html?category=securities">Securities</a>
-                            <a href="funds.html?category=commodities">Commodities</a>
-                            <a href="funds.html?category=defi">DeFi</a>
-                            <a href="funds.html?category=stablecoins">Stablecoins</a>
-                            <a href="funds.html?category=real-estate">Real Estate</a>
-                            <a href="funds.html?category=credit">Credit</a>
-                        </div>
-                    </div>
-                    <a href="etf-tracker.html" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">ETFs</a>
-                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">DeFi</a>
-                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Staking</a>
-                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">News</a>
-                </div>
             </div>
             <div class="flex items-center gap-3">
+                <a href="index.html" class="text-xs text-zinc-500 hover:text-white transition-colors hidden sm:block">← Back to site</a>
                 <div id="authButtons"></div>
                 <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold">DW</div>
             </div>
