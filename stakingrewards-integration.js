@@ -75,10 +75,12 @@ function formatStakingDataForTerminal(stakingData) {
   const rewardOption = stakingData.rewardOptions?.find(r => r.type === 'staking') || stakingData.rewardOptions?.[0];
 
   return {
+    marketCap: metrics.marketCap,
     totalStakedETH: metrics.stakedTokens,
     totalStakedUSD: metrics.totalStakedUSD,
     stakingRatio: metrics.stakingRatio || ((metrics.stakedTokens / 120000000) * 100), // Approximate
     rewardRate: metrics.rewardRate,
+    apr: rewardOption?.apr || metrics.rewardRate,
     apy: rewardOption?.apy || rewardOption?.apr,
     activeValidators: metrics.activeValidators,
     inflationRate: metrics.inflationRate
@@ -127,6 +129,54 @@ async function updateTerminalWithStakingData() {
 
     const validatorsInK = (formattedData.activeValidators / 1000).toFixed(1);
     if (valueEl) valueEl.textContent = `${validatorsInK}K`;
+  }
+
+  // Update ETH Market Cap tile
+  const marketCapTile = document.querySelector('[data-metric="eth-market-cap"]');
+  if (marketCapTile) {
+    const valueEl = marketCapTile.querySelector('.metric-value');
+
+    if (formattedData.marketCap && valueEl) {
+      const marketCapInB = (formattedData.marketCap / 1000000000).toFixed(2);
+      valueEl.textContent = `$${marketCapInB}B`;
+    }
+  }
+
+  // Update Staked ETH USD tile
+  const stakedUSDTile = document.querySelector('[data-metric="eth-staked-usd"]');
+  if (stakedUSDTile) {
+    const valueEl = stakedUSDTile.querySelector('.metric-value');
+    const changeEl = stakedUSDTile.querySelector('.metric-change');
+
+    if (formattedData.totalStakedUSD && valueEl) {
+      const stakedUSDInB = (formattedData.totalStakedUSD / 1000000000).toFixed(2);
+      valueEl.textContent = `$${stakedUSDInB}B`;
+    }
+
+    if (formattedData.totalStakedETH && changeEl) {
+      const stakedInMillions = (formattedData.totalStakedETH / 1000000).toFixed(2);
+      changeEl.textContent = `${stakedInMillions}M ETH`;
+    }
+  }
+
+  // Update Staking Ratio tile
+  const stakingRatioTile = document.querySelector('[data-metric="eth-staking-ratio"]');
+  if (stakingRatioTile) {
+    const valueEl = stakingRatioTile.querySelector('.metric-value');
+
+    if (formattedData.stakingRatio && valueEl) {
+      valueEl.textContent = `${formattedData.stakingRatio.toFixed(2)}%`;
+    }
+  }
+
+  // Update Staking APR tile
+  const aprTile = document.querySelector('[data-metric="eth-staking-apr"]');
+  if (aprTile) {
+    const valueEl = aprTile.querySelector('.metric-value');
+
+    if (formattedData.apr && valueEl) {
+      valueEl.textContent = `${formattedData.apr.toFixed(2)}%`;
+    }
   }
 
   return formattedData;
