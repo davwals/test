@@ -138,79 +138,125 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
                 <!-- Most Important Stats First -->
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="total-crypto-market-cap">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Crypto Market Cap</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>Crypto Market Cap</span>
+                        <span class="text-[8px] opacity-60">CoinGecko</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-white metric-value">$3.42T</div>
-                    <div class="text-[10px] text-emerald-500/70 metric-change">↑ 2.10%</div>
+                    <div class="text-[10px] text-emerald-500/70 metric-change">↑ 2.10% (7d)</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-market-cap">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Market Cap</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>ETH Market Cap</span>
+                        <span class="text-[8px] opacity-60">StakingRewards</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-white metric-value">$385.00B</div>
-                    <div class="text-[10px] text-zinc-500 metric-change">Ethereum</div>
+                    <div class="text-[10px] text-zinc-500 metric-change">↑ 2.50% (7d)</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staked-usd">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Staked ETH (USD)</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>Staked ETH (USD)</span>
+                        <span class="text-[8px] opacity-60">StakingRewards</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-emerald-500 metric-value">$109.44B</div>
                     <div class="text-[10px] text-zinc-500 metric-change">34.20M ETH</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="rwa-tvl">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">RWA TVL</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>RWA TVL</span>
+                        <span class="text-[8px] opacity-60">Historical</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-white metric-value">$2.41T</div>
-                    <div class="text-[10px] text-emerald-500/70 metric-change">↑ 0.80%</div>
+                    <div class="text-[10px] text-emerald-500/70 metric-change">↑ 0.80% (7d)</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">BTC ETF Flows (24h)</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>BTC ETF Flows (24h)</span>
+                        <span class="text-[8px] opacity-60">Historical</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-emerald-500">+$487.00M</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 12.30%</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 12.30% (7d)</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH ETF Flows (24h)</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>ETH ETF Flows (24h)</span>
+                        <span class="text-[8px] opacity-60">Historical</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-emerald-500">+$124.00M</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 8.70%</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 8.70% (7d)</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staking-apr">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Ethereum Staking Yield</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>Ethereum Staking Yield</span>
+                        <span class="text-[8px] opacity-60">StakingRewards</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-emerald-500 metric-value">3.75%</div>
                     <div class="text-[10px] text-zinc-500 metric-change">APR</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staking-ratio">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Supply Staked (%)</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>ETH Supply Staked (%)</span>
+                        <span class="text-[8px] opacity-60">StakingRewards</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-white metric-value">28.40%</div>
                     <div class="text-[10px] text-zinc-500 metric-change">of total supply</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-ecosystem-tps">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Ecosystem TPS</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>ETH Ecosystem TPS</span>
+                        <span class="text-[8px] opacity-60">growthepie</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-emerald-500 metric-value">Loading...</div>
                     <div class="text-[10px] text-zinc-500 metric-change">Avg. Transactions/sec</div>
                 </div>
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Stablecoin Supply</div>
-                    <div class="text-lg font-mono font-bold text-white">$178.00B</div>
-                    <div class="text-[10px] text-zinc-500">ATH</div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="stablecoin-supply">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>Stablecoin Supply</span>
+                        <span class="text-[8px] opacity-60">CoinGecko</span>
+                    </div>
+                    <div class="text-lg font-mono font-bold text-white metric-value">$178.00B</div>
+                    <div class="text-[10px] text-emerald-500/70 metric-change">↑ 1.20% (7d)</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">DeFi TVL</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>DeFi TVL</span>
+                        <span class="text-[8px] opacity-60">Historical</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-white">$89.20B</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 3.40%</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 3.40% (7d)</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">L2 TVL</div>
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide flex items-center justify-between">
+                        <span>L2 TVL</span>
+                        <span class="text-[8px] opacity-60">Historical</span>
+                    </div>
                     <div class="text-lg font-mono font-bold text-white">$42.10B</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 5.20%</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 5.20% (7d)</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
                     <div class="flex items-center justify-between mb-4">
-                        <div><div class="text-sm font-medium text-white">Total Crypto Market Cap</div><div class="text-xs text-zinc-500">Last 12 months</div></div>
-                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$3.42T</div><div class="text-xs text-emerald-500">Loading...</div></div>
+                        <div>
+                            <div class="text-sm font-medium text-white">Total Crypto Market Cap</div>
+                            <div class="text-xs text-zinc-500">Last 12 months • <span class="opacity-60">CoinGecko</span></div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-mono font-bold text-white">$3.42T</div>
+                        </div>
                     </div>
                     <div class="h-48"><canvas id="marketCapChart"></canvas></div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
                     <div class="flex items-center justify-between mb-4">
-                        <div><div class="text-sm font-medium text-white">Tokenized RWA TVL</div><div class="text-xs text-zinc-500">Last 12 months (Historical)</div></div>
-                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$2.41T</div><div class="text-xs text-emerald-500">+24.20% YTD</div></div>
+                        <div>
+                            <div class="text-sm font-medium text-white">Tokenized RWA TVL</div>
+                            <div class="text-xs text-zinc-500">Last 12 months • <span class="opacity-60">Historical</span></div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-mono font-bold text-white">$2.41T</div>
+                        </div>
                     </div>
                     <div class="h-48"><canvas id="rwaChart"></canvas></div>
                 </div>
