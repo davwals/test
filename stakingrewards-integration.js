@@ -305,22 +305,68 @@ async function updateTotalCryptoMarketCap() {
 }
 
 /**
- * Update market cap chart with historical data
+ * Fetch total crypto market cap history (12 months) from CoinGecko
+ */
+async function fetchTotalCryptoMarketCapHistory() {
+  try {
+    // Get 365 days of market cap data
+    const response = await fetch(`${COINGECKO_API_URL}/global/market_cap_chart?days=365`);
+
+    if (!response.ok) {
+      throw new Error(`CoinGecko API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.market_cap_chart;
+  } catch (error) {
+    console.error('Error fetching crypto market cap history:', error);
+    return null;
+  }
+}
+
+/**
+ * Update market cap chart with 12-month total crypto market cap data
  */
 async function updateMarketCapChart() {
-  const historyData = await fetchEthereumMarketCapHistory();
+  // Fetch 12-month total crypto market cap from CoinGecko
+  let historyData;
+
+  try {
+    const response = await fetch(`${COINGECKO_API_URL}/coins/bitcoin/market_chart?vs_currency=usd&days=365&interval=daily`);
+    if (!response.ok) {
+      throw new Error(`CoinGecko API error: ${response.status}`);
+    }
+    const bitcoinData = await response.json();
+
+    // Get global market data to calculate total market cap from BTC data
+    const globalResponse = await fetch(`${COINGECKO_API_URL}/global`);
+    const globalData = await globalResponse.json();
+    const btcDominance = globalData.data.market_cap_percentage.btc / 100;
+
+    // Calculate total market cap from Bitcoin market cap and dominance
+    historyData = bitcoinData.market_caps.map(point => ({
+      x: point[0] / 1000, // Convert to seconds
+      y: point[1] / btcDominance // Calculate total market cap from BTC market cap
+    }));
+  } catch (error) {
+    console.error('Error fetching market cap history:', error);
+    return;
+  }
 
   if (!historyData || !window.marketCapChartInstance) {
     return;
   }
 
+  // Sample data to show roughly monthly points (every 30 days)
+  const sampledData = historyData.filter((_, index) => index % 30 === 0 || index === historyData.length - 1);
+
   // Format dates and values
-  const labels = historyData.map(point => {
-    const date = new Date(point.x * 1000); // Convert Unix timestamp to milliseconds
+  const labels = sampledData.map(point => {
+    const date = new Date(point.x * 1000);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   });
 
-  const values = historyData.map(point => point.y / 1000000000); // Convert to billions
+  const values = sampledData.map(point => point.y / 1000000000000); // Convert to trillions
 
   // Update chart data
   window.marketCapChartInstance.data.labels = labels;
@@ -334,13 +380,13 @@ async function updateMarketCapChart() {
 
   // Update header if elements exist
   const headerValue = document.querySelector('#marketCapChart')?.closest('.bg-zinc-900')?.querySelector('.text-lg.font-mono.font-bold');
-  const headerChange = document.querySelector('#marketCapChart')?.closest('.bg-zinc-900')?.querySelector('.text-xs.text-emerald-500');
+  const headerChange = document.querySelector('#marketCapChart')?.closest('.bg-zinc-900')?.querySelector('.text-xs');
 
   if (headerValue) {
-    headerValue.textContent = `$${currentValue.toFixed(2)}B`;
+    headerValue.textContent = `$${currentValue.toFixed(2)}T`;
   }
   if (headerChange) {
-    headerChange.textContent = `${percentChange > 0 ? '+' : ''}${percentChange}% (30d)`;
+    headerChange.textContent = `${percentChange > 0 ? '+' : ''}${percentChange}% (12mo)`;
     headerChange.className = percentChange > 0 ? 'text-xs text-emerald-500' : 'text-xs text-red-500';
   }
 }

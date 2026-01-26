@@ -132,10 +132,31 @@
                     </span>
                     <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded">LIVE</span>
                 </div>
-                <p class="text-sm text-zinc-400">Real-time data tracking institutional crypto adoption. <span class="text-zinc-500">Jan 14, 2025</span></p>
+                <p class="text-sm text-zinc-400">Real-time data tracking institutional crypto adoption. <span class="text-zinc-500" id="currentDate"></span></p>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
+                <!-- Most Important Stats First -->
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="total-crypto-market-cap">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Crypto Market Cap</div>
+                    <div class="text-lg font-mono font-bold text-white metric-value">$3.42T</div>
+                    <div class="text-[10px] text-emerald-500/70 metric-change">↑ 2.10%</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-market-cap">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Market Cap</div>
+                    <div class="text-lg font-mono font-bold text-white metric-value">$385.00B</div>
+                    <div class="text-[10px] text-zinc-500 metric-change">Ethereum</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staked-usd">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Staked ETH (USD)</div>
+                    <div class="text-lg font-mono font-bold text-emerald-500 metric-value">$109.44B</div>
+                    <div class="text-[10px] text-zinc-500 metric-change">34.20M ETH</div>
+                </div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="rwa-tvl">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">RWA TVL</div>
+                    <div class="text-lg font-mono font-bold text-white metric-value">$2.41T</div>
+                    <div class="text-[10px] text-emerald-500/70 metric-change">↑ 0.80%</div>
+                </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">BTC ETF Flows (24h)</div>
                     <div class="text-lg font-mono font-bold text-emerald-500">+$487.00M</div>
@@ -146,15 +167,15 @@
                     <div class="text-lg font-mono font-bold text-emerald-500">+$124.00M</div>
                     <div class="text-[10px] text-emerald-500/70">↑ 8.70%</div>
                 </div>
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="total-crypto-market-cap">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Crypto Market Cap</div>
-                    <div class="text-lg font-mono font-bold text-white metric-value">$3.42T</div>
-                    <div class="text-[10px] text-emerald-500/70 metric-change">↑ 2.10%</div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staking-apr">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Ethereum Staking Yield</div>
+                    <div class="text-lg font-mono font-bold text-emerald-500 metric-value">3.75%</div>
+                    <div class="text-[10px] text-zinc-500 metric-change">APR</div>
                 </div>
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="rwa-tvl">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">RWA TVL</div>
-                    <div class="text-lg font-mono font-bold text-white metric-value">$2.41T</div>
-                    <div class="text-[10px] text-emerald-500/70 metric-change">↑ 0.80%</div>
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staking-ratio">
+                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Supply Staked (%)</div>
+                    <div class="text-lg font-mono font-bold text-white metric-value">28.40%</div>
+                    <div class="text-[10px] text-zinc-500 metric-change">of total supply</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Stablecoin Supply</div>
@@ -166,52 +187,25 @@
                     <div class="text-lg font-mono font-bold text-white">$89.20B</div>
                     <div class="text-[10px] text-emerald-500/70">↑ 3.40%</div>
                 </div>
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staked">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Staked</div>
-                    <div class="text-lg font-mono font-bold text-white metric-value">28.40%</div>
-                    <div class="text-[10px] text-zinc-500 metric-change">34.20M ETH</div>
-                </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">L2 TVL</div>
                     <div class="text-lg font-mono font-bold text-white">$42.10B</div>
                     <div class="text-[10px] text-emerald-500/70">↑ 5.20%</div>
-                </div>
-
-                <!-- StakingRewards API Tiles -->
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-market-cap">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Market Cap</div>
-                    <div class="text-lg font-mono font-bold text-white metric-value">$385.00B</div>
-                    <div class="text-[10px] text-zinc-500 metric-change">Ethereum</div>
-                </div>
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staked-usd">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Staked ETH (USD)</div>
-                    <div class="text-lg font-mono font-bold text-emerald-500 metric-value">$109.44B</div>
-                    <div class="text-[10px] text-zinc-500 metric-change">34.20M ETH</div>
-                </div>
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staking-ratio">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Supply Staked (%)</div>
-                    <div class="text-lg font-mono font-bold text-white metric-value">28.40%</div>
-                    <div class="text-[10px] text-zinc-500 metric-change">of total supply</div>
-                </div>
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staking-apr">
-                    <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Ethereum Staking Yield</div>
-                    <div class="text-lg font-mono font-bold text-emerald-500 metric-value">3.75%</div>
-                    <div class="text-[10px] text-zinc-500 metric-change">APR</div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
                     <div class="flex items-center justify-between mb-4">
-                        <div><div class="text-sm font-medium text-white">ETH Market Cap</div><div class="text-xs text-zinc-500">Last 30 days</div></div>
-                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$385.00B</div><div class="text-xs text-emerald-500">Loading...</div></div>
+                        <div><div class="text-sm font-medium text-white">Total Crypto Market Cap</div><div class="text-xs text-zinc-500">Last 12 months</div></div>
+                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$3.42T</div><div class="text-xs text-emerald-500">Loading...</div></div>
                     </div>
                     <div class="h-48"><canvas id="marketCapChart"></canvas></div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
                     <div class="flex items-center justify-between mb-4">
-                        <div><div class="text-sm font-medium text-white">Tokenized RWA TVL</div><div class="text-xs text-zinc-500">Last 30 days</div></div>
-                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$2.41T</div><div class="text-xs text-emerald-500">+24.20% MTD</div></div>
+                        <div><div class="text-sm font-medium text-white">Tokenized RWA TVL</div><div class="text-xs text-zinc-500">Last 12 months (Historical)</div></div>
+                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$2.41T</div><div class="text-xs text-emerald-500">+24.20% YTD</div></div>
                     </div>
                     <div class="h-48"><canvas id="rwaChart"></canvas></div>
                 </div>
@@ -234,11 +228,31 @@
 
                 <div class="space-y-6">
                     <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-                        <div class="px-4 py-3 border-b border-zinc-800"><span class="text-sm font-medium">Latest Newsletter</span></div>
-                        <div class="p-4">
-                            <div class="text-xs text-zinc-500 mb-2">Issue #47 • Jan 13, 2025</div>
-                            <h3 class="text-sm font-medium text-white mb-3">Morgan Stanley Goes All-In + BlackRock's BUIDL Hits $500M</h3>
-                            <a href="#" class="block w-full text-center text-sm font-medium text-emerald-500 hover:text-emerald-400 py-2 border border-zinc-800 rounded-lg hover:bg-zinc-800/50 transition-colors">Read Full Issue →</a>
+                        <div class="px-4 py-3 border-b border-zinc-800"><span class="text-sm font-medium">Recent Newsletters</span></div>
+                        <div class="divide-y divide-zinc-800">
+                            <div class="p-4">
+                                <div class="text-xs text-zinc-500 mb-2">Issue #47 • Jan 13, 2025</div>
+                                <h3 class="text-sm font-medium text-white mb-3">Morgan Stanley Goes All-In + BlackRock's BUIDL Hits $500M</h3>
+                                <a href="https://enterpriseonchain.substack.com/" target="_blank" class="block w-full text-center text-sm font-medium text-emerald-500 hover:text-emerald-400 py-2 border border-zinc-800 rounded-lg hover:bg-zinc-800/50 transition-colors">Read Full Issue →</a>
+                            </div>
+                            <div class="p-4">
+                                <div class="text-xs text-zinc-500 mb-2">Issue #46 • Jan 6, 2025</div>
+                                <h3 class="text-sm font-medium text-zinc-300 mb-2">Ethereum ETFs Break $1B + JPMorgan's Onchain Settlement</h3>
+                                <a href="https://enterpriseonchain.substack.com/" target="_blank" class="text-xs text-zinc-500 hover:text-zinc-400">View →</a>
+                            </div>
+                            <div class="p-4">
+                                <div class="text-xs text-zinc-500 mb-2">Issue #45 • Dec 30, 2024</div>
+                                <h3 class="text-sm font-medium text-zinc-300 mb-2">Year in Review: 2024's Institutional Crypto Milestones</h3>
+                                <a href="https://enterpriseonchain.substack.com/" target="_blank" class="text-xs text-zinc-500 hover:text-zinc-400">View →</a>
+                            </div>
+                            <div class="p-4">
+                                <div class="text-xs text-zinc-500 mb-2">Issue #44 • Dec 23, 2024</div>
+                                <h3 class="text-sm font-medium text-zinc-300 mb-2">Goldman Sachs Tokenizes Real Estate + SEC Approves New ETFs</h3>
+                                <a href="https://enterpriseonchain.substack.com/" target="_blank" class="text-xs text-zinc-500 hover:text-zinc-400">View →</a>
+                            </div>
+                            <div class="px-4 pb-4">
+                                <a href="https://enterpriseonchain.substack.com/" target="_blank" class="block w-full text-center text-xs font-medium text-zinc-400 hover:text-white py-2 border border-zinc-800 rounded-lg hover:bg-zinc-800/50 transition-colors">View All Issues →</a>
+                            </div>
                         </div>
                     </div>
 
@@ -345,10 +359,14 @@
             newsFeed.innerHTML += `<a href="#" class="block p-4 hover:bg-zinc-800/50 transition-colors"><div class="flex items-start gap-3"><div class="w-8 h-8 rounded bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-400 shrink-0">${item.ticker}</div><div class="flex-1 min-w-0"><div class="flex items-center gap-2 mb-1"><span class="text-xs font-mono ${tagColors[item.tagColor]}">${item.tag}</span><span class="text-xs text-zinc-500">${item.time}</span></div><h3 class="text-sm font-medium text-white mb-1">${item.title}</h3><p class="text-xs text-zinc-500 line-clamp-2">${item.desc}</p></div></div></a>`;
         });
 
+        // Set current date
+        const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        document.getElementById('currentDate').textContent = currentDate;
+
         Chart.defaults.color = '#71717a';
         Chart.defaults.borderColor = '#27272a';
 
-        // Store chart instance globally for updates from StakingRewards API
+        // Store chart instance globally for updates from CoinGecko API
         window.marketCapChartInstance = new Chart(document.getElementById('marketCapChart').getContext('2d'), {
             type: 'line',
             data: {
@@ -378,7 +396,7 @@
                         grid: { color: '#27272a' },
                         ticks: {
                             font: { size: 10 },
-                            callback: v => '$' + v.toFixed(2) + 'B'
+                            callback: v => '$' + v.toFixed(2) + 'T'
                         }
                     }
                 }
