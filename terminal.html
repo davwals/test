@@ -132,7 +132,18 @@
                     </span>
                     <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded">LIVE</span>
                 </div>
-                <p class="text-sm text-zinc-400">Real-time data tracking institutional crypto adoption. <span class="text-zinc-500" id="currentDate"></span> • <span class="text-zinc-500" id="lastUpdate">Last updated: Loading...</span></p>
+                <p class="text-sm text-zinc-400">Real-time data tracking institutional crypto adoption. <span class="text-zinc-500" id="currentDate"></span> • <span class="text-zinc-500" id="lastUpdate">Last updated: Loading...</span> • <span class="text-zinc-500 text-xs cursor-pointer" id="apiStatus" onclick="document.getElementById('apiDebug').classList.toggle('hidden')">API Status ⓘ</span></p>
+            </div>
+
+            <!-- API Debug Panel (hidden by default) -->
+            <div id="apiDebug" class="hidden mb-6 bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+                <div class="text-sm font-medium text-white mb-3">API Status</div>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div id="status-coingecko" class="text-zinc-500">CoinGecko: <span>Checking...</span></div>
+                    <div id="status-stakingrewards" class="text-zinc-500">StakingRewards: <span>Checking...</span></div>
+                    <div id="status-defillama" class="text-zinc-500">DefiLlama: <span>Checking...</span></div>
+                    <div id="status-growthepie" class="text-zinc-500">growthepie: <span>Checking...</span></div>
+                </div>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">

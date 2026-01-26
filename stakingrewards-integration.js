@@ -12,6 +12,28 @@ const GROWTHEPIE_API_URL = 'https://api.growthepie.com/v1/fundamentals.json';
 const DEFILLAMA_API_URL = 'https://api.llama.fi';
 
 /**
+ * Update API status indicator
+ */
+function updateAPIStatus(apiName, status, message = '') {
+  const statusEl = document.getElementById(`status-${apiName.toLowerCase()}`);
+  if (statusEl) {
+    const statusSpan = statusEl.querySelector('span');
+    if (statusSpan) {
+      if (status === 'success') {
+        statusSpan.textContent = '✅ Working';
+        statusSpan.className = 'text-emerald-500';
+      } else if (status === 'error') {
+        statusSpan.textContent = `❌ Failed${message ? ': ' + message : ''}`;
+        statusSpan.className = 'text-red-500';
+      } else {
+        statusSpan.textContent = '⏳ Loading...';
+        statusSpan.className = 'text-yellow-500';
+      }
+    }
+  }
+}
+
+/**
  * GraphQL query to get Ethereum staking metrics
  */
 const ETHEREUM_STAKING_QUERY = `
@@ -128,13 +150,19 @@ async function fetchEthereumMarketCapHistory() {
  */
 async function fetchTotalCryptoMarketCap() {
   try {
+    console.log('Fetching from:', `${COINGECKO_API_URL}/global`);
     const response = await fetch(`${COINGECKO_API_URL}/global`);
 
+    console.log('CoinGecko global response status:', response.status);
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('CoinGecko API error response:', errorText);
       throw new Error(`CoinGecko API error: ${response.status}`);
     }
 
     const data = await response.json();
+    console.log('CoinGecko global data received:', data.data ? 'Success' : 'No data');
     return data.data;
   } catch (error) {
     console.error('Error fetching total crypto market cap:', error);
@@ -195,13 +223,18 @@ function formatStakingDataForTerminal(stakingData) {
  * Update terminal tiles with live staking data
  */
 async function updateTerminalWithStakingData() {
+  updateAPIStatus('stakingrewards', 'loading');
+
   const stakingData = await fetchEthereumStakingData();
   const formattedData = formatStakingDataForTerminal(stakingData);
 
   if (!formattedData) {
     console.error('Failed to fetch staking data');
+    updateAPIStatus('stakingrewards', 'error', 'Failed to fetch data');
     return;
   }
+
+  updateAPIStatus('stakingrewards', 'success');
 
   // Update ETH Staked tile
   const ethStakedTile = document.querySelector('[data-metric="eth-staked"]');
@@ -326,9 +359,12 @@ async function updateEthMarketCap() {
  * Update total crypto market cap tile
  */
 async function updateTotalCryptoMarketCap() {
+  updateAPIStatus('coingecko', 'loading');
+
   const globalData = await fetchTotalCryptoMarketCap();
 
   if (!globalData) {
+    updateAPIStatus('coingecko', 'error', 'Failed to fetch global data');
     return;
   }
 
@@ -355,6 +391,8 @@ async function updateTotalCryptoMarketCap() {
         ? 'text-[10px] text-emerald-500/70 metric-change'
         : 'text-[10px] text-red-500/70 metric-change';
     }
+
+    updateAPIStatus('coingecko', 'success');
   }
 }
 
@@ -449,9 +487,12 @@ async function fetchDefiTVL() {
  * Update DeFi TVL tile
  */
 async function updateDefiTVL() {
+  updateAPIStatus('defillama', 'loading');
+
   const defiData = await fetchDefiTVL();
 
   if (!defiData) {
+    updateAPIStatus('defillama', 'error', 'Failed to fetch TVL');
     return;
   }
 
@@ -472,6 +513,8 @@ async function updateDefiTVL() {
         ? 'text-[10px] text-emerald-500/70'
         : 'text-[10px] text-red-500/70';
     }
+
+    updateAPIStatus('defillama', 'success');
   }
 }
 
@@ -544,9 +587,12 @@ async function fetchEthereumEcosystemTPS() {
  * Update Ethereum ecosystem TPS tile
  */
 async function updateEthereumEcosystemTPS() {
+  updateAPIStatus('growthepie', 'loading');
+
   const tpsData = await fetchEthereumEcosystemTPS();
 
   if (!tpsData) {
+    updateAPIStatus('growthepie', 'error', 'Failed to fetch TPS');
     return;
   }
 
@@ -564,6 +610,8 @@ async function updateEthereumEcosystemTPS() {
     if (changeEl) {
       changeEl.textContent = `${tpsData.chainCount} chains`;
     }
+
+    updateAPIStatus('growthepie', 'success');
   }
 }
 
@@ -654,31 +702,60 @@ async function updateMarketCapChart() {
 }
 
 /**
- * Initialize staking data updates
+ * Initialize staking data updates with staggered loading to avoid rate limits
  * Call this when the page loads and optionally set up auto-refresh
  */
-function initializeStakingData() {
+async function initializeStakingData() {
   console.log('Initializing staking data...');
 
-  // Update immediately on page load
-  updateTerminalWithStakingData();
-  updateMarketCapChart();
-  updateTotalCryptoMarketCap();
-  updateEthMarketCap();
-  updateStablecoinSupply();
-  updateDefiTVL();
-  updateEthereumEcosystemTPS();
+  try {
+    // Update immediately on page load with staggered delays to avoid rate limiting
+    console.log('Starting StakingRewards data...');
+    updateTerminalWithStakingData();
 
-  // Update every 5 minutes (300000ms)
-  setInterval(updateTerminalWithStakingData, 300000);
-  setInterval(updateMarketCapChart, 300000);
-  setInterval(updateTotalCryptoMarketCap, 300000);
-  setInterval(updateEthMarketCap, 300000);
-  setInterval(updateStablecoinSupply, 300000);
-  setInterval(updateDefiTVL, 300000);
-  setInterval(updateEthereumEcosystemTPS, 300000);
+    setTimeout(async () => {
+      console.log('Starting CoinGecko total market cap...');
+      await updateTotalCryptoMarketCap();
+    }, 500);
 
-  console.log('All updates scheduled');
+    setTimeout(async () => {
+      console.log('Starting CoinGecko ETH market cap...');
+      await updateEthMarketCap();
+    }, 1000);
+
+    setTimeout(async () => {
+      console.log('Starting CoinGecko stablecoins...');
+      await updateStablecoinSupply();
+    }, 1500);
+
+    setTimeout(async () => {
+      console.log('Starting DeFi Llama TVL...');
+      await updateDefiTVL();
+    }, 2000);
+
+    setTimeout(async () => {
+      console.log('Starting GrowthePie TPS...');
+      await updateEthereumEcosystemTPS();
+    }, 2500);
+
+    setTimeout(async () => {
+      console.log('Starting market cap chart...');
+      await updateMarketCapChart();
+    }, 3000);
+
+    // Update every 5 minutes (300000ms)
+    setInterval(updateTerminalWithStakingData, 300000);
+    setInterval(updateMarketCapChart, 300000);
+    setInterval(updateTotalCryptoMarketCap, 300000);
+    setInterval(updateEthMarketCap, 300000);
+    setInterval(updateStablecoinSupply, 300000);
+    setInterval(updateDefiTVL, 300000);
+    setInterval(updateEthereumEcosystemTPS, 300000);
+
+    console.log('All updates scheduled');
+  } catch (error) {
+    console.error('Error initializing staking data:', error);
+  }
 }
 
 // Auto-initialize when DOM is ready
