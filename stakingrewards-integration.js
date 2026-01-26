@@ -304,46 +304,35 @@ async function updateTotalCryptoMarketCap() {
 
 /**
  * Update stablecoin supply tile with real data from CoinGecko
+ * Using /coins/categories endpoint for accurate total market cap
  */
 async function updateStablecoinSupply() {
   try {
-    const response = await fetch(`${COINGECKO_API_URL}/coins/markets?vs_currency=usd&category=stablecoins&order=market_cap_desc&per_page=100&page=1&price_change_percentage=7d`);
+    // Use categories endpoint to get accurate stablecoin market cap total
+    const response = await fetch(`${COINGECKO_API_URL}/coins/categories`);
 
     if (!response.ok) {
-      console.error('Failed to fetch stablecoin data:', response.status);
+      console.error('Failed to fetch categories data:', response.status);
       return;
     }
 
-    const stablecoins = await response.json();
+    const categories = await response.json();
 
-    if (!Array.isArray(stablecoins) || stablecoins.length === 0) {
-      console.error('Invalid stablecoin data');
+    if (!Array.isArray(categories) || categories.length === 0) {
+      console.error('Invalid categories data');
       return;
     }
 
-    // Sum up total stablecoin market cap
-    const totalStablecoinMcap = stablecoins.reduce((sum, coin) => {
-      return sum + (coin.market_cap || 0);
-    }, 0);
+    // Find the stablecoin category
+    const stablecoinCategory = categories.find(cat =>
+      cat.id === 'stablecoins' ||
+      cat.name.toLowerCase().includes('stablecoin')
+    );
 
-    // Calculate 7-day change
-    let totalMcap7dAgo = 0;
-    let coinsWithChangeData = 0;
-
-    stablecoins.forEach(coin => {
-      const hasChangeData = coin.price_change_percentage_7d_in_currency !== null &&
-                           coin.price_change_percentage_7d_in_currency !== undefined;
-
-      if (hasChangeData && coin.current_price && coin.circulating_supply) {
-        const price7dAgo = coin.current_price / (1 + (coin.price_change_percentage_7d_in_currency / 100));
-        const mcap7dAgo = price7dAgo * coin.circulating_supply;
-        totalMcap7dAgo += mcap7dAgo;
-        coinsWithChangeData++;
-      } else {
-        // For coins without 7d data, assume no change
-        totalMcap7dAgo += (coin.market_cap || 0);
-      }
-    });
+    if (!stablecoinCategory) {
+      console.error('Stablecoin category not found');
+      return;
+    }
 
     const stablecoinTile = document.querySelector('[data-metric="stablecoin-supply"]');
     if (!stablecoinTile) return;
@@ -351,15 +340,16 @@ async function updateStablecoinSupply() {
     const valueEl = stablecoinTile.querySelector('.metric-value');
     const changeEl = stablecoinTile.querySelector('.metric-change');
 
-    if (valueEl) {
-      valueEl.textContent = `$${(totalStablecoinMcap / 1000000000).toFixed(2)}B`;
+    if (valueEl && stablecoinCategory.market_cap) {
+      const marketCapInB = (stablecoinCategory.market_cap / 1000000000).toFixed(2);
+      valueEl.textContent = `$${marketCapInB}B`;
     }
 
-    if (changeEl && totalMcap7dAgo > 0) {
-      const change7d = ((totalStablecoinMcap - totalMcap7dAgo) / totalMcap7dAgo) * 100;
-      const isPositive = change7d > 0;
+    if (changeEl && stablecoinCategory.market_cap_change_24h !== null && stablecoinCategory.market_cap_change_24h !== undefined) {
+      const change24h = stablecoinCategory.market_cap_change_24h;
+      const isPositive = change24h > 0;
       const arrow = isPositive ? '↑' : '↓';
-      changeEl.textContent = `${arrow} ${Math.abs(change7d).toFixed(2)}% (7d)`;
+      changeEl.textContent = `${arrow} ${Math.abs(change24h).toFixed(2)}% (24h)`;
       changeEl.className = isPositive
         ? 'text-[10px] text-emerald-500/70 metric-change'
         : 'text-[10px] text-red-500/70 metric-change';
@@ -459,11 +449,107 @@ async function updateDefiTVL() {
 }
 
 /**
- * Fetch Ethereum ecosystem TPS from GrowthePie API
+ * Fetch L2 TVL from DeFi Llama API
+ */
+async function fetchL2TVL() {
+  try {
+    // DeFi Llama chains endpoint gives TVL per chain
+    const response = await fetch(`${DEFILLAMA_API_URL}/v2/chains`);
+
+    if (!response.ok) {
+      throw new Error(`DeFi Llama API error: ${response.status}`);
+    }
+
+    const chains = await response.json();
+
+    if (!Array.isArray(chains) || chains.length === 0) {
+      console.error('Invalid DeFi Llama chains data');
+      return null;
+    }
+
+    // Filter for L2 chains
+    const l2Chains = chains.filter(chain => {
+      const name = chain.name.toLowerCase();
+      return name.includes('arbitrum') ||
+             name.includes('optimism') ||
+             name.includes('base') ||
+             name.includes('polygon') ||
+             name.includes('zksync') ||
+             name.includes('starknet') ||
+             name.includes('linea') ||
+             name.includes('scroll') ||
+             name.includes('mantle') ||
+             name.includes('blast') ||
+             name.includes('metis') ||
+             name.includes('mode') ||
+             name.includes('zora');
+    });
+
+    // Sum up TVL across all L2s
+    const totalL2TVL = l2Chains.reduce((sum, chain) => sum + (chain.tvl || 0), 0);
+
+    // Calculate 7-day change if available
+    const currentTVL = totalL2TVL;
+    const previousTVL = l2Chains.reduce((sum, chain) => {
+      const change = chain.chainId && chain.change_7d ? currentTVL / (1 + (chain.change_7d / 100)) : chain.tvl;
+      return sum + (change || 0);
+    }, 0);
+
+    const change7d = previousTVL > 0 ? ((currentTVL - previousTVL) / previousTVL) * 100 : 0;
+
+    return {
+      tvl: totalL2TVL,
+      change7d: change7d,
+      chainCount: l2Chains.length
+    };
+  } catch (error) {
+    console.error('Error fetching L2 TVL:', error);
+    return null;
+  }
+}
+
+/**
+ * Update L2 TVL tile
+ */
+async function updateL2TVL() {
+  const l2Data = await fetchL2TVL();
+
+  if (!l2Data || l2Data.tvl === 0) return;
+
+  const l2Tile = document.querySelector('[data-metric="l2-tvl"]');
+  if (!l2Tile) return;
+
+  const valueEl = l2Tile.querySelector('.metric-value');
+  const changeEl = l2Tile.querySelector('.metric-change');
+
+  if (valueEl) {
+    const tvlInB = (l2Data.tvl / 1000000000).toFixed(2);
+    valueEl.textContent = `$${tvlInB}B`;
+  }
+
+  if (changeEl && l2Data.change7d !== 0) {
+    const isPositive = l2Data.change7d > 0;
+    const arrow = isPositive ? '↑' : '↓';
+    changeEl.textContent = `${arrow} ${Math.abs(l2Data.change7d).toFixed(2)}% (7d)`;
+    changeEl.className = isPositive
+      ? 'text-[10px] text-emerald-500/70 metric-change'
+      : 'text-[10px] text-red-500/70 metric-change';
+  }
+}
+
+/**
+ * Fetch Ethereum ecosystem TPS from GrowthePie API with cache busting
  */
 async function fetchEthereumEcosystemTPS() {
   try {
-    const response = await fetch(GROWTHEPIE_API_URL);
+    // Add cache busting parameter
+    const cacheBuster = `?_=${Date.now()}`;
+    const response = await fetch(GROWTHEPIE_API_URL + cacheBuster, {
+      cache: 'no-cache',
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    });
 
     if (!response.ok) {
       throw new Error(`GrowthePie API error: ${response.status}`);
@@ -477,7 +563,7 @@ async function fetchEthereumEcosystemTPS() {
     }
 
     // Filter for throughput metric
-    const throughputData = data.filter(item => item.metric_key === 'throughput' && item.value);
+    const throughputData = data.filter(item => item.metric_key === 'throughput' && item.value > 0);
 
     if (throughputData.length === 0) {
       console.warn('No throughput data found in GrowthePie API');
@@ -492,10 +578,15 @@ async function fetchEthereumEcosystemTPS() {
     // Get all throughput values for the most recent date, excluding aggregates
     const recentThroughput = throughputData
       .filter(item => item.date === mostRecentDate)
-      .filter(item => item.origin_key !== 'ethereum' && item.origin_key !== 'all_l2s');
+      .filter(item => item.origin_key !== 'ethereum' && item.origin_key !== 'all_l2s' && item.origin_key !== 'multiple_l2s');
 
     // Sum up TPS across all chains
     const totalTPS = recentThroughput.reduce((sum, item) => sum + (item.value || 0), 0);
+
+    if (totalTPS === 0) {
+      console.warn('Total TPS is 0, data may be stale');
+      return null;
+    }
 
     return {
       tps: totalTPS,
@@ -534,37 +625,46 @@ async function updateEthereumEcosystemTPS() {
 
 /**
  * Update market cap chart with 12-month total crypto market cap data
+ * Optimized with parallel requests for faster loading
  */
 async function updateMarketCapChart() {
   try {
-    const response = await fetch(`${COINGECKO_API_URL}/coins/bitcoin/market_chart?vs_currency=usd&days=365&interval=daily`);
+    // Fetch Bitcoin data and global data in parallel for faster loading
+    const [bitcoinResponse, globalResponse] = await Promise.all([
+      fetch(`${COINGECKO_API_URL}/coins/bitcoin/market_chart?vs_currency=usd&days=365&interval=daily`, {
+        cache: 'no-cache'
+      }),
+      fetch(`${COINGECKO_API_URL}/global`, {
+        cache: 'no-cache'
+      })
+    ]);
 
-    if (!response.ok) {
-      throw new Error(`CoinGecko API error: ${response.status}`);
+    if (!bitcoinResponse.ok) {
+      throw new Error(`CoinGecko API error: ${bitcoinResponse.status}`);
     }
 
-    const bitcoinData = await response.json();
+    if (!globalResponse.ok) {
+      throw new Error(`CoinGecko global API error: ${globalResponse.status}`);
+    }
+
+    const [bitcoinData, globalDataWrapper] = await Promise.all([
+      bitcoinResponse.json(),
+      globalResponse.json()
+    ]);
 
     if (!bitcoinData.market_caps || bitcoinData.market_caps.length === 0) {
       console.error('No Bitcoin market cap data');
       return;
     }
 
-    // Get global market data to calculate total market cap from BTC data
-    const globalResponse = await fetch(`${COINGECKO_API_URL}/global`);
+    const globalData = globalDataWrapper.data;
 
-    if (!globalResponse.ok) {
-      throw new Error(`CoinGecko global API error: ${globalResponse.status}`);
-    }
-
-    const globalData = await globalResponse.json();
-
-    if (!globalData.data || !globalData.data.market_cap_percentage || !globalData.data.market_cap_percentage.btc) {
+    if (!globalData || !globalData.market_cap_percentage || !globalData.market_cap_percentage.btc) {
       console.error('Invalid BTC dominance data');
       return;
     }
 
-    const btcDominance = globalData.data.market_cap_percentage.btc / 100;
+    const btcDominance = globalData.market_cap_percentage.btc / 100;
 
     if (btcDominance === 0) {
       console.error('BTC dominance is 0, cannot calculate total market cap');
@@ -596,7 +696,7 @@ async function updateMarketCapChart() {
     // Update chart data
     window.marketCapChartInstance.data.labels = labels;
     window.marketCapChartInstance.data.datasets[0].data = values;
-    window.marketCapChartInstance.update();
+    window.marketCapChartInstance.update('none'); // 'none' mode = no animation for faster update
 
     // Update the chart header with current value
     const currentValue = values[values.length - 1];
@@ -612,30 +712,45 @@ async function updateMarketCapChart() {
 
 /**
  * Initialize staking data updates with staggered loading to avoid rate limits
+ * Optimized with parallel loading where safe
  */
 async function initializeStakingData() {
   try {
-    // Stagger initial API calls to avoid rate limiting (500ms between each call)
-    updateTerminalWithStakingData();
+    // Load critical tiles and chart in parallel for faster page load
+    // These don't hit the same API endpoints so no rate limit concerns
+    await Promise.all([
+      updateTerminalWithStakingData(),
+      updateTotalCryptoMarketCap(),
+      updateMarketCapChart() // Chart loads in parallel for speed
+    ]);
 
-    setTimeout(() => updateTotalCryptoMarketCap(), 500);
-    setTimeout(() => updateEthMarketCap(), 1000);
-    setTimeout(() => updateStablecoinSupply(), 1500);
-    setTimeout(() => updateDefiTVL(), 2000);
+    // Stagger remaining CoinGecko calls to avoid rate limits
+    setTimeout(() => updateEthMarketCap(), 500);
+    setTimeout(() => updateStablecoinSupply(), 1000);
+
+    // DeFi Llama calls (different API)
+    setTimeout(() => updateDefiTVL(), 1500);
+    setTimeout(() => updateL2TVL(), 2000);
+
+    // GrowthePie call (different API)
     setTimeout(() => updateEthereumEcosystemTPS(), 2500);
-    setTimeout(() => updateMarketCapChart(), 3000);
 
-    // Set up periodic updates with staggered intervals to avoid simultaneous calls
-    // StakingRewards: Every 30 minutes (less frequent due to slower changing data)
+    // Set up periodic updates with staggered intervals
+    // StakingRewards: Every 30 minutes (slower changing data)
     setInterval(updateTerminalWithStakingData, 1800000); // 30 minutes
 
-    // Other APIs: Every 5 minutes, but staggered by 30 seconds each
+    // CoinGecko APIs: Every 5 minutes, staggered by 30 seconds
     setInterval(updateTotalCryptoMarketCap, 300000); // 5 minutes
-    setTimeout(() => setInterval(updateEthMarketCap, 300000), 30000); // 5 min + 30sec offset
-    setTimeout(() => setInterval(updateStablecoinSupply, 300000), 60000); // 5 min + 60sec offset
-    setTimeout(() => setInterval(updateDefiTVL, 300000), 90000); // 5 min + 90sec offset
-    setTimeout(() => setInterval(updateEthereumEcosystemTPS, 300000), 120000); // 5 min + 120sec offset
-    setTimeout(() => setInterval(updateMarketCapChart, 300000), 150000); // 5 min + 150sec offset
+    setTimeout(() => setInterval(updateEthMarketCap, 300000), 30000); // 5 min + 30sec
+    setTimeout(() => setInterval(updateStablecoinSupply, 300000), 60000); // 5 min + 60sec
+    setTimeout(() => setInterval(updateMarketCapChart, 300000), 90000); // 5 min + 90sec
+
+    // DeFi Llama APIs: Every 5 minutes, staggered
+    setTimeout(() => setInterval(updateDefiTVL, 300000), 120000); // 5 min + 120sec
+    setTimeout(() => setInterval(updateL2TVL, 300000), 150000); // 5 min + 150sec
+
+    // GrowthePie API: Every 5 minutes
+    setTimeout(() => setInterval(updateEthereumEcosystemTPS, 300000), 180000); // 5 min + 180sec
   } catch (error) {
     console.error('Error initializing staking data:', error);
   }
@@ -657,6 +772,7 @@ if (typeof module !== 'undefined' && module.exports) {
     fetchTotalCryptoMarketCap,
     fetchEthereumEcosystemTPS,
     fetchDefiTVL,
+    fetchL2TVL,
     fetch7DayChange,
     formatStakingDataForTerminal,
     updateTerminalWithStakingData,
@@ -665,6 +781,7 @@ if (typeof module !== 'undefined' && module.exports) {
     updateEthMarketCap,
     updateStablecoinSupply,
     updateDefiTVL,
+    updateL2TVL,
     updateEthereumEcosystemTPS,
     initializeStakingData
   };
