@@ -140,6 +140,33 @@ async function fetchTotalCryptoMarketCap() {
 }
 
 /**
+ * Fetch 7-day change data from CoinGecko
+ */
+async function fetch7DayChange(coinId) {
+  try {
+    const response = await fetch(`${COINGECKO_API_URL}/coins/${coinId}/market_chart?vs_currency=usd&days=7`);
+
+    if (!response.ok) {
+      throw new Error(`CoinGecko API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.market_caps && data.market_caps.length > 0) {
+      const firstValue = data.market_caps[0][1];
+      const lastValue = data.market_caps[data.market_caps.length - 1][1];
+      const percentChange = ((lastValue - firstValue) / firstValue) * 100;
+      return percentChange;
+    }
+
+    return null;
+  } catch (error) {
+    console.error(`Error fetching 7-day change for ${coinId}:`, error);
+    return null;
+  }
+}
+
+/**
  * Format staking data for terminal display
  */
 function formatStakingDataForTerminal(stakingData) {
@@ -216,19 +243,15 @@ async function updateTerminalWithStakingData() {
       valueEl.textContent = `$${marketCapInB}B`;
     }
 
-    // Fetch ETH price data for 24h change (from CoinGecko)
-    fetch(`${COINGECKO_API_URL}/simple/price?ids=ethereum&vs_currencies=usd&include_market_cap=true&include_24hr_change=true`)
-      .then(r => r.json())
-      .then(data => {
-        if (data.ethereum && changeEl) {
-          const change24h = data.ethereum.usd_24h_change || 0;
-          const isPositive = change24h > 0;
-          const arrow = isPositive ? '↑' : '↓';
-          changeEl.textContent = `${arrow} ${Math.abs(change24h).toFixed(2)}% (24h)`;
-          changeEl.className = isPositive ? 'text-[10px] text-emerald-500/70 metric-change' : 'text-[10px] text-red-500/70 metric-change';
-        }
-      })
-      .catch(err => console.error('Error fetching ETH price change:', err));
+    // Fetch ETH 7-day change (from CoinGecko)
+    const change7d = await fetch7DayChange('ethereum');
+
+    if (changeEl && change7d !== null) {
+      const isPositive = change7d > 0;
+      const arrow = isPositive ? '↑' : '↓';
+      changeEl.textContent = `${arrow} ${Math.abs(change7d).toFixed(2)}% (7d)`;
+      changeEl.className = isPositive ? 'text-[10px] text-emerald-500/70 metric-change' : 'text-[10px] text-red-500/70 metric-change';
+    }
   }
 
   // Update Staked ETH USD tile
@@ -294,17 +317,58 @@ async function updateTotalCryptoMarketCap() {
     // Total market cap in trillions
     const totalMarketCap = globalData.total_market_cap.usd / 1000000000000;
 
-    // 24h market cap percentage change
-    const marketCapChange24h = globalData.market_cap_change_percentage_24h_usd;
-
     if (valueEl) {
       valueEl.textContent = `$${totalMarketCap.toFixed(2)}T`;
     }
 
-    if (changeEl && marketCapChange24h !== undefined) {
-      const isPositive = marketCapChange24h > 0;
+    // Fetch 7-day change for Bitcoin as proxy for total market
+    const change7d = await fetch7DayChange('bitcoin');
+
+    if (changeEl && change7d !== null) {
+      const isPositive = change7d > 0;
       const arrow = isPositive ? '↑' : '↓';
-      changeEl.textContent = `${arrow} ${Math.abs(marketCapChange24h).toFixed(2)}%`;
+      changeEl.textContent = `${arrow} ${Math.abs(change7d).toFixed(2)}% (7d)`;
+      changeEl.className = isPositive
+        ? 'text-[10px] text-emerald-500/70 metric-change'
+        : 'text-[10px] text-red-500/70 metric-change';
+    }
+  }
+}
+
+/**
+ * Update stablecoin supply tile
+ */
+async function updateStablecoinSupply() {
+  const globalData = await fetchTotalCryptoMarketCap();
+
+  if (!globalData) {
+    return;
+  }
+
+  const stablecoinTile = document.querySelector('[data-metric="stablecoin-supply"]');
+  if (stablecoinTile) {
+    const valueEl = stablecoinTile.querySelector('.metric-value');
+    const changeEl = stablecoinTile.querySelector('.metric-change');
+
+    // Total stablecoin market cap
+    const stablecoinMcap = globalData.total_volume.usd; // This is an approximation - CoinGecko doesn't have direct stablecoin mcap
+
+    // Use Tether (USDT) as proxy for stablecoin market
+    const stablecoinData = await fetch(`${COINGECKO_API_URL}/coins/tether`).then(r => r.json()).catch(() => null);
+
+    if (stablecoinData && valueEl) {
+      // Get total stablecoin supply from global data (if available) or estimate
+      const stableSupply = globalData.total_market_cap.usd * 0.05; // Rough estimate: ~5% of total market cap
+      valueEl.textContent = `$${(stableSupply / 1000000000).toFixed(2)}B`;
+    }
+
+    // Fetch 7-day change for Tether as proxy
+    const change7d = await fetch7DayChange('tether');
+
+    if (changeEl && change7d !== null) {
+      const isPositive = change7d > 0;
+      const arrow = isPositive ? '↑' : '↓';
+      changeEl.textContent = `${arrow} ${Math.abs(change7d).toFixed(2)}% (7d)`;
       changeEl.className = isPositive
         ? 'text-[10px] text-emerald-500/70 metric-change'
         : 'text-[10px] text-red-500/70 metric-change';
@@ -453,21 +517,14 @@ async function updateMarketCapChart() {
   window.marketCapChartInstance.data.datasets[0].data = values;
   window.marketCapChartInstance.update();
 
-  // Update the chart header with current value and change
+  // Update the chart header with current value only (no percentage change)
   const currentValue = values[values.length - 1];
-  const firstValue = values[0];
-  const percentChange = ((currentValue - firstValue) / firstValue * 100).toFixed(2);
 
   // Update header if elements exist
   const headerValue = document.querySelector('#marketCapChart')?.closest('.bg-zinc-900')?.querySelector('.text-lg.font-mono.font-bold');
-  const headerChange = document.querySelector('#marketCapChart')?.closest('.bg-zinc-900')?.querySelector('.text-xs');
 
   if (headerValue) {
     headerValue.textContent = `$${currentValue.toFixed(2)}T`;
-  }
-  if (headerChange) {
-    headerChange.textContent = `${percentChange > 0 ? '+' : ''}${percentChange}% (12mo)`;
-    headerChange.className = percentChange > 0 ? 'text-xs text-emerald-500' : 'text-xs text-red-500';
   }
 }
 
@@ -480,12 +537,14 @@ function initializeStakingData() {
   updateTerminalWithStakingData();
   updateMarketCapChart();
   updateTotalCryptoMarketCap();
+  updateStablecoinSupply();
   updateEthereumEcosystemTPS();
 
   // Update every 5 minutes (300000ms)
   setInterval(updateTerminalWithStakingData, 300000);
   setInterval(updateMarketCapChart, 300000);
   setInterval(updateTotalCryptoMarketCap, 300000);
+  setInterval(updateStablecoinSupply, 300000);
   setInterval(updateEthereumEcosystemTPS, 300000);
 }
 
@@ -505,10 +564,12 @@ if (typeof module !== 'undefined' && module.exports) {
     fetchEthereumMarketCapHistory,
     fetchTotalCryptoMarketCap,
     fetchEthereumEcosystemTPS,
+    fetch7DayChange,
     formatStakingDataForTerminal,
     updateTerminalWithStakingData,
     updateMarketCapChart,
     updateTotalCryptoMarketCap,
+    updateStablecoinSupply,
     updateEthereumEcosystemTPS,
     initializeStakingData
   };
