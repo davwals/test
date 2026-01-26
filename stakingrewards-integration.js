@@ -321,14 +321,18 @@ async function updateTerminalWithStakingData() {
  */
 async function updateEthMarketCap() {
   try {
+    console.log('Fetching ETH data from CoinGecko...');
     const response = await fetch(`${COINGECKO_API_URL}/coins/ethereum`);
 
+    console.log('ETH response status:', response.status);
+
     if (!response.ok) {
-      console.error('Failed to fetch ETH data from CoinGecko');
+      console.error('Failed to fetch ETH data from CoinGecko:', response.status);
       return;
     }
 
     const ethData = await response.json();
+    console.log('ETH data received');
 
     const marketCapTile = document.querySelector('[data-metric="eth-market-cap"]');
     if (marketCapTile) {
@@ -338,6 +342,7 @@ async function updateEthMarketCap() {
       if (valueEl && ethData.market_data) {
         const marketCapInB = (ethData.market_data.market_cap.usd / 1000000000).toFixed(2);
         valueEl.textContent = `$${marketCapInB}B`;
+        console.log('Updated ETH market cap to:', valueEl.textContent);
       }
 
       if (changeEl && ethData.market_data) {
@@ -348,6 +353,7 @@ async function updateEthMarketCap() {
         changeEl.className = isPositive
           ? 'text-[10px] text-emerald-500/70 metric-change'
           : 'text-[10px] text-red-500/70 metric-change';
+        console.log('Updated ETH change to:', changeEl.textContent);
       }
     }
   } catch (error) {
@@ -401,27 +407,37 @@ async function updateTotalCryptoMarketCap() {
  */
 async function updateStablecoinSupply() {
   try {
-    // Fetch top stablecoins by market cap
-    const response = await fetch(`${COINGECKO_API_URL}/coins/markets?vs_currency=usd&category=stablecoins&order=market_cap_desc&per_page=50&page=1`);
+    console.log('Fetching stablecoin data from CoinGecko...');
+
+    // Fetch top 100 stablecoins to ensure we get all major ones
+    const response = await fetch(`${COINGECKO_API_URL}/coins/markets?vs_currency=usd&category=stablecoins&order=market_cap_desc&per_page=100&page=1&price_change_percentage=7d`);
+
+    console.log('Stablecoin response status:', response.status);
 
     if (!response.ok) {
-      console.error('Failed to fetch stablecoin data');
+      console.error('Failed to fetch stablecoin data:', response.status);
       return;
     }
 
     const stablecoins = await response.json();
+    console.log('Stablecoins fetched:', stablecoins.length);
 
     // Sum up total stablecoin market cap
     const totalStablecoinMcap = stablecoins.reduce((sum, coin) => sum + (coin.market_cap || 0), 0);
+    console.log('Total stablecoin market cap:', (totalStablecoinMcap / 1000000000).toFixed(2) + 'B');
 
-    // Calculate 7-day change weighted by market cap
+    // Calculate 7-day change - use price_change_percentage_7d_in_currency field
     const totalMcap7dAgo = stablecoins.reduce((sum, coin) => {
-      const price7dAgo = coin.current_price / (1 + (coin.price_change_percentage_7d_in_currency || 0) / 100);
-      const mcap7dAgo = price7dAgo * coin.circulating_supply;
-      return sum + mcap7dAgo;
+      if (coin.price_change_percentage_7d_in_currency !== null && coin.price_change_percentage_7d_in_currency !== undefined) {
+        const price7dAgo = coin.current_price / (1 + (coin.price_change_percentage_7d_in_currency / 100));
+        const mcap7dAgo = price7dAgo * (coin.circulating_supply || 0);
+        return sum + mcap7dAgo;
+      }
+      return sum + (coin.market_cap || 0); // Fallback if no 7d data
     }, 0);
 
     const change7d = ((totalStablecoinMcap - totalMcap7dAgo) / totalMcap7dAgo) * 100;
+    console.log('Stablecoin 7d change:', change7d.toFixed(2) + '%');
 
     const stablecoinTile = document.querySelector('[data-metric="stablecoin-supply"]');
     if (stablecoinTile) {
@@ -430,6 +446,7 @@ async function updateStablecoinSupply() {
 
       if (valueEl) {
         valueEl.textContent = `$${(totalStablecoinMcap / 1000000000).toFixed(2)}B`;
+        console.log('Updated stablecoin tile to:', valueEl.textContent);
       }
 
       if (changeEl) {
@@ -451,24 +468,47 @@ async function updateStablecoinSupply() {
  */
 async function fetchDefiTVL() {
   try {
+    console.log('Fetching DeFi TVL from DeFi Llama...');
     const response = await fetch(`${DEFILLAMA_API_URL}/charts`);
+
+    console.log('DeFi Llama response status:', response.status);
 
     if (!response.ok) {
       throw new Error(`DeFi Llama API error: ${response.status}`);
     }
 
     const data = await response.json();
+    console.log('DeFi Llama data points:', data.length);
 
     // Get the most recent TVL data point
     if (data && data.length > 0) {
       const mostRecent = data[data.length - 1];
+      console.log('Most recent TVL:', mostRecent);
 
-      // Get 7 days ago data point for comparison
-      const sevenDaysAgo = data[data.length - 8] || data[0]; // Fallback to first if not enough data
+      // Find the data point from 7 days ago (Unix timestamp)
+      const currentTimestamp = mostRecent.date;
+      const sevenDaysAgoTimestamp = currentTimestamp - (7 * 24 * 60 * 60); // 7 days in seconds
+
+      // Find closest data point to 7 days ago
+      let sevenDaysAgo = data[0];
+      let minDiff = Math.abs(sevenDaysAgo.date - sevenDaysAgoTimestamp);
+
+      for (const point of data) {
+        const diff = Math.abs(point.date - sevenDaysAgoTimestamp);
+        if (diff < minDiff) {
+          minDiff = diff;
+          sevenDaysAgo = point;
+        }
+      }
+
+      console.log('Seven days ago TVL:', sevenDaysAgo);
 
       const currentTVL = mostRecent.totalLiquidityUSD;
       const previousTVL = sevenDaysAgo.totalLiquidityUSD;
       const change7d = ((currentTVL - previousTVL) / previousTVL) * 100;
+
+      console.log('Current TVL:', (currentTVL / 1000000000).toFixed(2) + 'B');
+      console.log('TVL 7d change:', change7d.toFixed(2) + '%');
 
       return {
         tvl: currentTVL,
@@ -502,7 +542,9 @@ async function updateDefiTVL() {
     const changeEl = defiTile.querySelector('.metric-change') || defiTile.querySelector('.text-\\[10px\\]');
 
     if (valueEl) {
-      valueEl.textContent = `$${(defiData.tvl / 1000000000).toFixed(2)}B`;
+      const tvlInB = (defiData.tvl / 1000000000).toFixed(2);
+      valueEl.textContent = `$${tvlInB}B`;
+      console.log('Updated DeFi TVL tile to:', valueEl.textContent);
     }
 
     if (changeEl) {
@@ -510,8 +552,9 @@ async function updateDefiTVL() {
       const arrow = isPositive ? '↑' : '↓';
       changeEl.textContent = `${arrow} ${Math.abs(defiData.change7d).toFixed(2)}% (7d)`;
       changeEl.className = isPositive
-        ? 'text-[10px] text-emerald-500/70'
-        : 'text-[10px] text-red-500/70';
+        ? 'text-[10px] text-emerald-500/70 metric-change'
+        : 'text-[10px] text-red-500/70 metric-change';
+      console.log('Updated DeFi TVL change to:', changeEl.textContent);
     }
 
     updateAPIStatus('defillama', 'success');
@@ -743,16 +786,18 @@ async function initializeStakingData() {
       await updateMarketCapChart();
     }, 3000);
 
-    // Update every 5 minutes (300000ms)
-    setInterval(updateTerminalWithStakingData, 300000);
-    setInterval(updateMarketCapChart, 300000);
-    setInterval(updateTotalCryptoMarketCap, 300000);
-    setInterval(updateEthMarketCap, 300000);
-    setInterval(updateStablecoinSupply, 300000);
-    setInterval(updateDefiTVL, 300000);
-    setInterval(updateEthereumEcosystemTPS, 300000);
+    // Update intervals:
+    // StakingRewards: Every 30 minutes (1800000ms) - less frequent to reduce API load
+    // Other APIs: Every 5 minutes (300000ms)
+    setInterval(updateTerminalWithStakingData, 1800000); // 30 minutes
+    setInterval(updateMarketCapChart, 300000); // 5 minutes
+    setInterval(updateTotalCryptoMarketCap, 300000); // 5 minutes
+    setInterval(updateEthMarketCap, 300000); // 5 minutes
+    setInterval(updateStablecoinSupply, 300000); // 5 minutes
+    setInterval(updateDefiTVL, 300000); // 5 minutes
+    setInterval(updateEthereumEcosystemTPS, 300000); // 5 minutes
 
-    console.log('All updates scheduled');
+    console.log('All updates scheduled (StakingRewards: 30min, Others: 5min)');
   } catch (error) {
     console.error('Error initializing staking data:', error);
   }
