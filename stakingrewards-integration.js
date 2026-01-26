@@ -32,6 +32,21 @@ const ETHEREUM_STAKING_QUERY = `
 `;
 
 /**
+ * GraphQL query to get Ethereum historical market cap
+ */
+const ETHEREUM_MARKET_CAP_HISTORY_QUERY = `
+  query {
+    asset(slug: "ethereum") {
+      name
+      metricChart(metric: "market_cap", from: "30d", interval: "1d") {
+        x
+        y
+      }
+    }
+  }
+`;
+
+/**
  * Fetch Ethereum staking data from StakingRewards API
  */
 async function fetchEthereumStakingData() {
@@ -66,6 +81,40 @@ async function fetchEthereumStakingData() {
 }
 
 /**
+ * Fetch Ethereum historical market cap data from StakingRewards API
+ */
+async function fetchEthereumMarketCapHistory() {
+  try {
+    const response = await fetch(STAKING_REWARDS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': STAKING_REWARDS_API_KEY
+      },
+      body: JSON.stringify({
+        query: ETHEREUM_MARKET_CAP_HISTORY_QUERY
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.errors) {
+      console.error('GraphQL errors:', data.errors);
+      return null;
+    }
+
+    return data.data.asset.metricChart;
+  } catch (error) {
+    console.error('Error fetching market cap history:', error);
+    return null;
+  }
+}
+
+/**
  * Format staking data for terminal display
  */
 function formatStakingDataForTerminal(stakingData) {
@@ -75,10 +124,12 @@ function formatStakingDataForTerminal(stakingData) {
   const rewardOption = stakingData.rewardOptions?.find(r => r.type === 'staking') || stakingData.rewardOptions?.[0];
 
   return {
+    marketCap: metrics.marketCap,
     totalStakedETH: metrics.stakedTokens,
     totalStakedUSD: metrics.totalStakedUSD,
     stakingRatio: metrics.stakingRatio || ((metrics.stakedTokens / 120000000) * 100), // Approximate
     rewardRate: metrics.rewardRate,
+    apr: rewardOption?.apr || metrics.rewardRate,
     apy: rewardOption?.apy || rewardOption?.apr,
     activeValidators: metrics.activeValidators,
     inflationRate: metrics.inflationRate
@@ -129,7 +180,96 @@ async function updateTerminalWithStakingData() {
     if (valueEl) valueEl.textContent = `${validatorsInK}K`;
   }
 
+  // Update ETH Market Cap tile
+  const marketCapTile = document.querySelector('[data-metric="eth-market-cap"]');
+  if (marketCapTile) {
+    const valueEl = marketCapTile.querySelector('.metric-value');
+
+    if (formattedData.marketCap && valueEl) {
+      const marketCapInB = (formattedData.marketCap / 1000000000).toFixed(2);
+      valueEl.textContent = `$${marketCapInB}B`;
+    }
+  }
+
+  // Update Staked ETH USD tile
+  const stakedUSDTile = document.querySelector('[data-metric="eth-staked-usd"]');
+  if (stakedUSDTile) {
+    const valueEl = stakedUSDTile.querySelector('.metric-value');
+    const changeEl = stakedUSDTile.querySelector('.metric-change');
+
+    if (formattedData.totalStakedUSD && valueEl) {
+      const stakedUSDInB = (formattedData.totalStakedUSD / 1000000000).toFixed(2);
+      valueEl.textContent = `$${stakedUSDInB}B`;
+    }
+
+    if (formattedData.totalStakedETH && changeEl) {
+      const stakedInMillions = (formattedData.totalStakedETH / 1000000).toFixed(2);
+      changeEl.textContent = `${stakedInMillions}M ETH`;
+    }
+  }
+
+  // Update Staking Ratio tile
+  const stakingRatioTile = document.querySelector('[data-metric="eth-staking-ratio"]');
+  if (stakingRatioTile) {
+    const valueEl = stakingRatioTile.querySelector('.metric-value');
+
+    if (formattedData.stakingRatio && valueEl) {
+      valueEl.textContent = `${formattedData.stakingRatio.toFixed(2)}%`;
+    }
+  }
+
+  // Update Staking APR tile
+  const aprTile = document.querySelector('[data-metric="eth-staking-apr"]');
+  if (aprTile) {
+    const valueEl = aprTile.querySelector('.metric-value');
+
+    if (formattedData.apr && valueEl) {
+      valueEl.textContent = `${formattedData.apr.toFixed(2)}%`;
+    }
+  }
+
   return formattedData;
+}
+
+/**
+ * Update market cap chart with historical data
+ */
+async function updateMarketCapChart() {
+  const historyData = await fetchEthereumMarketCapHistory();
+
+  if (!historyData || !window.marketCapChartInstance) {
+    return;
+  }
+
+  // Format dates and values
+  const labels = historyData.map(point => {
+    const date = new Date(point.x * 1000); // Convert Unix timestamp to milliseconds
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  });
+
+  const values = historyData.map(point => point.y / 1000000000); // Convert to billions
+
+  // Update chart data
+  window.marketCapChartInstance.data.labels = labels;
+  window.marketCapChartInstance.data.datasets[0].data = values;
+  window.marketCapChartInstance.update();
+
+  // Update the chart header with current value and change
+  const currentValue = values[values.length - 1];
+  const firstValue = values[0];
+  const percentChange = ((currentValue - firstValue) / firstValue * 100).toFixed(2);
+
+  // Update header if elements exist
+  const headerValue = document.querySelector('#marketCapChart')?.closest('.bg-zinc-900')?.querySelector('.text-lg.font-mono.font-bold');
+  const headerChange = document.querySelector('#marketCapChart')?.closest('.bg-zinc-900')?.querySelector('.text-xs.text-emerald-500');
+
+  if (headerValue) {
+    headerValue.textContent = `$${currentValue.toFixed(2)}B`;
+  }
+  if (headerChange) {
+    headerChange.textContent = `${percentChange > 0 ? '+' : ''}${percentChange}% (30d)`;
+    headerChange.className = percentChange > 0 ? 'text-xs text-emerald-500' : 'text-xs text-red-500';
+  }
 }
 
 /**
@@ -139,9 +279,11 @@ async function updateTerminalWithStakingData() {
 function initializeStakingData() {
   // Update immediately on page load
   updateTerminalWithStakingData();
+  updateMarketCapChart();
 
   // Update every 5 minutes (300000ms)
   setInterval(updateTerminalWithStakingData, 300000);
+  setInterval(updateMarketCapChart, 300000);
 }
 
 // Auto-initialize when DOM is ready
@@ -157,8 +299,10 @@ if (typeof document !== 'undefined') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     fetchEthereumStakingData,
+    fetchEthereumMarketCapHistory,
     formatStakingDataForTerminal,
     updateTerminalWithStakingData,
+    updateMarketCapChart,
     initializeStakingData
   };
 }
