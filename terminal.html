@@ -41,18 +41,19 @@
     <nav class="fixed top-0 w-full z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-md">
         <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
             <div class="flex items-center gap-6">
+                <!-- Burger Menu Button -->
+                <button id="burgerBtn" class="p-2 text-zinc-500 hover:text-white transition-colors -ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
                 <a href="index.html" class="flex items-center gap-2">
                     <img src="https://i.imgur.com/LJ0gSjb.jpeg" alt="Enterprise Onchain" class="w-6 h-6 rounded-full">
                     <span class="text-sm font-semibold tracking-tight">Enterprise Onchain</span>
                     <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded ml-2">TERMINAL</span>
                 </a>
-                <div class="hidden md:flex items-center gap-1 text-sm">
-                    <a href="#" class="px-3 py-1.5 rounded-md bg-zinc-800 text-white font-medium">Dashboard</a>
-                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">News</a>
-                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Newsletter</a>
-                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Podcast</a>
-                    <a href="#" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors">Data</a>
-                </div>
             </div>
             <div class="flex items-center gap-3">
                 <a href="index.html" class="text-xs text-zinc-500 hover:text-white transition-colors hidden sm:block">← Back to site</a>
@@ -61,53 +62,119 @@
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 hidden">
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" id="mobileMenuOverlay"></div>
+        <div class="fixed left-0 top-0 h-full w-64 bg-zinc-950 border-r border-zinc-800 shadow-xl transform -translate-x-full transition-transform duration-300" id="mobileMenuPanel">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between p-4 border-b border-zinc-800">
+                    <span class="text-sm font-semibold">Menu</span>
+                    <button id="closeMobileMenu" class="p-2 text-zinc-500 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4">
+                    <nav class="space-y-1">
+                        <a href="terminal.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white hover:bg-zinc-800 transition-colors">
+                            Terminal
+                        </a>
+                        <a href="articles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">
+                            Articles
+                        </a>
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">
+                            Newsletter
+                        </a>
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">
+                            Podcast
+                        </a>
+                        <a href="#contact" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">
+                            Contact Us
+                        </a>
+                        <a href="#about" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">
+                            About
+                        </a>
+                    </nav>
+                </div>
+                <div class="p-4 border-t border-zinc-800">
+                    <a href="#waitlist" class="block w-full text-center h-10 px-4 rounded-md bg-white text-zinc-900 text-sm font-medium hover:bg-zinc-200 transition-colors leading-10 mb-4">
+                        Join Community
+                    </a>
+                    <div class="flex items-center justify-center gap-4">
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="text-zinc-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+                        </a>
+                        <a href="https://x.com/enteronchain?s=20" target="_blank" class="text-zinc-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/enterpriseonchain/" target="_blank" class="text-zinc-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                        </a>
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="text-zinc-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main class="pt-14">
         <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-6">
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-white mb-1">gm, James</h1>
-                <p class="text-sm text-zinc-400">Here's what's happening in institutional crypto today. <span class="text-zinc-500">Jan 14, 2025</span></p>
+                <div class="flex items-center gap-3 mb-1">
+                    <h1 class="text-2xl font-bold text-white">Institutional Adoption Tracker</h1>
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded">LIVE</span>
+                </div>
+                <p class="text-sm text-zinc-400">Real-time data tracking institutional crypto adoption. <span class="text-zinc-500">Jan 14, 2025</span></p>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">BTC ETF Flows (24h)</div>
-                    <div class="text-lg font-mono font-bold text-emerald-500">+$487M</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 12.3%</div>
+                    <div class="text-lg font-mono font-bold text-emerald-500">+$487.00M</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 12.30%</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH ETF Flows (24h)</div>
-                    <div class="text-lg font-mono font-bold text-emerald-500">+$124M</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 8.7%</div>
+                    <div class="text-lg font-mono font-bold text-emerald-500">+$124.00M</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 8.70%</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Crypto Market Cap</div>
                     <div class="text-lg font-mono font-bold text-white">$3.42T</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 2.1%</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 2.10%</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">RWA TVL</div>
                     <div class="text-lg font-mono font-bold text-white">$2.41T</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 0.8%</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 0.80%</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">Stablecoin Supply</div>
-                    <div class="text-lg font-mono font-bold text-white">$178B</div>
+                    <div class="text-lg font-mono font-bold text-white">$178.00B</div>
                     <div class="text-[10px] text-zinc-500">ATH</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">DeFi TVL</div>
-                    <div class="text-lg font-mono font-bold text-white">$89.2B</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 3.4%</div>
+                    <div class="text-lg font-mono font-bold text-white">$89.20B</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 3.40%</div>
                 </div>
-                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3" data-metric="eth-staked">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">ETH Staked</div>
-                    <div class="text-lg font-mono font-bold text-white">28.4%</div>
-                    <div class="text-[10px] text-zinc-500">34.2M ETH</div>
+                    <div class="text-lg font-mono font-bold text-white metric-value">28.40%</div>
+                    <div class="text-[10px] text-zinc-500 metric-change">34.20M ETH</div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
                     <div class="text-[10px] text-zinc-500 mb-1 uppercase tracking-wide">L2 TVL</div>
-                    <div class="text-lg font-mono font-bold text-white">$42.1B</div>
-                    <div class="text-[10px] text-emerald-500/70">↑ 5.2%</div>
+                    <div class="text-lg font-mono font-bold text-white">$42.10B</div>
+                    <div class="text-[10px] text-emerald-500/70">↑ 5.20%</div>
                 </div>
             </div>
 
@@ -115,14 +182,14 @@
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
                     <div class="flex items-center justify-between mb-4">
                         <div><div class="text-sm font-medium text-white">Crypto Market Cap</div><div class="text-xs text-zinc-500">Last 30 days</div></div>
-                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$3.42T</div><div class="text-xs text-emerald-500">+18.4% MTD</div></div>
+                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$3.42T</div><div class="text-xs text-emerald-500">+18.40% MTD</div></div>
                     </div>
                     <div class="h-48"><canvas id="marketCapChart"></canvas></div>
                 </div>
                 <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
                     <div class="flex items-center justify-between mb-4">
                         <div><div class="text-sm font-medium text-white">Tokenized RWA TVL</div><div class="text-xs text-zinc-500">Last 30 days</div></div>
-                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$2.41T</div><div class="text-xs text-emerald-500">+24.2% MTD</div></div>
+                        <div class="text-right"><div class="text-lg font-mono font-bold text-white">$2.41T</div><div class="text-xs text-emerald-500">+24.20% MTD</div></div>
                     </div>
                     <div class="h-48"><canvas id="rwaChart"></canvas></div>
                 </div>
@@ -288,7 +355,7 @@
                         grid: { color: '#27272a' },
                         ticks: {
                             font: { size: 10 },
-                            callback: v => '$' + v + 'T'
+                            callback: v => '$' + v.toFixed(2) + 'T'
                         }
                     }
                 }
@@ -324,12 +391,99 @@
                         grid: { color: '#27272a' },
                         ticks: {
                             font: { size: 10 },
-                            callback: v => '$' + v + 'T'
+                            callback: v => '$' + v.toFixed(2) + 'T'
                         }
                     }
                 }
             }
         });
+
+        // Burger menu functionality
+        const burgerBtn = document.getElementById('burgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuPanel = document.getElementById('mobileMenuPanel');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+        function openMenu() {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => {
+                mobileMenuPanel.classList.remove('-translate-x-full');
+            }, 10);
+        }
+
+        function closeMenu() {
+            mobileMenuPanel.classList.add('-translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        }
+
+        burgerBtn?.addEventListener('click', openMenu);
+        closeMobileMenu?.addEventListener('click', closeMenu);
+        mobileMenuOverlay?.addEventListener('click', closeMenu);
     </script>
+
+    <!-- Footer -->
+    <footer class="bg-zinc-950 border-t border-zinc-800 pt-20 pb-12 mt-12">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-manrope text-white mb-4 tracking-tight">Don't Miss the Institutional Crypto Revolution</h2>
+            <p class="text-zinc-500 mb-8">Stay ahead with the latest news, insights, and analysis on institutional adoption.</p>
+
+            <!-- Substack Newsletter Form -->
+            <form action="https://enterpriseonchain.substack.com/api/v1/free?nojs=true" method="post" target="hidden_iframe2" onsubmit="showThankYou(this)" class="flex flex-col sm:flex-row gap-2 max-w-sm mx-auto mb-6">
+                <input type="email" name="email" placeholder="name@organization.com" required class="flex-1 h-11 px-4 rounded-md border border-zinc-700 bg-zinc-900 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-600 transition-all">
+                <button type="submit" class="h-11 px-6 rounded-md bg-white text-zinc-900 text-sm font-medium hover:bg-zinc-200 transition-colors whitespace-nowrap">
+                    Join Free
+                </button>
+            </form>
+            <iframe name="hidden_iframe2" style="display:none;"></iframe>
+
+            <!-- Subscriber count -->
+            <p class="text-sm text-zinc-500 mb-16">
+                <strong class="text-zinc-300">8,443</strong> executives already subscribed
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-between items-center text-xs text-zinc-400 pt-8 border-t border-zinc-800">
+                <div class="mb-4 md:mb-0">
+                    © 2025 Enterprise Onchain. All rights reserved.
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="hover:text-white transition-colors">About</a>
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Contact</a>
+                    <div class="flex items-center gap-4 ml-2">
+                        <!-- YouTube -->
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+                        </a>
+                        <!-- X/Twitter -->
+                        <a href="https://x.com/enteronchain?s=20" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/company/enterpriseonchain/" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                        </a>
+                        <!-- Mail/Substack -->
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showThankYou(form) {
+            setTimeout(() => {
+                form.innerHTML = '<p class="text-emerald-500 font-medium">✓ Thanks for subscribing! Check your email.</p>';
+            }, 500);
+        }
+    </script>
+
+    <!-- StakingRewards Integration -->
+    <script src="stakingrewards-integration.js"></script>
 </body>
 </html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles | Enterprise Onchain</title>
+    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/LJ0gSjb.jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'manrope': ['Manrope', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 antialiased min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-md">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <button id="burgerBtn" class="p-2 text-zinc-500 hover:text-white transition-colors -ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="index.html" class="flex items-center gap-2">
+                    <img src="https://i.imgur.com/LJ0gSjb.jpeg" alt="Enterprise Onchain" class="w-6 h-6 rounded-full">
+                    <span class="text-sm font-semibold tracking-tight">Enterprise Onchain</span>
+                    <span class="text-xs font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded ml-2">TERMINAL</span>
+                </a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-xs text-zinc-500 hover:text-white transition-colors hidden sm:block">← Back to site</a>
+                <div id="authButtons"></div>
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold">DW</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 hidden">
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" id="mobileMenuOverlay"></div>
+        <div class="fixed left-0 top-0 h-full w-64 bg-zinc-950 border-r border-zinc-800 shadow-xl transform -translate-x-full transition-transform duration-300" id="mobileMenuPanel">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between p-4 border-b border-zinc-800">
+                    <span class="text-sm font-semibold">Menu</span>
+                    <button id="closeMobileMenu" class="p-2 text-zinc-500 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4">
+                    <nav class="space-y-1">
+                        <a href="terminal.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Terminal</a>
+                        <a href="articles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white hover:bg-zinc-800 transition-colors">Articles</a>
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Newsletter</a>
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Podcast</a>
+                        <a href="#contact" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">Contact Us</a>
+                        <a href="#about" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-zinc-400 hover:bg-zinc-800 transition-colors">About</a>
+                    </nav>
+                </div>
+                <div class="p-4 border-t border-zinc-800">
+                    <a href="#waitlist" class="block w-full text-center h-10 px-4 rounded-md bg-white text-zinc-900 text-sm font-medium hover:bg-zinc-200 transition-colors leading-10 mb-4">
+                        Join Community
+                    </a>
+                    <div class="flex items-center justify-center gap-4">
+                        <a href="https://www.youtube.com/@enterpriseonchain" target="_blank" class="text-zinc-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg>
+                        </a>
+                        <a href="https://x.com/enteronchain?s=20" target="_blank" class="text-zinc-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/enterpriseonchain/" target="_blank" class="text-zinc-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                        </a>
+                        <a href="https://enterpriseonchain.substack.com/" target="_blank" class="text-zinc-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="pt-14">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-white mb-2">Articles</h1>
+                <p class="text-zinc-400">Deep dives into institutional crypto adoption</p>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="mb-8 flex flex-wrap gap-2">
+                <button class="category-filter px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-emerald-600 text-white" data-category="all">
+                    All
+                </button>
+                <button class="category-filter px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-zinc-800 text-zinc-300 hover:bg-zinc-700" data-category="stablecoins">
+                    Stablecoins
+                </button>
+                <button class="category-filter px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-zinc-800 text-zinc-300 hover:bg-zinc-700" data-category="tokenization">
+                    Tokenization
+                </button>
+                <button class="category-filter px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-zinc-800 text-zinc-300 hover:bg-zinc-700" data-category="defi">
+                    DeFi
+                </button>
+                <button class="category-filter px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-zinc-800 text-zinc-300 hover:bg-zinc-700" data-category="l2s">
+                    L2s
+                </button>
+                <button class="category-filter px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-zinc-800 text-zinc-300 hover:bg-zinc-700" data-category="etf">
+                    ETF
+                </button>
+                <button class="category-filter px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-zinc-800 text-zinc-300 hover:bg-zinc-700" data-category="regulatory">
+                    Regulatory
+                </button>
+                <button class="category-filter px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-zinc-800 text-zinc-300 hover:bg-zinc-700" data-category="institutional-adoption">
+                    Institutional
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center py-12">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+                <p class="text-zinc-500 mt-4">Loading articles...</p>
+            </div>
+
+            <!-- Articles Grid -->
+            <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+                <!-- Articles will be inserted here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-12">
+                <p class="text-zinc-500">No articles found in this category.</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        let currentUser = null;
+        let allArticles = [];
+        let currentCategory = 'all';
+
+        // Check authentication status
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            currentUser = session?.user || null;
+            updateAuthUI();
+        }
+
+        // Update auth UI
+        function updateAuthUI() {
+            const authButtons = document.getElementById('authButtons');
+            if (currentUser) {
+                authButtons.innerHTML = `
+                    <button id="logoutBtn" class="text-xs text-zinc-400 hover:text-white transition-colors">
+                        Logout
+                    </button>
+                `;
+                document.getElementById('logoutBtn').addEventListener('click', async () => {
+                    await supabaseClient.auth.signOut();
+                    window.location.reload();
+                });
+            } else {
+                authButtons.innerHTML = `
+                    <a href="login.html" class="h-8 inline-flex items-center justify-center rounded-md bg-emerald-600 px-4 text-xs font-medium text-white hover:bg-emerald-700 transition-colors">
+                        Login
+                    </a>
+                `;
+            }
+        }
+
+        // Fetch articles
+        async function fetchArticles() {
+            try {
+                // Check if Supabase client is initialized
+                if (!window.supabaseClient) {
+                    throw new Error('Supabase client not initialized. Check supabase-config.js');
+                }
+
+                console.log('Fetching articles from Supabase...');
+                const { data, error } = await supabaseClient
+                    .from('articles')
+                    .select('*')
+                    .order('published_at', { ascending: false });
+
+                if (error) {
+                    console.error('Supabase error:', error);
+                    throw error;
+                }
+
+                console.log('Articles fetched successfully:', data?.length || 0, 'articles');
+                allArticles = data || [];
+                displayArticles();
+            } catch (error) {
+                console.error('Error fetching articles:', error);
+                document.getElementById('loadingState').innerHTML = `
+                    <div class="text-center">
+                        <p class="text-red-400 mb-2">Error loading articles</p>
+                        <p class="text-zinc-500 text-sm">${error.message || 'Please check console for details'}</p>
+                        <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-emerald-600 text-white text-sm rounded-lg hover:bg-emerald-700 transition-colors">
+                            Retry
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Display articles
+        function displayArticles() {
+            const loadingState = document.getElementById('loadingState');
+            const articlesGrid = document.getElementById('articlesGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            loadingState.classList.add('hidden');
+
+            // Filter articles by category
+            let filteredArticles = currentCategory === 'all'
+                ? allArticles
+                : allArticles.filter(article => article.category === currentCategory);
+
+            if (filteredArticles.length === 0) {
+                articlesGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            articlesGrid.classList.remove('hidden');
+
+            articlesGrid.innerHTML = filteredArticles.map(article => {
+                const categoryColors = {
+                    'stablecoins': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+                    'tokenization': 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+                    'defi': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+                    'l2s': 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+                    'etf': 'bg-pink-500/10 text-pink-400 border-pink-500/20',
+                    'regulatory': 'bg-red-500/10 text-red-400 border-red-500/20',
+                    'institutional-adoption': 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
+                };
+
+                const categoryColor = categoryColors[article.category] || 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+
+                return `
+                    <a href="article.html?slug=${article.slug}" class="group bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-700 transition-colors">
+                        ${article.cover_image ? `
+                            <div class="aspect-video bg-zinc-800 overflow-hidden">
+                                <img src="${article.cover_image}" alt="${article.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            </div>
+                        ` : ''}
+                        <div class="p-5">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="px-2 py-1 rounded-md text-xs font-medium border ${categoryColor}">
+                                    ${article.category.replace(/-/g, ' ')}
+                                </span>
+                                <span class="text-xs text-zinc-500">${article.read_time_minutes} min read</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-emerald-400 transition-colors line-clamp-2">
+                                ${article.title}
+                            </h3>
+                            <p class="text-sm text-zinc-400 line-clamp-3 mb-4">
+                                ${article.excerpt}
+                            </p>
+                            <div class="flex items-center gap-2 text-xs text-zinc-500">
+                                <span>${article.author_name}</span>
+                                <span>•</span>
+                                <span>${new Date(article.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // Handle category filtering
+        document.querySelectorAll('.category-filter').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active state
+                document.querySelectorAll('.category-filter').forEach(btn => {
+                    btn.classList.remove('bg-emerald-600', 'text-white');
+                    btn.classList.add('bg-zinc-800', 'text-zinc-300');
+                });
+                button.classList.remove('bg-zinc-800', 'text-zinc-300');
+                button.classList.add('bg-emerald-600', 'text-white');
+
+                // Update category and display
+                currentCategory = button.dataset.category;
+                displayArticles();
+            });
+        });
+
+        // Initialize
+        checkAuth();
+        fetchArticles();
+
+        // Burger menu functionality
+        const burgerBtn = document.getElementById('burgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuPanel = document.getElementById('mobileMenuPanel');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+        function openMenu() {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => {
+                mobileMenuPanel.classList.remove('-translate-x-full');
+            }, 10);
+        }
+
+        function closeMenu() {
+            mobileMenuPanel.classList.add('-translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        }
+
+        burgerBtn.addEventListener('click', openMenu);
+        closeMobileMenu.addEventListener('click', closeMenu);
+        mobileMenuOverlay.addEventListener('click', closeMenu);
+    </script>
+</body>
+</html>

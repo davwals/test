@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article | Enterprise Onchain</title>
+    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/LJ0gSjb.jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'manrope': ['Manrope', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; }
+
+        /* Article content styling */
+        .article-content h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .article-content h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        .article-content h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+        .article-content p {
+            margin-bottom: 1.25rem;
+            line-height: 1.75;
+            color: #a1a1aa;
+        }
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+            color: #a1a1aa;
+        }
+        .article-content ul {
+            list-style-type: disc;
+        }
+        .article-content ol {
+            list-style-type: decimal;
+        }
+        .article-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.75;
+        }
+        .article-content strong {
+            font-weight: 600;
+            color: #fafafa;
+        }
+        .article-content table {
+            width: 100%;
+            margin: 1.5rem 0;
+            border-collapse: collapse;
+        }
+        .article-content th {
+            background: #27272a;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid #3f3f46;
+        }
+        .article-content td {
+            padding: 0.75rem;
+            border: 1px solid #3f3f46;
+        }
+        .article-content code {
+            background: #27272a;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+        }
+
+        /* Content gate overlay */
+        .content-gate {
+            position: relative;
+        }
+        .content-gate::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 300px;
+            background: linear-gradient(to bottom, transparent, #09090b 90%);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 antialiased min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur-md">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <a href="index.html" class="flex items-center gap-2">
+                    <img src="https://i.imgur.com/LJ0gSjb.jpeg" alt="Enterprise Onchain" class="w-6 h-6 rounded-full">
+                    <span class="text-sm font-semibold tracking-tight">Enterprise Onchain</span>
+                </a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="articles.html" class="text-xs text-zinc-400 hover:text-white transition-colors">← Articles</a>
+                <div id="authButtons"></div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-14">
+        <!-- Loading State -->
+        <div id="loadingState" class="max-w-4xl mx-auto px-4 sm:px-6 py-12 text-center">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+            <p class="text-zinc-500 mt-4">Loading article...</p>
+        </div>
+
+        <!-- Article Content -->
+        <article id="articleContent" class="hidden max-w-4xl mx-auto px-4 sm:px-6 py-12">
+            <!-- Cover Image -->
+            <div id="coverImage" class="mb-8"></div>
+
+            <!-- Article Header -->
+            <header class="mb-8">
+                <div id="categoryBadge" class="mb-4"></div>
+                <h1 id="articleTitle" class="text-4xl font-bold text-white mb-4"></h1>
+                <p id="articleExcerpt" class="text-lg text-zinc-400 mb-6"></p>
+                <div class="flex items-center gap-4 text-sm text-zinc-500">
+                    <div class="flex items-center gap-2">
+                        <div id="authorAvatar" class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500"></div>
+                        <span id="authorName"></span>
+                    </div>
+                    <span>•</span>
+                    <span id="publishedDate"></span>
+                    <span>•</span>
+                    <span id="readTime"></span>
+                </div>
+            </header>
+
+            <!-- Article Body -->
+            <div id="articleBody" class="article-content max-w-none prose prose-invert"></div>
+
+            <!-- Content Gate (for non-authenticated users) -->
+            <div id="contentGate" class="hidden relative mt-12">
+                <div class="relative z-10 text-center py-12 px-6 bg-zinc-900 border border-zinc-800 rounded-xl">
+                    <div class="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Premium Content</h3>
+                    <p class="text-zinc-400 mb-6 max-w-md mx-auto">Sign in to read the full article and access all premium content.</p>
+                    <a href="login.html" class="inline-flex h-11 items-center justify-center rounded-lg bg-emerald-600 px-6 text-sm font-medium text-white hover:bg-emerald-700 transition-colors">
+                        Sign In to Continue Reading
+                    </a>
+                </div>
+            </div>
+
+            <!-- Related Articles -->
+            <div class="mt-16 pt-8 border-t border-zinc-800">
+                <h3 class="text-lg font-semibold text-white mb-6">Related Articles</h3>
+                <div id="relatedArticles" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Related articles will be inserted here -->
+                </div>
+            </div>
+        </article>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden max-w-4xl mx-auto px-4 sm:px-6 py-12 text-center">
+            <p class="text-red-400">Article not found.</p>
+            <a href="articles.html" class="inline-block mt-4 text-emerald-500 hover:text-emerald-400">← Back to articles</a>
+        </div>
+    </main>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        let currentUser = null;
+        let article = null;
+
+        // Get article slug from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('slug');
+
+        // Check authentication status
+        async function checkAuth() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            currentUser = session?.user || null;
+            updateAuthUI();
+            return currentUser;
+        }
+
+        // Update auth UI
+        function updateAuthUI() {
+            const authButtons = document.getElementById('authButtons');
+            if (currentUser) {
+                authButtons.innerHTML = `
+                    <button id="logoutBtn" class="text-xs text-zinc-400 hover:text-white transition-colors">
+                        Logout
+                    </button>
+                `;
+                document.getElementById('logoutBtn').addEventListener('click', async () => {
+                    await supabaseClient.auth.signOut();
+                    window.location.reload();
+                });
+            } else {
+                authButtons.innerHTML = `
+                    <a href="login.html" class="h-8 inline-flex items-center justify-center rounded-md bg-emerald-600 px-4 text-xs font-medium text-white hover:bg-emerald-700 transition-colors">
+                        Login
+                    </a>
+                `;
+            }
+        }
+
+        // Fetch article
+        async function fetchArticle() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('articles')
+                    .select('*')
+                    .eq('slug', slug)
+                    .single();
+
+                if (error) throw error;
+                article = data;
+                await displayArticle();
+                await fetchRelatedArticles();
+            } catch (error) {
+                console.error('Error fetching article:', error);
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('errorState').classList.remove('hidden');
+            }
+        }
+
+        // Display article
+        async function displayArticle() {
+            const isAuthenticated = await checkAuth();
+
+            // Category colors
+            const categoryColors = {
+                'stablecoins': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+                'tokenization': 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+                'defi': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+                'l2s': 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+                'etf': 'bg-pink-500/10 text-pink-400 border-pink-500/20',
+                'regulatory': 'bg-red-500/10 text-red-400 border-red-500/20',
+                'institutional-adoption': 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
+            };
+
+            const categoryColor = categoryColors[article.category] || 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+
+            // Cover image
+            if (article.cover_image) {
+                document.getElementById('coverImage').innerHTML = `
+                    <div class="aspect-video bg-zinc-900 rounded-xl overflow-hidden">
+                        <img src="${article.cover_image}" alt="${article.title}" class="w-full h-full object-cover">
+                    </div>
+                `;
+            }
+
+            // Category badge
+            document.getElementById('categoryBadge').innerHTML = `
+                <span class="inline-block px-3 py-1 rounded-md text-xs font-medium border ${categoryColor}">
+                    ${article.category.replace(/-/g, ' ')}
+                </span>
+            `;
+
+            // Article metadata
+            document.getElementById('articleTitle').textContent = article.title;
+            document.getElementById('articleExcerpt').textContent = article.excerpt;
+            document.getElementById('authorName').textContent = article.author_name;
+            document.getElementById('publishedDate').textContent = new Date(article.published_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('readTime').textContent = `${article.read_time_minutes} min read`;
+
+            // Article content with gating
+            const articleBody = document.getElementById('articleBody');
+            const contentGate = document.getElementById('contentGate');
+
+            if (isAuthenticated) {
+                // Show full content for authenticated users
+                articleBody.innerHTML = marked.parse(article.content);
+                contentGate.classList.add('hidden');
+                articleBody.classList.remove('content-gate');
+            } else {
+                // Show only 30% preview for non-authenticated users
+                const contentLength = article.content.length;
+                const previewLength = Math.floor(contentLength * 0.3);
+                const previewContent = article.content.substring(0, previewLength);
+
+                articleBody.innerHTML = marked.parse(previewContent);
+                articleBody.classList.add('content-gate');
+                contentGate.classList.remove('hidden');
+            }
+
+            // Show article, hide loading
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('articleContent').classList.remove('hidden');
+        }
+
+        // Fetch related articles
+        async function fetchRelatedArticles() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('articles')
+                    .select('*')
+                    .eq('category', article.category)
+                    .neq('id', article.id)
+                    .limit(2)
+                    .order('published_at', { ascending: false });
+
+                if (error) throw error;
+
+                const relatedArticles = document.getElementById('relatedArticles');
+                if (data.length === 0) {
+                    relatedArticles.parentElement.classList.add('hidden');
+                    return;
+                }
+
+                const categoryColors = {
+                    'stablecoins': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+                    'tokenization': 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+                    'defi': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+                    'l2s': 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+                    'etf': 'bg-pink-500/10 text-pink-400 border-pink-500/20',
+                    'regulatory': 'bg-red-500/10 text-red-400 border-red-500/20',
+                    'institutional-adoption': 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'
+                };
+
+                relatedArticles.innerHTML = data.map(related => {
+                    const categoryColor = categoryColors[related.category] || 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20';
+                    return `
+                        <a href="article.html?slug=${related.slug}" class="group bg-zinc-900 border border-zinc-800 rounded-xl p-5 hover:border-zinc-700 transition-colors">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="px-2 py-1 rounded-md text-xs font-medium border ${categoryColor}">
+                                    ${related.category.replace(/-/g, ' ')}
+                                </span>
+                                <span class="text-xs text-zinc-500">${related.read_time_minutes} min read</span>
+                            </div>
+                            <h4 class="text-base font-semibold text-white mb-2 group-hover:text-emerald-400 transition-colors line-clamp-2">
+                                ${related.title}
+                            </h4>
+                            <p class="text-sm text-zinc-400 line-clamp-2">
+                                ${related.excerpt}
+                            </p>
+                        </a>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error fetching related articles:', error);
+            }
+        }
+
+        // Initialize
+        if (!slug) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+        } else {
+            fetchArticle();
+        }
+    </script>
+</body>
+</html>
